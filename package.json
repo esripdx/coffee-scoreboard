@@ -12,6 +12,8 @@
   "dependencies": {
     "bricks": "~1.1.4",
     "redis": "*",
-    "zenircbot-api": "~2"}
+    "zenircbot-api": "~2",
+    "xml-writer": "*",
+    "atom-writer": "*"
   }
 }

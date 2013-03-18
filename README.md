@@ -9,7 +9,7 @@
 
 ### /score
 
-Returns the current score in `X: { Y: count }` format
+Returns the current score in `Y: { X: count }` format
 
 ### /coffee
 

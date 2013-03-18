@@ -1,0 +1,15 @@
+{
+  "name": "coffeeboard",
+  "version": "0.0.0",
+  "description": "Coffee Board for Esri Portland R&D",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "bricks": "~1.1.4"
+  }
+}

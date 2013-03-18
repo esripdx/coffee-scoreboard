@@ -1,3 +1,13 @@
+process.chdir(__dirname);
+var api = require('zenircbot-api');
+var bot_config = api.load_config('../../bot.json');
+var zen = new api.ZenIRCBot(bot_config.redis.host,
+                            bot_config.redis.port,
+                            bot_config.redis.db);
+var config = api.load_config('./config.json');
+var sub = zen.get_redis_client();
+var redis = zen.get_redis_client();
+
 var bricks = require('bricks'),
     fs     = require('fs'),
     url    = require('url');
@@ -84,4 +94,5 @@ appServer.addRoute(".+", appServer.plugins.fourohfour);
 
 
 var server = appServer.createServer();
-server.listen(8080);
+server.listen(config.listen);
+

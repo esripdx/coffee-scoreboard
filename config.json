@@ -4,18 +4,57 @@
   "feedAuthor": "Esri Portland",
   "baseURL": "http://coffee.geoloqi.com/",
   "people": [
-    "Aaron",
-    "Amber",
-    "Court",
-    "Jen",
-    "Jerry",
-    "Josh",
-    "Kenichi",
-    "Nate",
-    "Paul",
-    "Robin",
-    "Ryan",
-    "Shawna",
-    "Wayne"
+    {
+      "name": "Aaron",
+      "email": ""
+    },
+    {
+      "name": "Amber",
+      "email": ""
+    },
+    {
+      "name": "Court",
+      "email": ""
+    },
+    {
+      "name": "Jen",
+      "email": ""
+    },
+    {
+      "name": "Jerry",
+      "email": ""
+    },
+    {
+      "name": "Josh",
+      "email": ""
+    },
+    {
+      "name": "Kenichi",
+      "email": ""
+    },
+    {
+      "name": "Nate",
+      "email": ""
+    },
+    {
+      "name": "Paul",
+      "email": ""
+    },
+    {
+      "name": "Robin",
+      "email": ""
+    },
+    {
+      "name": "Ryan",
+      "email": ""
+    },
+    {
+      "name": "Shawna",
+      "email": ""
+    },
+    {
+      "name": "Wayne",
+      "email": ""
+    }
   ]
 }

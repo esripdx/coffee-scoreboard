@@ -1,0 +1,62 @@
+/* - - - - - - - - - - Basic Reset - - - - - - - - - - */
+html {
+  overflow-y: scroll;
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  background: url('../img/noisy_grid.png') top left repeat white;
+  color: #333;
+  font-family: "Lucida Grande", "Seoge UI", "Arial", sans-serif;
+  font-weight:200;
+  margin: 0;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+a, abbr, acronym, address, b, big, cite, code, del, em, i, ins, kbd, mark, output, q, samp, small, strike, strong, sub, sup, time, tt, var,
+dfn, dl, dt, dd, ol, ul, li,
+blockquote, h1, h2, h3, h4, h5, h6, p, pre,
+applet, canvas, embed, figure, figcaption, iframe, img, object {
+  background: transparent;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  line-height: 1.0;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+}
+
+/* - - - - - - - - - Basic Typography - - - - - - - */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  margin: 1em 0;
+}
+h1 {
+  font-size: 200%;
+}
+h2 {
+  font-size: 160%;
+}
+h3 {
+  font-size: 120%;
+}
+h4 {
+  font-size: 100%;
+}
+h5 {
+  font-size: 80%;
+}
+h6 {
+  font-size: 80%;
+  font-weight: normal;
+}

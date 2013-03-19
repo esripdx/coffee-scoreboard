@@ -56,6 +56,8 @@ function scoreRoute (request, response) {
 function modifyRoute (request, response) {
   var payload = url.parse(request.url, true);
 
+  // This is confusing because the frontend sends the x/y parameters backwards. x is actually 
+  // the vertical axis and y is the horizontal axis. It would be awesome to correct this.
   response.setHeader('Content-Type', 'application/json');
   if (payload.query && payload.query.x && payload.query.y && payload.query.direction) {
     var x = payload.query.x,
@@ -79,7 +81,8 @@ function modifyRoute (request, response) {
       return;
     }
 
-    var log = new Date().toString() + ": " + x + " paid " + y + " " + direction + "\n";
+    // See note above, that's why this looks backwards
+    var log = new Date().toString() + ": " + x + " to " + y + " " + direction + ". now: "+store[x][y]+"\n";
     fs.appendFileSync(logFile, log);
     writeData(store);
 

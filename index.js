@@ -72,7 +72,7 @@ function scoreRoute (request, response) {
 function modifyRoute (request, response) {
   var payload = url.parse(request.url, true);
 
-  // This is confusing because the frontend sends the x/y parameters backwards. x is actually 
+  // This is confusing because the frontend sends the x/y parameters backwards. x is actually
   // the vertical axis and y is the horizontal axis. It would be awesome to correct this.
   response.setHeader('Content-Type', 'application/json');
   if (payload.query && payload.query.x && payload.query.y && payload.query.direction) {
@@ -81,16 +81,24 @@ function modifyRoute (request, response) {
         direction = payload.query.direction;
 
     if (store[x] === undefined) {
-      store[x] = { };
+      store[x] = {};
     }
     if (store[x][y] === undefined) {
       store[x][y] = 0;
     }
+    if (store[y] === undefined) {
+      store[y] = {};
+    }
+    if (store[y][x] === undefined) {
+      store[y][x] = 0;
+    }
 
     if (direction === 'up') {
       store[x][y]++;
+      store[y][x]--;
     } else if (direction === 'down') {
       store[x][y]--;
+      store[y][x]++;
     } else {
       response.write(JSON.stringify({ "error": "direction must be up or down" }));
       response.end();

@@ -149,7 +149,11 @@ function atomRoute (request, response) {
 
 function peopleRoute (request, response) {
   response.setHeader('Content-Type', 'application/json');
-  response.write(JSON.stringify(config.people));
+  var people = [];
+  for (var i = 0; i < config.people.length; i++) {
+    people.push(config.people[i].name);
+  }
+  response.write(JSON.stringify(people));
   response.end();
 }
 

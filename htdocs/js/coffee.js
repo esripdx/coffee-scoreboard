@@ -63,6 +63,12 @@ function setScores (scores) {
         attr.html(scores[x[i]][y[j]].toString());
         attr.append($("<i>").attr("class", "icon-coffee"));
       }
+
+      var attr = $("#" + y[j] + "_" + x[i] + "_count");
+      if (attr) {
+        attr.html(scores[y[j]][x[i]].toString());
+        attr.append($("<i>").attr("class", "icon-coffee"));
+      }
     }
   }
 }

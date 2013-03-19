@@ -10,6 +10,10 @@
   "author": "",
   "license": "BSD",
   "dependencies": {
-    "bricks": "~1.1.4"
+    "bricks": "~1.1.4",
+    "redis": "*",
+    "zenircbot-api": "~2",
+    "xml-writer": "*",
+    "atom-writer": "*"
   }
 }

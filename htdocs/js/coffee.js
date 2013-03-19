@@ -1,20 +1,4 @@
-var people = [
-  "Aaron",
-  "Amber",
-  "Court",
-  "Jen",
-  "Jerry",
-  "Josh",
-  "Kenichi",
-  "Nate",
-  "Paul",
-  "Robin",
-  "Ryan",
-  "Shawna",
-  "Wayne"
-];
-
-function createTable (where) {
+function createTable (where, people) {
   var i, j;
 
   var table = $("<table>").attr("border", 1);
@@ -84,43 +68,44 @@ function setScores (scores) {
 }
 
 $(document).ready(function () {
-  createTable("#scoreboard");
+  $.get("/people", function(people){
+    createTable("#scoreboard", people);
 
-  $.ajax({
-    url: "/score"
-  }).done(function (data) {
-    setScores(data);
-  });
+    $.get("/score", function (data) {
+      setScores(data);
+    });
 
-  for (var i = 0; i < people.length; i++) {
-    for (var j = 0; j < people.length; j++) {
-      var up = "#" + people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_up";
-      var down = "#" + people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_down";
+    for (var i = 0; i < people.length; i++) {
+      for (var j = 0; j < people.length; j++) {
+        var up = "#" + people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_up";
+        var down = "#" + people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_down";
 
-      $(up).on("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+        $(up).on("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
 
-        var parts = $(this).attr("id").split("_");
-        $.ajax({
-          url: "/coffee?x=" + parts[0] + "&y=" + parts[1] + "&direction=up"
-        }).done(function (data) {
-          setScores(data);
+          var parts = $(this).attr("id").split("_");
+          $.ajax({
+            url: "/coffee?x=" + parts[0] + "&y=" + parts[1] + "&direction=up"
+          }).done(function (data) {
+            setScores(data);
+          });
         });
-      });
 
-      $(down).on("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+        $(down).on("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
 
-        var parts = $(this).attr("id").split("_");
-        $.ajax({
-          url: "/coffee?x=" + parts[0] + "&y=" + parts[1] + "&direction=down"
-        }).done(function (data) {
-          setScores(data);
+          var parts = $(this).attr("id").split("_");
+          $.ajax({
+            url: "/coffee?x=" + parts[0] + "&y=" + parts[1] + "&direction=down"
+          }).done(function (data) {
+            setScores(data);
+          });
         });
-      });
 
+      }
     }
-  }
+
+  })
 });

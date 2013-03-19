@@ -1,0 +1,21 @@
+{
+  "listen": 2400,
+  "channel": "#portland",
+  "feedAuthor": "Esri Portland",
+  "baseURL": "http://coffee.geoloqi.com/",
+  "people": [
+    "Aaron",
+    "Amber",
+    "Court",
+    "Jen",
+    "Jerry",
+    "Josh",
+    "Kenichi",
+    "Nate",
+    "Paul",
+    "Robin",
+    "Ryan",
+    "Shawna",
+    "Wayne"
+  ]
+}

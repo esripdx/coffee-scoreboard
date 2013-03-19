@@ -1,26 +1,42 @@
 process.chdir(__dirname);
-var api = require('zenircbot-api');
-var bot_config = api.load_config('../../bot.json');
-var zen = new api.ZenIRCBot(bot_config.redis.host,
-                            bot_config.redis.port,
-                            bot_config.redis.db);
-var config = api.load_config('./config.json');
-var sub = zen.get_redis_client();
-var redis = zen.get_redis_client();
 
-var bricks = require('bricks'),
-    fs     = require('fs'),
-    url    = require('url');
-
-var XMLWriter = require('xml-writer'),
+// server dependencies
+var bricks     = require('bricks'),
+    fs         = require('fs'),
+    url        = require('url'),
+    XMLWriter  = require('xml-writer'),
     ATOMWriter = require('atom-writer');
 
-var dataStore = "./data/store.json";
-var logFile = "./data/coffee.log";
+var config;
+
+// check for bot
+var exists = fs.existsSync('../../bot.json');
+
+if (exists) {
+  var api        = require('zenircbot-api');
+  var bot_config = api.load_config('../../bot.json');
+  var zen        = new api.ZenIRCBot(bot_config.redis.host,
+                                     bot_config.redis.port,
+                                     bot_config.redis.db);
+
+  var sub    = zen.get_redis_client();
+  var redis  = zen.get_redis_client();
+
+  config = api.load_config('./config.json');
+} else {
+  config = require('./config.json');
+}
+
+// paths to store and log
+var dataStore  = "./data/store.json";
+var logFile    = "./data/coffee.log";
+
+// set last modified date
 var lastModified = new Date();
 
+// sometimes you just gotta capitalize strings
 String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
+  return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
 function writeData (store) {

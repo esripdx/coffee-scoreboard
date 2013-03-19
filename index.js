@@ -16,11 +16,12 @@ var XMLWriter = require('xml-writer'),
     ATOMWriter = require('atom-writer');
 
 var dataStore = "./data/store.json";
+var logFile = "./data/coffee.log";
 var lastModified = new Date();
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
-}
+};
 
 function writeData (store) {
   fs.writeFileSync(dataStore, JSON.stringify(store), 'utf8');
@@ -78,6 +79,8 @@ function modifyRoute (request, response) {
       return;
     }
 
+    var log = new Date().toString() + ": " + x + " paid " + y + " " + direction + "\n";
+    fs.appendFileSync(logFile, log);
     writeData(store);
 
     response.write(JSON.stringify(store));
@@ -107,7 +110,7 @@ function atomRoute (request, response) {
     .writeItemsPerPage(data.length)
     .writeTotalResults(data.length)
     .writeTitle("Coffee Board")
-    .writeLink(config.baseURL+"score.atom", "application/atom+xml", "self")
+    .writeLink(config.baseURL+"score.atom", "application/atom+xml", "self");
 
   for(var i in data) {
     atom
@@ -115,7 +118,7 @@ function atomRoute (request, response) {
       .writeTitle(data[i])
       .writeContent(data[i])
       .writeAuthor("Esri Portland")
-      .endEntry()
+      .endEntry();
   }
 
   atom.endFeed();

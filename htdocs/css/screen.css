@@ -78,57 +78,94 @@ h6 {
   font-weight: normal;
 }
 
-/* - - - - - - - - - Portrait Bubbles - - - - - - - */
-.portrait{
-  margin-left:200px;
+/* - - - - - - - - - container - - - - - - - */
+#scoreboard {
+  height: 500px;
+  margin: 0 auto;
+  position: relative;
+  width: 500px;
+}
+
+/* - - - - - - - - - person Bubbles - - - - - - - */
+.person {
+  height: 50px;
   position: absolute;
-  display:block;
-  width:50px;
-  height:50px;
-  border-radius: 50px;
-  border:4px solid #ffffff;
+  width: 50px;
+}
+
+.portrait {
+  background: url(https://secure.gravatar.com/avatar/532ad97fbf9402eaff6fb6c29ae5faf7?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png);
+  background-size: 50px;
+  background-position: center center;
+  border: 4px solid #ffffff;
+  border-radius: 25px;
+  display: block;
+  height: 50px;
+  width: 50px;
+  z-index: 1;
+
   -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.15);
      -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.15);
           box-shadow: 0 0 21px rgba(0, 0, 0, 0.15);
+
   -webkit-transition: box-shadow 200ms linear;
      -moz-transition: box-shadow 200ms linear;
       -ms-transition: box-shadow 200ms linear;
        -o-transition: box-shadow 200ms linear;
           transition: box-shadow 200ms linear;
 }
-.portrait:hover{
-  -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
-     -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
-          box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
-  -webkit-transition: box-shadow 100ms linear;
-     -moz-transition: box-shadow 100ms linear;
-      -ms-transition: box-shadow 100ms linear;
-       -o-transition: box-shadow 100ms linear;
-          transition: box-shadow 100ms linear;
-}
-.portrait .name{
+  .portrait:hover {
+    -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
+       -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
+  }
+
+.portrait .name {
   color: rgba(0,0,0,0);
-  margin-top:0;
-  width:auto;
-  text-align:right;
-  position:absolute;
-  right:50px;
-  top:8px;
+  font-size: 110%;
+  margin-left: -50px;
+  margin-top: 0;
+  text-align: center;
+  width: 100px;
+
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  z-index: 100;
+
   -webkit-transition: all 100ms linear;
      -moz-transition: all 100ms linear;
       -ms-transition: all 100ms linear;
        -o-transition: all 100ms linear;
           transition: all 100ms linear;
 }
-.portrait:hover .name{
-  color: rgba(0,0,0,.5);
-  right:60px;
-  -webkit-transition: all 100ms linear;
-     -moz-transition: all 100ms linear;
-      -ms-transition: all 100ms linear;
-       -o-transition: all 100ms linear;
-          transition: all 100ms linear;
+  .portrait:hover .name {
+    color: rgba(0,0,0,.5);
+    top: 60px;
+  }
+
+.coffee-token {
+  background: url('../img/token.png');
+  background-size: 50px;
+  border-radius: 25px;
+  height: 50px;
+  opacity: 0;
+  width: 50px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500;
+
+  -webkit-transition: opacity 100ms linear;
+     -moz-transition: opacity 100ms linear;
+      -ms-transition: opacity 100ms linear;
+       -o-transition: opacity 100ms linear;
+          transition: opacity 100ms linear;
 }
+  .coffee-token:hover {
+    opacity: 1;
+  }
 
 /* - - - - - - - - - Print - - - - - - - */
 @media print {

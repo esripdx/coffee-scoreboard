@@ -1,111 +1,62 @@
-function createTable (where, people) {
-  var i, j;
+function createPeople(where, people) {
+  var $container = $(where);
 
-  var table = $("<table>").attr("border", 1);
+  var html = '<div class="portrait"><h2 class="name"></h2><div class="coffee-token" draggable="true"></div></div>';
 
-  var head = $("<tr>");
-  head.append($("<th>").html('&nbsp;'));
-
-  for (i = 0; i < people.length; i++) {
-    head.append($("<th>").html(people[i]));
-  }
-  table.append(head);
+  var $template = $('<div/>').attr({
+    'class': 'person',
+  }).html(html);
 
   for (i = 0; i < people.length; i++) {
-    var row = $("<tr>");
-    var who = $("<strong>").html(people[i]);
-    row.append($("<td>").append(who));
+    var $el = $template.clone();
 
-    for (j = 0; j < people.length; j++) {
-      var coffee = $("<td>");
-      if (i === j) {
-        coffee.html("&nbsp;");
-      } else {
-        // <td><a href="#"><i class="icon-arrow-up"></i></a><span id="aaron-court">0</span><i class="icon-coffee"></i><a href="#"><i class="icon-arrow-down"></i></a></td>
-        var up = $("<a>")
-                 .attr("id", people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_up")
-                 .attr("href", "#");
-        up.append($("<i>").attr("class", "icon-arrow-up"));
+    $el
+      .attr({ 'data-name': people[i] })
+      .find('.name')
+        .text(people[i])
+        .end()
+      .find('.coffee-token')
+        .on('dragstart',function(e){
+          console.log('dragging');
+        })
+        .on('dragend', function(e){
+          console.log('dragend');
+        })
+        .end()
+      .on('drop', function(e){
+        if (e.preventDefault) e.preventDefault();
+        console.log('drop');
+      });
 
-        var count = $("<span>")
-                  .attr("id", people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_count")
-                  .html("0")
-                  .append($("<i>").attr("class", "icon-coffee"));
-
-        var down = $("<a>")
-                 .attr("id", people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_down")
-                 .attr("href", "#");
-        down.append($("<i>").attr("class", "icon-arrow-down"));
-
-
-        coffee.append(down)
-              .append(count)
-              .append(up);
-
-      }
-
-      row.append(coffee);
-    }
-
-    table.append(row);
+    $container.append($el);
   }
 
-  $(where).append(table);
+  var $people = $('.person');
+
+  numItems = $people.length;
+  start    = 0.25;
+  step     = ( 2 * Math.PI ) / numItems;
+
+  $people.each(function(index) {
+    radius  = ($container.width() - $(this).width())/2;
+    tmpTop  = (($container.height()/2) + radius * Math.sin(start)) - ($(this).height()/2);
+    tmpLeft = (($container.width()/2) + radius * Math.cos(start)) - ($(this).width()/2);
+
+    start += step;
+
+    $(this).css("top", tmpTop);
+    $(this).css("left", tmpLeft);
+  });
+
 }
 
-function setScores (scores) {
-  var x = Object.keys(scores);
-  for (var i = 0; i < x.length; i++) {
-    var y = Object.keys(scores[x[i]]);
-    for (var j = 0; j < y.length; j++) {
-      var attr = $("#" + x[i] + "_" + y[j] + "_count");
-      if (attr) {
-        attr.html(scores[x[i]][y[j]].toString());
-        attr.append($("<i>").attr("class", "icon-coffee"));
-      }
-    }
-  }
-}
+$(document).ready(function() {
+  $.get("/people", function(people) {
+    createPeople("#scoreboard", people);
 
-$(document).ready(function () {
-  $.get("/people", function(people){
-    createTable("#scoreboard", people);
-
-    $.get("/score", function (data) {
-      setScores(data);
+    $.get("/score", function(scores) {
+      console.log(scores);
     });
-
-    for (var i = 0; i < people.length; i++) {
-      for (var j = 0; j < people.length; j++) {
-        var up = "#" + people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_up";
-        var down = "#" + people[i].toLowerCase() + "_" + people[j].toLowerCase() + "_down";
-
-        $(up).on("click", function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          var parts = $(this).attr("id").split("_");
-          $.ajax({
-            url: "/coffee?x=" + parts[0] + "&y=" + parts[1] + "&direction=up"
-          }).done(function (data) {
-            setScores(data);
-          });
-        });
-
-        $(down).on("click", function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          var parts = $(this).attr("id").split("_");
-          $.ajax({
-            url: "/coffee?x=" + parts[0] + "&y=" + parts[1] + "&direction=down"
-          }).done(function (data) {
-            setScores(data);
-          });
-        });
-
-      }
-    }
 
   })
 });

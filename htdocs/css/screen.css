@@ -116,7 +116,7 @@ h1:before{
   height:70px;
   content: "";
   display: inline-block;
-  border-left:2px solid #666;
+  border-left:2px solid #999;
   -webkit-transform: rotate(45deg);
      -moz-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
@@ -132,7 +132,7 @@ h1:after{
   height:70px;
   content: "";
   display: inline-block;
-  border-left:2px solid #666;
+  border-left:2px solid #999;
   -webkit-transform: rotate(-45deg);
      -moz-transform: rotate(-45deg);
       -ms-transform: rotate(-45deg);
@@ -149,7 +149,7 @@ h1:after{
   background: transparent;
   display:inline-block;
   float:left;
-  border: 2px solid #888;
+  border: 2px solid #999;
 }
 
 .mug:before, .mug:after{
@@ -163,14 +163,14 @@ h1:after{
   width:17px;
   height:12px;
   left:33px;
-  background: #666;
+  background: #999;
   border-radius: 0px 0px 18px 18px;
 }
 
 .mug:after{
   width:4px;
   height:4px;
-  border: 2px solid #666;
+  border: 2px solid #999;
   background:transparent;
   border-radius: 4px;
   left:46px;
@@ -183,7 +183,7 @@ h1:after{
   top: 13px;
   width: 13px;
   height: 13px;
-  background: #666;
+  background: #999;
   border-radius: 0px 7px 7px 7px;
   -webkit-transform: rotate(45deg);
      -moz-transform: rotate(45deg);
@@ -203,7 +203,7 @@ h1:after{
 
 .caps:before, .caps:after{
   text-align: left;
-  color: #666;
+  color: #999;
   font-family: 'Avenir Next', sans-serif;
   font-weight: 700;
   font-size: 18px;

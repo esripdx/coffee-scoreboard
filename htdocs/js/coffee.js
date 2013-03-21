@@ -198,6 +198,22 @@ function renderBoard(people, scores) {
     height: window.innerHeight
   });
 
+  function notify(msg) {
+    console.log('notify msg', msg);
+    var $el = $('<div class="notification animated flipInX"></div>');
+
+    $el
+      .text(msg)
+      .appendTo('#scoreboard');
+
+    setTimeout(function(){
+      $el.removeClass('flipInX').addClass('fadeOut');
+      setTimeout(function(){
+        $el.remove();
+      }, 1000);
+    }, 2000);
+  }
+
   stage.on('load', function() {
     stage.on("message:ready", function() {
 
@@ -253,6 +269,12 @@ function renderBoard(people, scores) {
               url: "/coffee?from=" + from.toLowerCase() + "&to=" + to.toLowerCase()
             }).done(function(response){
               console.log(response);
+              if (response.error) {
+                notify(response.error);
+              }
+              else {
+                notify(from + ' gave ' + to + ' 1 coffee');
+              }
             });
           });
       });

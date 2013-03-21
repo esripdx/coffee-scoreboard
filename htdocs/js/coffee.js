@@ -1,9 +1,11 @@
 function renderBoard(people, scores) {
   var stage = bonsai.run(document.getElementById('shadow'), {
     code: function() {
-      x = stage.width/2;
-      y = stage.height/2;
-      r = stage.height/2.5;
+
+      var x = stage.width/2,
+          y = stage.height/2,
+          r = stage.height/2.5,
+          people;
 
       function deg2rad(deg){
         return deg * (Math.PI/180);
@@ -32,7 +34,7 @@ function renderBoard(people, scores) {
           start = end;
           end = start+deg2rad(360/data.length);
         }
-      })
+      });
     },
     width: window.innerWidth,
     height: window.innerHeight
@@ -44,7 +46,7 @@ function renderBoard(people, scores) {
       var html = '<div class="portrait"><h2 class="name"></h2><div class="coffee-token" draggable="true"></div></div>';
 
       var $template = $('<div/>').attr({
-        'class': 'person',
+        'class': 'person'
       }).html(html);
 
       stage.sendMessage("data", people);

@@ -81,7 +81,7 @@ function modifyRoute(request, response) {
         to   = payload.query.to.toLowerCase();
 
     if (from === to) {
-      response.write(JSON.stringify({"error": "you can't owe yourself coffee"}));
+      response.write(JSON.stringify({"error": "you can't give yourself coffee"}));
       return response.end();
     }
 

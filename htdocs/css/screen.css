@@ -234,6 +234,36 @@ circle {
   z-index: 100;
 }
 
+/* - - - - - - - - - notifications - - - - - - - */
+.notification {
+  background: #3ea349;
+  border: 4px solid #fff;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 100%;
+  line-height: 1.4em;
+  padding: 10px 15px;
+  text-align: center;
+  width: 300px;
+
+  margin-left: -150px;
+  margin-top: -25px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  -webkit-box-shadow: 0 0 11px rgba(0, 0, 0, 0.3);
+     -moz-box-shadow: 0 0 11px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 0 11px rgba(0, 0, 0, 0.3);
+
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 /* - - - - - - - - - Print - - - - - - - */
 @media print {
   * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important; -ms-filter: none !important; } /* Black prints faster: sanbeiji.com/archives/953 */

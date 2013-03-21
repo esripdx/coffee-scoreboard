@@ -94,6 +94,8 @@ header:hover .drop{
       -ms-transition: all 250ms ease-in;
        -o-transition: all 250ms ease-in;
           transition: all 250ms ease-in;
+  width: 10px;
+  height: 10px;
 }
 
 h1 span{
@@ -158,11 +160,11 @@ h1:after{
 }
 
 .mug:before{
-  width:16px;
+  width:17px;
   height:12px;
   left:33px;
   background: #666;
-  border-radius: 0px 0px 16px 16px;
+  border-radius: 0px 0px 18px 18px;
 }
 
 .mug:after{
@@ -177,10 +179,10 @@ h1:after{
 .drop{
   display: inline-block;
   position: absolute;
-  left: 37px;
+  left: 36px;
   top: 13px;
-  width: 10px;
-  height: 10px;
+  width: 13px;
+  height: 13px;
   background: #666;
   border-radius: 0px 7px 7px 7px;
   -webkit-transform: rotate(45deg);
@@ -342,6 +344,11 @@ html, body, #scoreboard {
 
 circle {
   z-index: 100;
+
+@media screen and (max-width: 600px){
+  h1 span{
+    display:none;
+  }
 }
 
 /* - - - - - - - - - notifications - - - - - - - */

@@ -55,6 +55,7 @@ function renderBoard(people, scores) {
         $el
           .attr({ 'data-name': data.name })
           .on('dragstart', function(e){
+            e.originalEvent.dataTransfer.setData('text/plain', data.name);
             // var dragIcon = document.createElement('img');
             // dragIcon.src = '/img/token.png';
             // dragIcon.width = 100;
@@ -68,8 +69,20 @@ function renderBoard(people, scores) {
             $(this).removeClass('over');
           })
           .on('drop', function(e){
-            if (e.preventDefault) e.preventDefault();
+            e.preventDefault();
+
+            var from = e.originalEvent.dataTransfer.getData('text/plain');
+            var to   = data.name;
+
             $(this).removeClass('over');
+
+            console.log(from + ' bought ' + to + ' 1 coffee.');
+
+            $.ajax({
+              url: "/coffee?from=" + from.toLowerCase() + "&to=" + to.toLowerCase()
+            }).done(function(response){
+              console.log(response);
+            });
           })
           .find('.name')
             .text(data.name)

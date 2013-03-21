@@ -3,11 +3,19 @@
 function renderBoard(people, scores) {
   var stage = bonsai.run(document.getElementById('shadow'), {
     code: function() {
-
+      new FontFamily('SourceCodePro', [
+        '/font/SourceCodePro-Bold-webfont.woff',
+        '/font/SourceCodePro-Bold-webfont.eot',
+        '/font/SourceCodePro-Bold-webfont.ttf',
+        '/font/SourceCodePro-Bold-webfont.svg'
+      ]);
       var x = stage.width/2,
           y = stage.height/2,
           r = stage.height/2.5,
-          people;
+          lines = new Group().addTo(stage),
+          circles = new Group().addTo(stage),
+          people,
+          relations = {};
 
       function deg2rad(deg){
         return deg * (Math.PI/180);
@@ -15,6 +23,14 @@ function renderBoard(people, scores) {
 
       function rad2deg(rad){
         return rad * (180/Math.PI);
+      }
+
+      function drawLine(giver, receiver, amount){
+
+      }
+
+      function relate(giver, receiver, amount){
+
       }
 
       stage.sendMessage("ready", {});
@@ -40,25 +56,37 @@ function renderBoard(people, scores) {
         // random path generator
         for (var n = 0; n < people.length; n++) {
           var giver = people[n];
+          giver.relations = [];
           var receiver = people[Math.floor(Math.random()*people.length)];
+          receiver.relations = receiver.relations||[];
           var c1x = giver.x;
           var c1y = giver.y;
           var c2x = x;
           var c2y = y;
-          giver.path = new Path().moveTo(giver.x,giver.y).curveTo(c1x, c1y, c2x, c2y, receiver.x, receiver.y).attr("strokeColor", "blue").attr("strokeWidth", 0);
-          giver.path.on("addedToStage", function(){
+
+          var relation = {
+            path: new Path().moveTo(giver.x,giver.y).curveTo(c1x, c1y, c2x, c2y, receiver.x, receiver.y),
+            giver: giver.name,
+            receiver: receiver.name,
+            id: giver.name+"-"+receiver.name
+          };
+
+          relation.path.on("addedToStage", function(){
             stage.sendMessage("path",{
-              id: giver.path.id,
-              email: giver.email,
-              index: n
+              relationId: relation.id,
+              pathId: relation.path.id
             });
           });
-          giver.path.addTo(stage);
+
+          relation.path.addTo(stage);
+          giver.relations.push(relation.id);
+          receiver.relations.push(relation.id);
+          relations[relation.id] = relation;
         }
 
         stage.on("message:center", function(data) {
-          var person = people[data.index];
-          var path = person.path;
+          var relation = relations[data.id];
+          var path = relations[data.id].path;
           var s = {x:path.points()[0][0], y:path.points()[0][1]};
           var e = {x:path.points()[1][0], y:path.points()[1][1]};
           var m = {x:data.x, y:data.y};
@@ -104,16 +132,65 @@ function renderBoard(people, scores) {
           var sy = m.y;
 
           //p0, q0, r0, s
-          person.giverPath = new Path().moveTo(p0x, p0y).curveTo(q0x, q0y, r0x, r0y, sx, sy).attr("strokeColor", "green").attr("strokeWidth", 3).addTo(stage);
+          relation.giverPath = new Path().moveTo(p0x, p0y).curveTo(q0x, q0y, r0x, r0y, sx, sy)
+            .attr("strokeColor", "#3ea349")
+            .attr("strokeWidth", 3)
+            .addTo(lines);
+
           //s, r1, q2, p3
-          person.reciverPath = new Path().moveTo(sx, sy).curveTo(r1x, r1y, q2x, q2y, p3x, p3y).attr("strokeColor", "red").attr("strokeWidth", 3).addTo(stage);
+          relation.reciverPath = new Path().moveTo(sx, sy).curveTo(r1x, r1y, q2x, q2y, p3x, p3y)
+            .attr("strokeColor", "#c84d03")
+            .attr("strokeWidth", 3)
+            .addTo(lines);
+
           //sx, sy
-          person.circle = new Circle(sx, sy, 10).fill("black").addTo(stage);
+          relation.circle = new Circle(sx, sy, 13)
+            .fill("#ffffff")
+            .attr("strokeWidth", 1)
+            .attr("strokeColor", "#e1e1e1")
+            .addTo(circles);
+
+          relation.debt = new Text('1').addTo(circles).attr({
+            fontFamily: 'SourceCodePro',
+            fontSize: '14',
+            textFillColor: '#434946',
+            selectable: false,
+            x:sx-4,
+            y:sy-4
+          });
 
           //destroy old path
-          people[data.index].path.destroy();
-          delete people[data.index].path;
+          relation.path.destroy();
+          delete relation.path;
         });
+
+        stage.on("message:portraitEnter", function(data){
+          console.log("portraitEnter", data.name);
+          for(var key in relations){
+            var relation = relations[key];
+            if(relations.hasOwnProperty(key)){
+              if(!relation.id.match(data.name)){
+                relation.giverPath.animate(".25s", {opacity:0.15});
+                relation.reciverPath.animate(".25s", {opacity:0.15});
+                relation.circle.animate(".25s", {opacity:0.35});
+                relation.debt.animate(".25s", {opacity:0.15});
+              }
+            }
+          }
+        });
+
+        stage.on("message:portraitLeave", function(data){
+          console.log("portraitLeave", data.name);
+          for(var key in relations){
+              var relation = relations[key];
+              if(!relation.id.match(data.name)){
+                relation.giverPath.animate(".25s", {opacity:1});
+                relation.reciverPath.animate(".25s", {opacity:1});
+                relation.circle.animate(".25s", {opacity:1});
+                relation.debt.animate(".25s", {opacity:1});
+              }
+            }
+          });
 
       });
     },
@@ -187,20 +264,32 @@ function renderBoard(people, scores) {
   stage.on('message:path', function(data) {
     console.log("message:path",data);
     setTimeout(function(){
-      var path = document.querySelector("[data-bs-id='"+data.id+"']");
+      var path = document.querySelector("[data-bs-id='"+data.pathId+"']");
       var length = path.getTotalLength();
       var mid = path.getPointAtLength(length/2);
       stage.sendMessage("center", {
-        id: data.id,
-        email: data.email,
-        index: data.index,
+        id: data.relationId,
         x: mid.x,
         y: mid.y
       });
-    }, 25);
+    }, 100);
   });
 
   console.log(people, scores);
+
+  $(document).on('mouseenter mouseleave', '.person', function(event) {
+    if(event.type === 'mouseenter'){
+      stage.sendMessage("portraitEnter", {
+        name: $(this).data("name")
+      });
+    }
+
+    if(event.type === 'mouseleave'){
+      stage.sendMessage("portraitLeave", {
+        name: $(this).data("name")
+      });
+    }
+  });
 }
 
 $(document).ready(function() {
@@ -209,4 +298,5 @@ $(document).ready(function() {
       renderBoard(people, scores);
     });
   });
+
 });

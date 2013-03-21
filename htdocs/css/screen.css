@@ -56,8 +56,8 @@ h1, h2, h3, h4, h5, h6 {
   color:#209DCB;
 }
 h1 {
-  font-size: 200%;
-  margin:0.85em 0 0 0.6em;
+  font-size: 100%;
+  margin:1.25em 0 0 1.1em;
   float:left;
 }
 h2 {
@@ -89,11 +89,11 @@ header{
 
 header:hover .drop{
   top:62px;
-  -webkit-transition: all 250ms ease-in;
-     -moz-transition: all 250ms ease-in;
-      -ms-transition: all 250ms ease-in;
-       -o-transition: all 250ms ease-in;
-          transition: all 250ms ease-in;
+  -webkit-transition: all 350ms ease-in;
+     -moz-transition: all 350ms ease-in;
+      -ms-transition: all 350ms ease-in;
+       -o-transition: all 350ms ease-in;
+          transition: all 350ms ease-in;
   width: 10px;
   height: 10px;
 }
@@ -105,6 +105,8 @@ h1 span{
   font-size: 24px;
   line-height: 32px;
   vertical-align: baseline;
+  font-size: 14px;
+  line-height: 24px;
 /*  -webkit-text-fill-color: #666;
   -webkit-text-stroke-color: #ffffff;
   text-shadow:2px 2px 0 rgba(255,255,255,1), 2px 2px 8px rgba(0,0,0,0.15);
@@ -116,7 +118,7 @@ h1:before{
   height:70px;
   content: "";
   display: inline-block;
-  border-left:2px solid #999;
+  border-left:2px solid #6b6b6b;
   -webkit-transform: rotate(45deg);
      -moz-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
@@ -132,7 +134,7 @@ h1:after{
   height:70px;
   content: "";
   display: inline-block;
-  border-left:2px solid #999;
+  border-left:2px solid #6b6b6b;
   -webkit-transform: rotate(-45deg);
      -moz-transform: rotate(-45deg);
       -ms-transform: rotate(-45deg);
@@ -149,7 +151,7 @@ h1:after{
   background: transparent;
   display:inline-block;
   float:left;
-  border: 2px solid #999;
+  border: 2px solid #6b6b6b;
 }
 
 .mug:before, .mug:after{
@@ -163,14 +165,14 @@ h1:after{
   width:17px;
   height:12px;
   left:33px;
-  background: #999;
+  background: #6b6b6b;
   border-radius: 0px 0px 18px 18px;
 }
 
 .mug:after{
   width:4px;
   height:4px;
-  border: 2px solid #999;
+  border: 2px solid #6b6b6b;
   background:transparent;
   border-radius: 4px;
   left:46px;
@@ -183,18 +185,18 @@ h1:after{
   top: 13px;
   width: 13px;
   height: 13px;
-  background: #999;
+  background: #6b6b6b;
   border-radius: 0px 7px 7px 7px;
   -webkit-transform: rotate(45deg);
      -moz-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
        -o-transform: rotate(45deg);
           transform: rotate(45deg);
-  -webkit-transition: all 250ms ease-in;
-     -moz-transition: all 250ms ease-in;
-      -ms-transition: all 250ms ease-in;
-       -o-transition: all 250ms ease-in;
-          transition: all 250ms ease-in;
+  -webkit-transition: all 350ms ease-in;
+     -moz-transition: all 350ms ease-in;
+      -ms-transition: all 350ms ease-in;
+       -o-transition: all 350ms ease-in;
+          transition: all 350ms ease-in;
 }
 
 .caps{
@@ -203,7 +205,7 @@ h1:after{
 
 .caps:before, .caps:after{
   text-align: left;
-  color: #999;
+  color: #6b6b6b;
   font-family: 'Avenir Next', sans-serif;
   font-weight: 700;
   font-size: 18px;
@@ -240,8 +242,6 @@ html, body, #scoreboard {
   background: -webkit-radial-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
   top: 0;
 }
-
-
 
 /* - - - - - - - - - person Bubbles - - - - - - - */
 .person {
@@ -344,6 +344,7 @@ html, body, #scoreboard {
 
 circle {
   z-index: 100;
+}
 
 @media screen and (max-width: 600px){
   h1 span{

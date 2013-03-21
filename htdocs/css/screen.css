@@ -230,6 +230,10 @@ html, body, #scoreboard {
           transition: opacity 100ms linear;
 }
 
+circle {
+  z-index: 100;
+}
+
 /* - - - - - - - - - Print - - - - - - - */
 @media print {
   * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important; -ms-filter: none !important; } /* Black prints faster: sanbeiji.com/archives/953 */

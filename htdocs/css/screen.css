@@ -52,13 +52,13 @@ applet, canvas, embed, figure, figcaption, iframe, img, object {
 /* - - - - - - - - - Basic Typography - - - - - - - */
 h1, h2, h3, h4, h5, h6 {
   font-weight:600;
-  font-family: 'Avenir Next';
+  font-family: 'SourceCodeProRegular';
   color:#209DCB;
 }
 h1 {
-  float:left;
   font-size: 200%;
-  margin: .55em 0 0 .25em;
+  margin:0.85em 0 0 0.6em;
+  float:left;
 }
 h2 {
   font-size: 160%;
@@ -81,37 +81,144 @@ h6 {
 header{
   float:left;
   margin:1.5em;
+  position:absolute;
+  display: block;
+  z-index: 10;
+  cursor: default;
+}
+
+header:hover .drop{
+  top:62px;
+  -webkit-transition: all 250ms ease-in;
+     -moz-transition: all 250ms ease-in;
+      -ms-transition: all 250ms ease-in;
+       -o-transition: all 250ms ease-in;
+          transition: all 250ms ease-in;
 }
 
 h1 span{
   text-align: left;
-  color: rgba(0, 0, 0, 0);
-  font-family: 'Avenir Next', sans-serif;
-  font-weight: 700;
+  color: #666;
+  font-family: 'SourceCodeProLight', sans-serif;
   font-size: 24px;
-  letter-spacing:4px;
   line-height: 32px;
-  text-transform: uppercase;
   vertical-align: baseline;
-  -webkit-text-fill-color: #666;
-  -webkit-text-stroke-width: 1px;
+/*  -webkit-text-fill-color: #666;
   -webkit-text-stroke-color: #ffffff;
-  text-shadow:4px 3px 0 rgba(0,0,0,0.15);
+  text-shadow:2px 2px 0 rgba(255,255,255,1), 2px 2px 8px rgba(0,0,0,0.15);
+*/
 }
 
-#mug{
-  width:100px;
-  height:100px;
-  background: url('../img/mug.png') no-repeat top left transparent;
-  background-size: 100px 100px;
+h1:before{
+  width:70px;
+  height:70px;
+  content: "";
+  display: inline-block;
+  border-left:2px solid #666;
+  -webkit-transform: rotate(45deg);
+     -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+       -o-transform: rotate(45deg);
+          transform: rotate(45deg);
+  position: absolute;
+  top:32px;
+  left:30px;
+}
+
+h1:after{
+  width:70px;
+  height:70px;
+  content: "";
+  display: inline-block;
+  border-left:2px solid #666;
+  -webkit-transform: rotate(-45deg);
+     -moz-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+       -o-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  position: absolute;
+  top:-17px;
+  left:32px;
+}
+
+.mug{
+  width:80px;
+  height:80px;
+  background: transparent;
   display:inline-block;
   float:left;
+  border: 2px solid #888;
 }
 
-@media (-webkit-min-device-pixel-ratio: 1.5){
-  #mug{
-    background-image: url('../img/mug@2x.png');
-  }
+.mug:before, .mug:after{
+  content: "";
+  display:inline-block;
+  position: absolute;
+  top:60px;
+}
+
+.mug:before{
+  width:16px;
+  height:12px;
+  left:33px;
+  background: #666;
+  border-radius: 0px 0px 16px 16px;
+}
+
+.mug:after{
+  width:4px;
+  height:4px;
+  border: 2px solid #666;
+  background:transparent;
+  border-radius: 4px;
+  left:46px;
+}
+
+.drop{
+  display: inline-block;
+  position: absolute;
+  left: 37px;
+  top: 13px;
+  width: 10px;
+  height: 10px;
+  background: #666;
+  border-radius: 0px 7px 7px 7px;
+  -webkit-transform: rotate(45deg);
+     -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+       -o-transform: rotate(45deg);
+          transform: rotate(45deg);
+  -webkit-transition: all 250ms ease-in;
+     -moz-transition: all 250ms ease-in;
+      -ms-transition: all 250ms ease-in;
+       -o-transition: all 250ms ease-in;
+          transition: all 250ms ease-in;
+}
+
+.caps{
+  position:absolute;
+}
+
+.caps:before, .caps:after{
+  text-align: left;
+  color: #666;
+  font-family: 'Avenir Next', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 32px;
+  vertical-align: baseline;
+  display: inline-block;
+  position:absolute;
+  top:28px;
+}
+.caps:before{
+  content:"C";
+  left:12px;
+}
+
+.caps:after{
+  content:"S";
+  left:60px;
 }
 
 /* - - - - - - - - - containers - - - - - - - */
@@ -132,6 +239,8 @@ html, body, #scoreboard {
   top: 0;
 }
 
+
+
 /* - - - - - - - - - person Bubbles - - - - - - - */
 .person {
   height: 50px;
@@ -143,11 +252,11 @@ html, body, #scoreboard {
   border: 4px solid #fff;
   border-radius: 50%;
   display: block;
-  height: 56px;
-  width: 56px;
+  height: 50px;
+  width: 50px;
 
-  margin-left: -28px;
-  margin-top: -28px;
+  margin-left: -25px;
+  margin-top: -25px;
   overflow: visible;
 
   position: absolute;
@@ -168,6 +277,7 @@ html, body, #scoreboard {
       -ms-transition-delay: 200ms;
        -o-transition-delay: 200ms;
 }
+
   .portrait:hover {
     border-color: #3ea349;
 
@@ -182,9 +292,9 @@ html, body, #scoreboard {
 
 .portrait .name {
   color: rgba(0,0,0,0);
-  font-family: 'Avenir Next';
-  font-weight:400;
-  font-size: 110%;
+  font-family: 'SourceCodeProRegular';
+  letter-spacing:-1px;
+  font-size: 100%;
   margin-left: -50px;
   margin-top: 0;
   text-align: center;

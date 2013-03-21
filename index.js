@@ -77,8 +77,13 @@ function modifyRoute(request, response) {
   response.setHeader('Content-Type', 'application/json');
 
   if (payload.query && payload.query.from && payload.query.to) {
-    var from = payload.query.from,
-        to   = payload.query.to;
+    var from = payload.query.from.toLowerCase(),
+        to   = payload.query.to.toLowerCase();
+
+    if (from === to) {
+      response.write(JSON.stringify({"error": "you can't owe yourself coffee"}));
+      return response.end();
+    }
 
     if (store[from] === undefined) {
       store[from] = {};

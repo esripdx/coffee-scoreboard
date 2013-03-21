@@ -34,21 +34,21 @@
 
 @font-face {
     font-family: 'Avenir Next';
-    src: url('../font/avenir-demi/avenirnextltpro-demi.woff') format('woff');
+    src: url('../font/avenirnextltpro-demi.woff') format('woff');
     font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Avenir Next';
-    src: url('../font/avenir-bold/avenirnextltpro-bold.woff') format('woff');
+    src: url('../font/avenirnextltpro-bold.woff') format('woff');
     font-weight: 800;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Avenir Next';
-    src: url('../font/avenir/avenirnextltpro-regular.woff') format('woff');
+    src: url('../font/avenirnextltpro-regular.woff') format('woff');
     font-weight: 400;
     font-style: normal;
 }

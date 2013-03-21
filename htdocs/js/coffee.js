@@ -51,15 +51,28 @@ function renderBoard(people, scores) {
 
       stage.on('message:circle', function(data) {
         var $el = $template.clone();
+        var name = data.name;
+        var dragIcon = document.createElement('img');
+        dragIcon.src = '/img/plus1.png';
 
         $el
-          .attr({ 'data-name': data.name })
+          .attr('data-name', name)
+          .find('.name')
+            .text(name)
+            .end()
+          .find('.portrait')
+            .css({
+              "background": "url('"+gravatar(data.email, 50)+"')",
+              "top": data.y,
+              "left": data.x
+            })
+            .end()
+          .appendTo('#scoreboard');
+
+        $el
           .on('dragstart', function(e){
-            e.originalEvent.dataTransfer.setData('text/plain', data.name);
-            // var dragIcon = document.createElement('img');
-            // dragIcon.src = '/img/token.png';
-            // dragIcon.width = 100;
-            // e.originalEvent.dataTransfer.setDragImage(dragIcon, -10, -10);
+            e.originalEvent.dataTransfer.setData('text/plain', name);
+            e.originalEvent.dataTransfer.setDragImage(dragIcon, 30, 30);
           })
           .on('dragover', function(e){
             e.preventDefault();
@@ -72,7 +85,7 @@ function renderBoard(people, scores) {
             e.preventDefault();
 
             var from = e.originalEvent.dataTransfer.getData('text/plain');
-            var to   = data.name;
+            var to   = name;
 
             $(this).removeClass('over');
 
@@ -83,26 +96,7 @@ function renderBoard(people, scores) {
             }).done(function(response){
               console.log(response);
             });
-          })
-          .find('.name')
-            .text(data.name)
-            .end()
-          // .find('.coffee-token')
-          //   .on('dragstart',function(e){
-          //     console.log('dragging');
-          //   })
-          //   .on('dragend', function(e){
-          //     console.log('dragend');
-          //   })
-          //   .end()
-          .find('.portrait')
-            .css({
-              "background": "url('"+gravatar(data.email, 50)+"')",
-              "top": data.y,
-              "left": data.x
-            })
-            .end()
-          .appendTo('#scoreboard');
+          });
       });
     });
   });

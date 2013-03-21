@@ -54,18 +54,14 @@ applet, canvas, embed, figure, figcaption, iframe, img, object {
 
 /* - - - - - - - - - Basic Typography - - - - - - - */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: normal;
-  text-align: center;
-  margin: 1em 0;
-  color:#209DCB;
-}
-h1 {
-  font-size: 260%;
-  float: left;
-  margin-left: 1em;
   font-weight:600;
   font-family: 'Avenir Next';
   color:#209DCB;
+}
+h1 {
+  float:left;
+  font-size: 200%;
+  margin: .55em 0 0 .25em;
 }
 h2 {
   font-size: 160%;
@@ -84,16 +80,10 @@ h6 {
   font-weight: normal;
 }
 
-/* - - - - - - - - - containers - - - - - - - */
-html, body, #scoreboard {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-#scoreboard, #shadow {
-  position: absolute;
-  overflow: hidden;
+/* - - - - - - - - - header - - - - - - - */
+header{
+  float:left;
+  margin:1.5em;
 }
 
 h1 span{
@@ -127,9 +117,16 @@ h1 span{
   }
 }
 
-header{
-  float:left;
-  margin:2em;
+/* - - - - - - - - - containers - - - - - - - */
+html, body, #scoreboard {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#scoreboard, #shadow {
+  position: absolute;
+  overflow: hidden;
 }
 
 /* - - - - - - - - - container - - - - - - - */
@@ -181,7 +178,8 @@ header{
 
 .portrait .name {
   color: rgba(0,0,0,0);
-  font-family: "estilo-pro";
+  font-family: 'Avenir Next';
+  font-weight:400;
   font-size: 110%;
   margin-left: -50px;
   margin-top: 0;
@@ -205,12 +203,12 @@ header{
   }
 
 .coffee-token {
-  background: url('../img/token.png');
-  background-size: 50px;
+  background: url('../img/plus1.png');
+  background-size: 60px;
   border-radius: 25px;
-  height: 50px;
+  height: 60px;
   opacity: 0;
-  width: 50px;
+  width: 60px;
 
   position: absolute;
   top: 0;
@@ -226,6 +224,12 @@ header{
   .coffee-token:active {
     opacity: 1;
   }
+
+@media (-webkit-min-device-pixel-ratio: 1.5){
+  .coffee-token{
+    background-image: url('../img/plus1@2x.png');
+  }
+}
 
 /* - - - - - - - - - Print - - - - - - - */
 @media print {

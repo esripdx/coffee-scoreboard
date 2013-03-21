@@ -89,8 +89,6 @@ function renderBoard(people, scores) {
 
             $(this).removeClass('over');
 
-            console.log(from + ' bought ' + to + ' 1 coffee.');
-
             $.ajax({
               url: "/coffee?from=" + from.toLowerCase() + "&to=" + to.toLowerCase()
             }).done(function(response){

@@ -9,7 +9,7 @@ html {
 
 body {
   margin: 0;
-  background: url('../img/noisy_grid.png') top left repeat white;
+  background: url('../img/noisy_grid.png') top left repeat;
   color: #333;
   font-family: "Avenir Next", "Lucida Grande", "Seoge UI", "Arial", sans-serif;
   font-size:16px;
@@ -128,6 +128,7 @@ html, body, #scoreboard {
 
 /* - - - - - - - - - container - - - - - - - */
 #scoreboard {
+  background: -webkit-radial-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
   top: 0;
 }
 
@@ -139,7 +140,7 @@ html, body, #scoreboard {
 }
 
 .portrait {
-  border: 4px solid #ffffff;
+  border: 4px solid #fff;
   border-radius: 50%;
   display: block;
   height: 50px;
@@ -161,12 +162,20 @@ html, body, #scoreboard {
       -ms-transition: all 200ms linear;
        -o-transition: all 200ms linear;
           transition: all 200ms linear;
+
+  -webkit-transition-delay: 200ms;
+     -moz-transition-delay: 200ms;
+      -ms-transition-delay: 200ms;
+       -o-transition-delay: 200ms;
 }
   .portrait:hover {
-    -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
-       -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
-            box-shadow: 0 0 21px rgba(0, 0, 0, 0.25);
+    border-color: #3ea349;
+
+    -webkit-box-shadow: 0 0 11px rgba(0, 0, 0, 0.3);
+       -moz-box-shadow: 0 0 11px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 11px rgba(0, 0, 0, 0.3);
   }
+
   .person.over .portrait {
     border-color: #ca4c29;
   }
@@ -191,6 +200,11 @@ html, body, #scoreboard {
       -ms-transition: all 100ms linear;
        -o-transition: all 100ms linear;
           transition: all 100ms linear;
+
+  -webkit-transition-delay: 200ms;
+     -moz-transition-delay: 200ms;
+      -ms-transition-delay: 200ms;
+       -o-transition-delay: 200ms;
 }
   .portrait:hover .name {
     color: rgba(0,0,0,.5);

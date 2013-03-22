@@ -105,7 +105,7 @@ function renderBoard(people, scores) {
         var c2x = x;
         var c2y = y;
 
-        this.path = new Path().moveTo(this.get(0).x,this.get(0).y).curveTo(c1x, c1y, c2x, c2y, this.get(1).x, this.get(1).y).attr("strokeWidth", 1).attr("strokeColor", "#ccc"),
+        this.path = new Path().moveTo(this.get(0).x,this.get(0).y).curveTo(c1x, c1y, c2x, c2y, this.get(1).x, this.get(1).y).attr("strokeWidth", 1).attr("strokeColor", "#ccc").attr("strokeOpacity", 0.25),
 
         this.path.on("addedToStage", function(){
           stage.sendMessage("relation",{
@@ -138,10 +138,8 @@ function renderBoard(people, scores) {
         var p0y = s.y;
 
         //first control point
-        var p1x = s.x;
-        var p1y = s.y;
-
-        
+        var p1x = x;
+        var p1y = y;
 
         // second control point
         var p2x = x;

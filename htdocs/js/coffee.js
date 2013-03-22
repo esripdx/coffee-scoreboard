@@ -16,6 +16,8 @@ function renderBoard(people, scores) {
           bg = new Group().addTo(stage),
           lines = new Group().addTo(stage),
           circles = new Group().addTo(stage),
+          activeLines = new Group().addTo(stage),
+          activeCircles = new Group().addTo(stage),
           scores;
 
       function People(){
@@ -99,13 +101,13 @@ function renderBoard(people, scores) {
         this.amount = scores[person1.name.toLowerCase()][person2.name.toLowerCase()] - scores[person2.name.toLowerCase()][person1.name.toLowerCase()];
 
         // THE CONTROL POINTS
-        var c1x = x;
-        var c1y = y;
+        var c1x = this.get(0).x;
+        var c1y = this.get(0).y;
 
         var c2x = x;
         var c2y = y;
 
-        this.path = new Path().moveTo(this.get(0).x,this.get(0).y).curveTo(c1x, c1y, c2x, c2y, this.get(1).x, this.get(1).y).attr("strokeWidth", 1).attr("strokeColor", "#ccc").attr("strokeOpacity", 0.25),
+        this.path = new Path().moveTo(this.get(0).x,this.get(0).y).curveTo(c1x, c1y, c2x, c2y, this.get(1).x, this.get(1).y).attr("strokeWidth", 1).attr("strokeColor", "#ccc").attr("strokeOpacity", 0.2)
 
         this.path.on("addedToStage", function(){
           stage.sendMessage("relation",{
@@ -138,8 +140,8 @@ function renderBoard(people, scores) {
         var p0y = s.y;
 
         //first control point
-        var p1x = x;
-        var p1y = y;
+        var p1x = s.x;
+        var p1y = s.y;
 
         // second control point
         var p2x = x;
@@ -273,20 +275,25 @@ function renderBoard(people, scores) {
           relationships.forEach(function(relation){
             if(!relation.id.match(data.name)){
               relation.paths[0].animate(".25s", {
-                opacity:0.25,
+                opacity:0.2,
                 strokeWidth:1
               });
               relation.paths[1].animate(".25s", {
-                opacity:0.25,
+                opacity:0.2,
                 strokeWidth:1
               });
               relation.circle.animate(".25s", {
-                opacity:0.5,
-                radius: 7
+                //opacity:0.5,
+                radius: 5
               });
               relation.text.animate(".25s", {
                 opacity:0
               });
+            } else if (relation.amount !== 0) {
+              relation.paths[0].remove().addTo(activeLines);
+              relation.paths[1].remove().addTo(activeLines);
+              relation.circle.remove().addTo(activeCircles);
+              relation.text.remove().addTo(activeCircles);
             }
           });
         });
@@ -294,21 +301,27 @@ function renderBoard(people, scores) {
         stage.on("message:portraitLeave", function(data){
           relationships.forEach(function(relation){
             relation.text.animate(".25s", {opacity:1});
-              relation.paths[0].animate(".25s", {
-                opacity:1,
-                strokeWidth:3
-              });
-              relation.paths[1].animate(".25s", {
-                opacity:1,
-                strokeWidth:3
-              });
-              relation.circle.animate(".25s", {
-                opacity:1,
-                radius: 13
-              });
-              relation.text.animate(".25s", {
-                opacity:1
-              });
+            relation.paths[0].animate(".25s", {
+              opacity:1,
+              strokeWidth:3
+            });
+            relation.paths[1].animate(".25s", {
+              opacity:1,
+              strokeWidth:3
+            });
+            relation.circle.animate(".25s", {
+              opacity:1,
+              radius: 13
+            });
+            relation.text.animate(".25s", {
+              opacity:1
+            });
+            if(relation.id.match(data.name) && relation.amount !== 0){
+              relation.paths[0].remove().addTo(lines);
+              relation.paths[1].remove().addTo(lines);
+              relation.circle.remove().addTo(circles);
+              relation.text.remove().addTo(circles);
+            }
           });
         });
 

@@ -80,6 +80,12 @@ function renderBoard(people, scores) {
         return this[id];
       };
 
+      Relationships.prototype.forEach = function(func) {
+        for(var key in this){
+          func(this[key]);
+        }
+      };
+
       function Relation(person1, person2){
         this[person1.name] = person1;
         this[person2.name] = person2;
@@ -260,33 +266,25 @@ function renderBoard(people, scores) {
         });
 
         stage.on("message:portraitEnter", function(data){
-          /*
-          for(var key in relations){
-            var relation = relations[key];
-            if(relations.hasOwnProperty(key)){
-              if(!relation.id.match(data.name)){
-                relation.giverPath.animate(".25s", {opacity:0.15});
-                relation.reciverPath.animate(".25s", {opacity:0.15});
-                relation.circle.animate(".25s", {opacity:0.35});
-                relation.debt.animate(".25s", {opacity:0.15});
-              }
+          relationships.forEach(function(relation){
+            if(!relation.id.match(data.name)){
+              relation.paths[0].animate(".25s", {opacity:0.25});
+              relation.paths[1].animate(".25s", {opacity:0.25});
+              relation.circle.animate(".25s", {opacity:0.25});
+              relation.text.animate(".25s", {opacity:0.25});
             }
-          }
-          */
+          });
         });
 
         stage.on("message:portraitLeave", function(data){
-          /*
-          for(var key in relations){
-            var relation = relations[key];
-            if(!relation.id.match(data.name)){
-              relation.giverPath.animate(".25s", {opacity:1});
-              relation.reciverPath.animate(".25s", {opacity:1});
+          relationships.forEach(function(relation){
+            //if(!relation.id.match(data.name)){
+              relation.paths[0].animate(".25s", {opacity:1});
+              relation.paths[1].animate(".25s", {opacity:1});
               relation.circle.animate(".25s", {opacity:1});
-              relation.debt.animate(".25s", {opacity:1});
-            }
-          }
-          */
+              relation.text.animate(".25s", {opacity:1});
+            //}
+          });
         });
 
         stage.on("message:updateRelation", function(data){

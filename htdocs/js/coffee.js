@@ -374,7 +374,7 @@ function renderBoard(people, scores) {
       .appendTo('#scoreboard');
 
     setTimeout(function(){
-      $el.removeClass('flipInX').addClass('fadeOut');
+      $el.removeClass('flipInX').addClass('flipOutX');
       setTimeout(function(){
         $el.remove();
       }, 1000);

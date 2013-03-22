@@ -9,6 +9,7 @@ function renderBoard(people, scores) {
         '/font/SourceCodePro-Bold-webfont.ttf',
         '/font/SourceCodePro-Bold-webfont.svg'
       ]);
+
       var x = stage.width/2,
           y = stage.height/2,
           r = stage.height/2.5,
@@ -197,8 +198,7 @@ function renderBoard(people, scores) {
         this.draw();
       };
 
-      Relation.prototype.draw = function(newAmount){
-        this.amount = newAmount || this.amount;
+      Relation.prototype.draw = function(){
 
         this.text.attr("text", Math.abs(this.amount));
 
@@ -268,22 +268,43 @@ function renderBoard(people, scores) {
         stage.on("message:portraitEnter", function(data){
           relationships.forEach(function(relation){
             if(!relation.id.match(data.name)){
-              relation.paths[0].animate(".25s", {opacity:0.25});
-              relation.paths[1].animate(".25s", {opacity:0.25});
-              relation.circle.animate(".25s", {opacity:0.25});
-              relation.text.animate(".25s", {opacity:0.25});
+              relation.paths[0].animate(".25s", {
+                opacity:0.25,
+                strokeWidth:1
+              });
+              relation.paths[1].animate(".25s", {
+                opacity:0.25,
+                strokeWidth:1
+              });
+              relation.circle.animate(".25s", {
+                opacity:0.5,
+                radius: 7
+              });
+              relation.text.animate(".25s", {
+                opacity:0
+              });
             }
           });
         });
 
         stage.on("message:portraitLeave", function(data){
           relationships.forEach(function(relation){
-            //if(!relation.id.match(data.name)){
-              relation.paths[0].animate(".25s", {opacity:1});
-              relation.paths[1].animate(".25s", {opacity:1});
-              relation.circle.animate(".25s", {opacity:1});
-              relation.text.animate(".25s", {opacity:1});
-            //}
+            relation.text.animate(".25s", {opacity:1});
+              relation.paths[0].animate(".25s", {
+                opacity:1,
+                strokeWidth:3
+              });
+              relation.paths[1].animate(".25s", {
+                opacity:1,
+                strokeWidth:3
+              });
+              relation.circle.animate(".25s", {
+                opacity:1,
+                radius: 13
+              });
+              relation.text.animate(".25s", {
+                opacity:1
+              });
           });
         });
 

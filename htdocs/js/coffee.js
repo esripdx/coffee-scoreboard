@@ -13,6 +13,7 @@ function renderBoard(people, scores) {
       var x = stage.width/2,
           y = stage.height/2,
           r = stage.height/2.5,
+          tension = 2.5,
           bg = new Group().addTo(stage),
           lines = new Group().addTo(stage),
           circles = new Group().addTo(stage),
@@ -29,7 +30,7 @@ function renderBoard(people, scores) {
 
         this.__defineGetter__('relations', function () {
           var relations = [];
-          var names = this.names.sort();
+          var names = this.names.slice(0).sort();
           while (p = names.shift()){
             for (var i = 0; i < names.length; i++) {
               relations.push(p+"-"+names[i]);
@@ -101,13 +102,28 @@ function renderBoard(people, scores) {
         this.amount = scores[person1.name.toLowerCase()][person2.name.toLowerCase()] - scores[person2.name.toLowerCase()][person1.name.toLowerCase()];
 
         // THE CONTROL POINTS
-        var c1x = this.get(0).x;
-        var c1y = this.get(0).y;
+        var person1x = this.get(0).x;
+        var person1y = this.get(0).y;
 
-        var c2x = x;
-        var c2y = y;
+        var person1index = people.names.indexOf(this.get(0).name);
+        var person2index = people.names.indexOf(this.get(1).name);
 
-        this.path = new Path().moveTo(this.get(0).x,this.get(0).y).curveTo(c1x, c1y, c2x, c2y, this.get(1).x, this.get(1).y).attr("strokeWidth", 1).attr("strokeColor", "#ccc").attr("strokeOpacity", 0.2)
+        var c1x = x + ( (person1x - x) / tension );
+        var c1y = y + ( (person1y - y) / tension );
+
+        var person2x = this.get(1).x;
+        var person2y = this.get(1).y;
+
+        var c2x = x + ( (person2x - x) / tension );
+        var c2y = y + ( (person2y - y) / tension );
+
+        if(Math.abs(person1index - person2index) === people.length/2){
+          this.randomFactor = (r/4)*([-1,1][Math.round(Math.random())]);
+          c1y = c1y+this.randomFactor;
+          c2y = c2y+this.randomFactor;
+        }
+
+        this.path = new Path().moveTo(this.get(0).x,this.get(0).y).curveTo(c1x, c1y, c2x, c2y, this.get(1).x, this.get(1).y).attr("strokeWidth", 1).attr("strokeColor", "#ccc").attr("strokeOpacity", 0.2);
 
         this.path.on("addedToStage", function(){
           stage.sendMessage("relation",{
@@ -140,16 +156,24 @@ function renderBoard(people, scores) {
         var p0y = s.y;
 
         //first control point
-        var p1x = s.x;
-        var p1y = s.y;
-
-        // second control point
-        var p2x = x;
-        var p2y = y;
+        var p1x = x + ( (p0x - x) / tension );
+        var p1y = y + ( (p0y - y) / tension );
 
         // end point
         var p3x = e.x;
         var p3y = e.y;
+
+        // second control point
+        var p2x = x + ( (p3x - x) / tension );
+        var p2y = y + ( (p3y - y) / tension );
+
+        var person1index = people.names.indexOf(this.get(0).name);
+        var person2index = people.names.indexOf(this.get(1).name);
+
+        if(Math.abs(person1index - person2index) === people.length/2){
+          p1y = p1y+this.randomFactor;
+          p2y = p2y+this.randomFactor;
+        }
 
         //q0 = (p0 + p1) / 2
         var q0x = (p0x + p1x) / 2;

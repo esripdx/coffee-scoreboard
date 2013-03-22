@@ -19,8 +19,8 @@ if (exists) {
                                      bot_config.redis.port,
                                      bot_config.redis.db);
 
-  var sub    = zen.get_redis_client();
-  var redis  = zen.get_redis_client();
+  var sub   = zen.get_redis_client();
+  var redis = zen.get_redis_client();
 
   config = api.load_config('./config.json');
 } else {
@@ -28,8 +28,8 @@ if (exists) {
 }
 
 // paths to store and log
-var dataStore  = "./data/store.json";
-var logFile    = "./data/coffee.log";
+var dataStore = "./data/store.json";
+var logFile   = "./data/coffee.log";
 
 // set last modified date
 var lastModified = new Date();
@@ -39,78 +39,76 @@ String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-function writeData (store) {
+// synchronously write data to json store
+function writeData(store) {
   fs.writeFileSync(dataStore, JSON.stringify(store), 'utf8');
   lastModified = new Date();
 }
 
-function readData () {
-  var data = fs.readFileSync(dataStore, 'utf8');
-  var store;
+// synchronously read data from json store
+function readData() {
+  var data  = fs.readFileSync(dataStore, 'utf8'),
+      store = {};
+
   try {
     store = JSON.parse(data);
   } catch (err) {
     console.error("Unable to parse data from store");
-    store = { };
   }
 
   return store;
 }
 
-
 var appServer = new bricks.appserver();
 
 var store = readData();
 
+// routes
 
-function scoreRoute (request, response) {
+function scoreRoute(request, response) {
   response.setHeader('Content-Type', 'application/json');
   response.write(JSON.stringify(store));
   response.end();
 }
 
-function modifyRoute (request, response) {
+function modifyRoute(request, response) {
   var payload = url.parse(request.url, true);
 
-  // This is confusing because the frontend sends the x/y parameters backwards. x is actually 
-  // the vertical axis and y is the horizontal axis. It would be awesome to correct this.
   response.setHeader('Content-Type', 'application/json');
-  if (payload.query && payload.query.x && payload.query.y && payload.query.direction) {
-    var x = payload.query.x,
-        y = payload.query.y,
-        direction = payload.query.direction;
 
-    if (store[x] === undefined) {
-      store[x] = { };
-    }
-    if (store[x][y] === undefined) {
-      store[x][y] = 0;
+  if (payload.query && payload.query.from && payload.query.to) {
+    var from = payload.query.from.toLowerCase(),
+        to   = payload.query.to.toLowerCase();
+
+    if (from === to) {
+      response.write(JSON.stringify({"error": "you can't give yourself coffee"}));
+      return response.end();
     }
 
-    if (direction === 'up') {
-      store[x][y]++;
-    } else if (direction === 'down') {
-      store[x][y]--;
-    } else {
-      response.write(JSON.stringify({ "error": "direction must be up or down" }));
-      response.end();
-      return;
+    if (store[from] === undefined) {
+      store[from] = {};
+    }
+    if (store[from][to] === undefined) {
+      store[from][to] = 0;
     }
 
-    // See note above, that's why this looks backwards
-    var log = new Date().toString() + ": " + x + " to " + y + " " + direction + ". now: "+store[x][y]+"\n";
+    // add 1 coffee credit to purchaser's (from) transaction record with recipient (to)
+    store[from][to]++;
+
+    // add transaction to log
+    var log = new Date().toString() + ": " + from + " to " + to + ". now: " + store[from][to] + "\n";
     fs.appendFileSync(logFile, log);
     writeData(store);
 
     response.write(JSON.stringify(store));
   } else {
-    response.write(JSON.stringify({"error": "need an x, y, and direction"}));
+    response.write(JSON.stringify({"error": "need a 'from' and a 'to'"}));
   }
 
   response.end();
 }
 
-function atomRoute (request, response) {
+function atomRoute(request, response) {
   var xwriter = new XMLWriter(true);
   var atom = new ATOMWriter(xwriter);
 
@@ -147,15 +145,17 @@ function atomRoute (request, response) {
   response.end();
 }
 
-function peopleRoute (request, response) {
+function peopleRoute(request, response) {
   response.setHeader('Content-Type', 'application/json');
-  var people = [];
-  for (var i = 0; i < config.people.length; i++) {
-    people.push(config.people[i].name);
-  }
-  response.write(JSON.stringify(people));
+  // var people = [];
+  // for (var i = 0; i < config.people.length; i++) {
+  //   people.push(config.people[i].name);
+  // }
+  response.write(JSON.stringify(config.people));
   response.end();
 }
+
+// server settings
 
 var redirects = [
   {
@@ -176,6 +176,7 @@ appServer.addRoute(".+", appServer.plugins.fourohfour);
 appServer.addEventHandler('route.fatal', function (error) { console.log("FATAL: " + error); console.dir(error); });
 appServer.addEventHandler('run.fatal', function (error) { console.log("FATAL: " + error); console.dir(error); });
 
+// start server
+
 var server = appServer.createServer();
 server.listen(config.listen);
-

@@ -13,6 +13,7 @@ function renderBoard(people, scores) {
       var x = stage.width/2,
           y = stage.height/2,
           r = stage.height/2.5,
+          bg = new Group().addTo(stage),
           lines = new Group().addTo(stage),
           circles = new Group().addTo(stage),
           scores;
@@ -96,12 +97,14 @@ function renderBoard(people, scores) {
         // Aaron has bought Amber n coffees
         // coffees aaron has bought amber - coffees amber and bought aaron
         this.amount = scores[person1.name.toLowerCase()][person2.name.toLowerCase()] - scores[person2.name.toLowerCase()][person1.name.toLowerCase()];
-        var c1x = this.get(0).x;
-        var c1y = this.get(0).y;
+
+        var c1x = x;
+        var c1y = y;
+
         var c2x = x;
         var c2y = y;
 
-        this.path = new Path().moveTo(this.get(0).x,this.get(0).y).curveTo(c1x, c1y, c2x, c2y, this.get(1).x, this.get(1).y),
+        this.path = new Path().moveTo(this.get(0).x,this.get(0).y).curveTo(c1x, c1y, c2x, c2y, this.get(1).x, this.get(1).y).attr("strokeWidth", 1).attr("strokeColor", "#ccc"),
 
         this.path.on("addedToStage", function(){
           stage.sendMessage("relation",{
@@ -110,7 +113,7 @@ function renderBoard(people, scores) {
           });
         }.bind(this));
 
-        this.path.addTo(stage);
+        this.path.addTo(bg);
       }
 
       Relation.prototype.get = function(getBy) {
@@ -136,6 +139,8 @@ function renderBoard(people, scores) {
         //first control point
         var p1x = s.x;
         var p1y = s.y;
+
+        
 
         // second control point
         var p2x = x;

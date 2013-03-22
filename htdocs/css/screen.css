@@ -318,7 +318,8 @@ html, body, #scoreboard {
       -ms-transition-delay: 200ms;
        -o-transition-delay: 200ms;
 }
-  .portrait:hover .name {
+  .portrait:hover .name,
+  #scoreboard.show-names .portrait .name {
     color: rgba(0,0,0,.5);
     top: 60px;
   }

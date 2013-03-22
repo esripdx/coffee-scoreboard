@@ -419,6 +419,7 @@ function renderBoard(people, scores) {
           .on('dragstart', function(e){
             e.originalEvent.dataTransfer.setData('text/plain', name);
             e.originalEvent.dataTransfer.setDragImage(dragIcon, 30, 30);
+            $('#scoreboard').addClass('show-names');
           })
           .on('dragover', function(e){
             e.preventDefault();
@@ -426,6 +427,9 @@ function renderBoard(people, scores) {
           })
           .on('dragleave', function(e){
             $(this).removeClass('over');
+          })
+          .on('dragend', function(){
+            $('#scoreboard').removeClass('show-names');
           })
           .on('drop', function(e){
             e.preventDefault();

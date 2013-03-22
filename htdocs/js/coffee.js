@@ -98,6 +98,7 @@ function renderBoard(people, scores) {
         // coffees aaron has bought amber - coffees amber and bought aaron
         this.amount = scores[person1.name.toLowerCase()][person2.name.toLowerCase()] - scores[person2.name.toLowerCase()][person1.name.toLowerCase()];
 
+        // THE CONTROL POINTS
         var c1x = x;
         var c1y = y;
 

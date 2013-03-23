@@ -206,6 +206,7 @@ function simplify() {
       }
     }
 
+    // Find out if this person is owed anything
     var isOwedCount = 0;
     for(var owes in store[person]) {
       if(store[person][owes] > 0) {
@@ -214,10 +215,8 @@ function simplify() {
     }
 
     if(owesCount > 0 && isOwedCount > 0) {
-      // console.log(person + " owes " + owesCount);
-      // console.log(person + " is owed " + isOwedCount);
 
-      // Pick one going in and out of this person to simplify the graph
+      // Pick one person who owes this person and one who is owed by this person
 
       var inPerson = false;
       var outPerson = false;
@@ -236,6 +235,7 @@ function simplify() {
       console.log("Found "+inPerson+" owes "+person+", and "+person+" owes "+outPerson);
       console.log("Simplifying to "+inPerson+" owes "+outPerson);
 
+      // Adjust the debt accordingly
       store[person][inPerson]--;
       store[outPerson][person]--;
       store[outPerson][inPerson]++;

@@ -451,7 +451,7 @@ function renderBoard(people, scores) {
                 notify(response.error);
               }
               else {
-                notify(from + ' gave ' + to + ' 1 coffee');
+                notify(from + ' bought a coffee for ' + to);
               }
             });
           });

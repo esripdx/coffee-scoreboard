@@ -189,6 +189,79 @@ function peopleRoute(request, response) {
   response.end();
 }
 
+// This function searches for one person to simplify 1 coffee debt.
+// Returns false if none could be found.
+function simplify() {
+
+  // Look for the first person who both owes and is owed coffee
+  var found = false;
+  for(var i in config.people) {
+    var person = config.people[i].name.toLowerCase();
+
+    // Find out if this person owes anything
+    var owesCount = 0;
+    for(var owed in store) {
+      if(store[owed][person] > 0) {
+        owesCount += store[owed][person];
+      }
+    }
+
+    var isOwedCount = 0;
+    for(var owes in store[person]) {
+      if(store[person][owes] > 0) {
+        isOwedCount += store[person][owes];
+      }
+    }
+
+    if(owesCount > 0 && isOwedCount > 0) {
+      // console.log(person + " owes " + owesCount);
+      // console.log(person + " is owed " + isOwedCount);
+
+      // Pick one going in and out of this person to simplify the graph
+
+      var inPerson = false;
+      var outPerson = false;
+
+      for(var owes in store[person]) {
+        if(inPerson == false && store[person][owes] > 0) {
+          inPerson = owes;
+        }
+      }
+      for(var owed in store) {
+        if(outPerson == false && store[owed][person] > 0) {
+          outPerson = owed;
+        }
+      }
+
+      console.log("Found "+inPerson+" owes "+person+", and "+person+" owes "+outPerson);
+      console.log("Simplifying to "+inPerson+" owes "+outPerson);
+
+      store[person][inPerson]--;
+      store[outPerson][person]--;
+      store[outPerson][inPerson]++;
+
+      // recurse!
+      return simplify();
+    }
+  }
+
+  // Save to disk
+  writeData(store);
+  return false;
+}
+
+// Simplify the debt graph by looking for 
+function simplifyRoute(request, response) {
+  response.setHeader('Content-Type', 'application/json');
+
+  console.log("Simplifying graph...");
+  simplify();
+  console.log("Complete!");
+
+  response.write(JSON.stringify(store));
+  response.end();
+}
+
 // server settings
 
 var redirects = [
@@ -205,6 +278,7 @@ appServer.addRoute("/score$", scoreRoute);
 appServer.addRoute("/score\.atom", atomRoute);
 appServer.addRoute("/coffee", modifyRoute);
 appServer.addRoute("/people", peopleRoute);
+appServer.addRoute("/simplify", simplifyRoute);
 appServer.addRoute(".+", appServer.plugins.fourohfour);
 
 appServer.addEventHandler('route.fatal', function (error) { console.log("FATAL: " + error); console.dir(error); });

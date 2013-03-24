@@ -5,7 +5,8 @@ var bricks     = require('bricks'),
     fs         = require('fs'),
     url        = require('url'),
     XMLWriter  = require('xml-writer'),
-    ATOMWriter = require('atom-writer');
+    ATOMWriter = require('atom-writer'),
+    request    = require('request');
 
 var config;
 
@@ -129,8 +130,12 @@ function modifyRoute(request, response) {
           }
         }
       }
-      msg += (existingDebt ? from : to).capitalize() + " now owes " + numCoffeesOwed + " coffee" + (numCoffeesOwed == 1 ? "" : "s") 
-          + " to " + numPeopleOwed + " " + (numPeopleOwed == 1 ? "person" : "people") + ".";
+      if(numCoffeesOwed == 0) {
+        msg += (existingDebt ? from : to).capitalize() + " is now coffee-debt free!";
+      } else {
+        msg += (existingDebt ? from : to).capitalize() + " now owes " + numCoffeesOwed + " coffee" + (numCoffeesOwed == 1 ? "" : "s") 
+            + " to " + numPeopleOwed + " " + (numPeopleOwed == 1 ? "person" : "people") + ".";
+      }
       zen.send_privmsg(config.channel, msg);
     }
 
@@ -284,7 +289,49 @@ appServer.addRoute(".+", appServer.plugins.fourohfour);
 appServer.addEventHandler('route.fatal', function (error) { console.log("FATAL: " + error); console.dir(error); });
 appServer.addEventHandler('run.fatal', function (error) { console.log("FATAL: " + error); console.dir(error); });
 
-// start server
-
+// start web server
 var server = appServer.createServer();
 server.listen(config.listen);
+
+// If an IRC environment exists, set up the listener for IRC commands
+if(irc) {
+  sub.subscribe('in');
+  sub.on('message', function(channel, message) {
+    var msg = JSON.parse(message);
+    var sender = msg.data.sender;
+    if(msg.version == 1) {
+      var names = [];
+      for(var i in config.people) {
+        names.push(config.people[i].name.toLowerCase());
+      }
+      if(match=msg.data.message.match(new RegExp('^!coffee ('+(names.join('|'))+')$', 'i'))) {
+        console.log("Name: " + match[1]);
+
+
+        
+      } else if(msg.data.message.match(/^[a-z]+ bought a coffee for [a-z]+$/)
+        || msg.data.message.match(/^[a-z]+ bought [a-z]+.+coffee$/)) {
+
+        if((match=msg.data.message.match(new RegExp('^('+(names.join('|'))+') bought ('+(names.join('|'))+') a coffee', 'i')))
+          || (match=msg.data.message.match(new RegExp('^('+(names.join('|'))+') bought a coffee for ('+(names.join('|'))+')$', 'i')))) {
+
+          request({
+            url: 'http://127.0.0.1:'+config.listen+'/coffee',
+            method: 'get',
+            qs: {
+              from: match[1],
+              to: match[2]
+            }
+          }, function(error, response, body){
+            // cool
+          });
+
+        } else {
+          zen.send_privmsg(config.channel, "Try 'aaron bought jerry a coffee' (first names only!)");
+        }
+        
+      }
+    }
+  });
+}
+

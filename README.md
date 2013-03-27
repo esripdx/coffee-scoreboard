@@ -4,18 +4,16 @@
 
     $ node index.js
 
-
 ## API
 
 ### /score
 
-Returns the current score in `Y: { X: count }` format
+Returns the current score in `from: { to: count }` format
 
 ### /coffee
 
 Parameters:
-* x
-* y
-* direction (up or down)
+* from
+* to
 
 Returns the current score or error

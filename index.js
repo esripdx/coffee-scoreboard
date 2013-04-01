@@ -180,6 +180,7 @@ function atomRoute(request, response) {
   atom.endFeed();
 
   response.setHeader('Content-Type', 'text/xml');
+  response.write('<?xml version="1.0" encoding="utf-8"?>'+"\n");
   response.write(atom.writer.toString());
   response.end();
 }

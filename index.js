@@ -155,7 +155,7 @@ function atomRoute(request, response) {
   for(var y in store) {
     for(var x in store[y]) {
       if(store[y][x] > 0) {
-        data.push(y.toString().capitalize()+" owes "+x.capitalize()+" "+store[y][x]+" coffee"+(store[y][x] > 1 ? "s" : ""));
+        data.push(x.capitalize()+" owes "+y.toString().capitalize()+" "+store[y][x]+" coffee"+(store[y][x] > 1 ? "s" : ""));
       }
     }
   }

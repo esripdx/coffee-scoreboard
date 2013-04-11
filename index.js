@@ -133,7 +133,7 @@ function modifyRoute(request, response) {
       if(numCoffeesOwed == 0) {
         msg += (existingDebt ? from : to).capitalize() + " is now coffee-debt free!";
       } else {
-        msg += (existingDebt ? from : to).capitalize() + " now owes " + numCoffeesOwed + " coffee" + (numCoffeesOwed == 1 ? "" : "s") 
+        msg += (existingDebt ? from : to).capitalize() + " now owes " + coffeeWord(numCoffeesOwed, 1)
             + " to " + numPeopleOwed + " " + (numPeopleOwed == 1 ? "person" : "people") + ".";
       }
       zen.send_privmsg(config.channel, msg);
@@ -155,7 +155,7 @@ function atomRoute(request, response) {
   for(var y in store) {
     for(var x in store[y]) {
       if(store[y][x] > 0) {
-        data.push(x.capitalize()+" owes "+y.toString().capitalize()+" "+store[y][x]+" coffee"+(store[y][x] > 1 ? "s" : ""));
+        data.push(x.capitalize()+" owes "+y.toString().capitalize()+" "+coffeeWord(store[y][x], true));
       }
     }
   }
@@ -305,18 +305,42 @@ if(irc) {
       for(var i in config.people) {
         names.push(config.people[i].name.toLowerCase());
       }
-      if(match=msg.data.message.match(new RegExp('^!coffee ('+(names.join('|'))+')$', 'i'))) {
+      if(match=msg.data.message.match(/^!coffee ([a-z]+)$/, 'i')) {
         console.log("Name: " + match[1]);
+        var who = match[1];
 
-
+        if(names.indexOf(who) == -1) {
+          zen.send_privmsg(config.channel, "Sorry, I don't know who that is. Try first names only.");
+        } else {
+          var is_owed = [];
+          var owes = [];
+          for(var y in store) {
+            if(store[y][who] > 0) {
+              owes.push(y.capitalize()+" "+coffeeWord(store[y][who], true));
+            }
+          }
+          for(var x in store[who]) {
+            if(store[who][x] > 0) {
+              is_owed.push(x.capitalize()+" owes "+who.capitalize()+" "+coffeeWord(store[who][x], true));
+            }
+          }
+          var sentence = "";
+          if(is_owed.length > 0) {
+            sentence += is_owed.join(", ") + ". ";
+          }
+          if(owes.length > 0) {
+            sentence += who.capitalize() + " owes " + owes.join(", ") + ". ";
+          }
+          zen.send_privmsg(config.channel, sentence);
+        }
         
-      } else if((match=msg.data.message.match(/^([a-z]+) bought (a) coffees? for ([a-z]+)$/))
-        || (match=msg.data.message.match(/^([a-z]+) bought ([a-z]+) (a) coffees?$/))) {
+      } else if((match=msg.data.message.match(/^([a-z]+) bought (a|1) coffees? for ([a-z]+)$/))
+        || (match=msg.data.message.match(/^([a-z]+) bought ([a-z]+) (a|1) coffees?$/))) {
 
         var coffee_from;
         var coffee_to;
         var coffee_num;
-        if(match[2].match(/^a|[0-9]$/)) {
+        if(match[2].match(/^(a|[0-9])$/)) {
           coffee_from = match[1].toLowerCase();
           coffee_to = match[3].toLowerCase();
           coffee_num = match[2];
@@ -328,6 +352,8 @@ if(irc) {
         if(coffee_num == "a") {
           coffee_num = 1;
         }
+
+        console.log("IRC Message: from: " + coffee_from + " to: " + coffee_to + " num: " + coffee_num);
 
         if(names.indexOf(coffee_from) != -1 
           && names.indexOf(coffee_to) != -1 
@@ -354,7 +380,19 @@ if(irc) {
   });
 }
 
-process.on('uncaughtException', function(err) {
-  console.log("!!!!!!!!!!!!!!!")
-  console.log(err);
-});
+function coffeeWord(num, includeNum) {
+  if(includeNum) {
+    if(num == 1) {
+      return "one coffee";
+    } else {
+      return num + " coffees";
+    }
+  } else {
+    if(num == 1) {
+      return "coffee";
+    } else {
+      return "coffees";
+    }
+  }
+}
+

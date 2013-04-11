@@ -310,18 +310,36 @@ if(irc) {
 
 
         
-      } else if(msg.data.message.match(/^[a-z]+ bought a coffee for [a-z]+$/)
-        || msg.data.message.match(/^[a-z]+ bought [a-z]+.+coffee$/)) {
+      } else if((match=msg.data.message.match(/^([a-z]+) bought (a) coffees? for ([a-z]+)$/))
+        || (match=msg.data.message.match(/^([a-z]+) bought ([a-z]+) (a) coffees?$/))) {
 
-        if((match=msg.data.message.match(new RegExp('^('+(names.join('|'))+') bought ('+(names.join('|'))+') a coffee', 'i')))
-          || (match=msg.data.message.match(new RegExp('^('+(names.join('|'))+') bought a coffee for ('+(names.join('|'))+')$', 'i')))) {
+        var coffee_from;
+        var coffee_to;
+        var coffee_num;
+        if(match[2].match(/^a|[0-9]$/)) {
+          coffee_from = match[1].toLowerCase();
+          coffee_to = match[3].toLowerCase();
+          coffee_num = match[2];
+        } else {
+          coffee_from = match[1].toLowerCase();
+          coffee_to = match[2].toLowerCase();
+          coffee_num = match[3];
+        }
+        if(coffee_num == "a") {
+          coffee_num = 1;
+        }
+
+        if(names.indexOf(coffee_from) != -1 
+          && names.indexOf(coffee_to) != -1 
+          && coffee_from != coffee_to) {
 
           request({
             url: 'http://127.0.0.1:'+config.listen+'/coffee',
             method: 'get',
             qs: {
-              from: match[1],
-              to: match[2]
+              from: coffee_from,
+              to: coffee_to,
+              num: coffee_num
             }
           }, function(error, response, body){
             // cool
@@ -336,3 +354,7 @@ if(irc) {
   });
 }
 
+process.on('uncaughtException', function(err) {
+  console.log("!!!!!!!!!!!!!!!")
+  console.log(err);
+});

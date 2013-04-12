@@ -24,8 +24,10 @@ if (irc) {
   var redis = zen.get_redis_client();
 
   config = api.load_config('./config.json');
+  console.log("IRC Bot Configured");
 } else {
   config = require('./config.json');
+  console.log("No IRC bot configured");
 }
 
 // paths to store and log
@@ -300,7 +302,7 @@ if(irc) {
   sub.on('message', function(channel, message) {
     var msg = JSON.parse(message);
     var sender = msg.data.sender;
-    if(msg.version == 1) {
+    if(msg.version == 1 && msg.data.message) {
       var names = [];
       for(var i in config.people) {
         names.push(config.people[i].name.toLowerCase());

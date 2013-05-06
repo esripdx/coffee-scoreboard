@@ -103,7 +103,7 @@ sub.on('message', function(channel, message) {
   }
 });
 
-exports.update = function(from, to) {
+exports.update = function(from, to, existingDebt) {
   var store = data.read();
   var msg = "[coffee] " + from.capitalize() + " bought a coffee for " + to.capitalize() + ". ";
 

@@ -1,5 +1,5 @@
 var fs = require('fs');
-var store = require('./data').read();
+var data = require('./data');
 
 // sometimes you just gotta capitalize strings
 String.prototype.capitalize = function() {
@@ -21,6 +21,7 @@ console.log("IRC Bot Configured");
 // set up the listener for IRC commands
 sub.subscribe('in');
 sub.on('message', function(channel, message) {
+  var store = data.read();
   var msg = JSON.parse(message);
   var sender = msg.data.sender;
   if(msg.version == 1 && msg.data.message) {
@@ -103,6 +104,7 @@ sub.on('message', function(channel, message) {
 });
 
 exports.update = function(from, to) {
+  var store = data.read();
   var msg = "[coffee] " + from.capitalize() + " bought a coffee for " + to.capitalize() + ". ";
 
   var numCoffeesOwed = 0;

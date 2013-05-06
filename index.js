@@ -9,8 +9,13 @@ var bricks     = require('bricks'),
     url        = require('url'),
     request    = require('request');
 
-// irc
-var loqi = require('./loqi');
+// check for IRC bot
+var irc = fs.existsSync('../../bot.json');
+if (irc) {
+  var loqi = require('./loqi');
+} else {
+  console.log("No IRC bot configured");
+}
 
 // data
 var data      = require('./data');
@@ -75,7 +80,9 @@ function modifyRoute(request, response) {
     fs.appendFileSync(logFile, log);
     writeData(store);
 
-    loqi.update(from, to, store);
+    if (irc) {
+      loqi.update(from, to);
+    }
 
     response.write(JSON.stringify(store));
   } else {

@@ -81,7 +81,7 @@ function modifyRoute(request, response) {
     writeData(store);
 
     if (irc) {
-      loqi.update(from, to);
+      loqi.update(from, to, existingDebt);
     }
 
     response.write(JSON.stringify(store));

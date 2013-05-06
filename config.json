@@ -3,6 +3,7 @@
   "channel": "#portland",
   "feedAuthor": "Esri Portland",
   "baseURL": "http://coffee.geoloqi.com/",
+  "botConfigPath": "../../bot.json",
   "people": [
     {
       "name": "Aaron",

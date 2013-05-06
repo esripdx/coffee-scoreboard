@@ -154,7 +154,6 @@ body.who {
   -webkit-box-shadow: 0 0 4px #DADADA;
      -moz-box-shadow: 0 0 4px #DADADA;
           box-shadow: 0 0 4px #DADADA;
-
 }
 
 .user-list.active{
@@ -189,4 +188,63 @@ body.who {
   text-align: right;
   margin-right: 40px;
   right: 50%;
+}
+
+/* - - - - - - - - - - Requests - - - - - - - - - - */
+
+.card {
+  background: #fff;
+  border-radius: 4px;
+  float: left;
+  line-height: 1;
+  margin: 3%;
+  min-height: 74px;
+  overflow: hidden;
+  padding: 1em;
+  position: relative;
+  width: 94%;
+
+  -webkit-box-shadow: 0 0 4px #DADADA;
+     -moz-box-shadow: 0 0 4px #DADADA;
+          box-shadow: 0 0 4px #DADADA;
+
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#requests .user-icon {
+  background-size: 50px;
+  border-color: white;
+  box-shadow: none;
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  left: .5em;
+  top: .5em;
+}
+
+#requests .content {
+  color: #666;
+  padding: 0 0 0 65px;
+  position: relative;
+}
+
+#requests .content .message {
+  font-size: .8em;
+  line-height: 1.6em;
+  padding-bottom: .5em;
+}
+
+#requests .content .name {
+  font-family: 'Open Sans Semibold';
+  font-family: 'Open Sans Bold';
+  color: #575;
+}
+
+#requests .card .timestamp {
+  color: #9a9;
+  font-size: .6em;
 }

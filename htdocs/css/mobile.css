@@ -9,9 +9,9 @@ html {
 
 body {
   margin: 0;
-  background: url('../img/noisy_grid.png') top left repeat;
+  background-color: #E5E5E5;
   color: #333;
-  font-family: "Avenir Next", "Lucida Grande", "Seoge UI", "Arial", sans-serif;
+  font-family: "Open Sans", "Lucida Grande", "Seoge UI", "Arial", sans-serif;
   font-size:16px;
   line-height: 1.5em;
   position: relative;
@@ -47,4 +47,146 @@ applet, canvas, embed, figure, figcaption, iframe, img, object {
   margin: 0;
   padding: 0;
   vertical-align: baseline;
+}
+
+/* - - - - - - - - - - Global - - - - - - - - - - */
+
+.nav {
+  width: 100%;
+  border-top: 1px solid #2a2a2a;
+  background: transparent url(../img/nav-bg.jpg) repeat-x 0 0;
+  background-size: 16px 49px;
+  height: 48px;
+  z-index: 1000;
+}
+
+.nav-text {
+  display: block;
+  padding: 13px 16px 10px;
+  text-shadow: 0 1px 0 #000;
+  -webkit-transition: color .2s linear,-webkit-box-shadow .2s linear;
+  -moz-transition: color .2s linear,box-shadow .2s linear;
+  -o-transition: color .2s linear,box-shadow .2s linear;
+  transition: color .2s linear,box-shadow .2s linear;
+}
+
+
+/* - - - - - - - - - - Choose a User - - - - - - - - - - */
+.logo {
+  display: block;
+  width: 50px;
+  height: 50px;
+  margin: 1em auto 0 auto;
+  background: url(../img/logo.png) no-repeat center center transparent;
+  background-size: contain;
+}
+a {
+  text-decoration: none;
+}
+
+h1 {
+  text-align: center;
+  font:400 normal 24px/24px "Open Sans Light", "Lucida Grande", "Seoge UI", "Arial", sans-serif;
+  margin:.75em 0 0.75em 0;
+  color: #fff;
+}
+
+
+h2 {
+  line-height:1.5em;
+  color:#fff;
+}
+
+body.who {
+  background: #2B9EA6;
+  background: -webkit-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
+  background:    -moz-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
+  background:     -ms-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
+  background:      -o-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
+}
+
+.user {
+  margin: 1em 4%;
+  width: 25%;
+  float:left;
+  text-align: center;
+
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.user-icon {
+  width:60px;
+  height:60px;
+  margin: 0 auto;
+  background: url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100') cover no-repeat transparent;
+  background-size: 60px;
+  display:inline-block;
+  border: 4px solid #fff;
+  border-radius: 50%;
+
+  -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
+     -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
+}
+
+
+/* - - - - - - - - - - List View - - - - - - - - - - */
+
+.user-list {
+  width: 94%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 3%;
+  float:left;
+  padding: 0.5em;
+  background: #ffffff;
+  border-radius: 4px;
+  height:74px;
+  overflow: hidden;
+
+  -webkit-box-shadow: 0 0 4px #DADADA;
+     -moz-box-shadow: 0 0 4px #DADADA;
+          box-shadow: 0 0 4px #DADADA;
+
+}
+
+.user-list.active{
+  height: 200px;
+}
+
+.user-icon.centered {
+  position: absolute;
+  left: 50%;
+  margin-left: -29px;
+  width: 50px;
+  height: 50px;
+  background-size: 50px;
+  border-color: white;
+  box-shadow: none;
+}
+.debts, .credits {
+  width: 30%;
+  margin-top: 18px;
+  font-size: 32px;
+  letter-spacing: 2px;
+  position: absolute;
+}
+.debts {
+  color: #ca4c29;
+  text-align: left;
+  margin-left: 40px;
+  left: 50%;
+}
+.credits {
+  color: #3ea349;
+  text-align: right;
+  margin-right: 40px;
+  right: 50%;
 }

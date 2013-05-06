@@ -1,5 +1,6 @@
 var fs = require('fs');
 var data = require('./data');
+var coffeeConfig = require('./config.json');
 
 // sometimes you just gotta capitalize strings
 String.prototype.capitalize = function() {
@@ -7,7 +8,7 @@ String.prototype.capitalize = function() {
 };
 
 var api        = require('zenircbot-api');
-var bot_config = api.load_config('../../bot.json');
+var bot_config = api.load_config(coffeeConfig.botConfigPath);
 var zen        = new api.ZenIRCBot(bot_config.redis.host,
                                    bot_config.redis.port,
                                    bot_config.redis.db);

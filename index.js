@@ -10,7 +10,7 @@ var bricks     = require('bricks'),
     request    = require('request');
 
 // check for IRC bot
-var irc = fs.existsSync('../../bot.json');
+var irc = fs.existsSync(config.botConfigPath);
 if (irc) {
   var loqi = require('./loqi');
 } else {

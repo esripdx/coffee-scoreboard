@@ -71,6 +71,7 @@ sub.on('message', function(channel, message) {
                 redis.get(sender, function(err, val) {
                     var response = [];
                     if (val) {
+                        val = JSON.parse(val);
                         redis.del(sender);
                         responses = ["Your order has been cancelled.", "No coffee for you!", "no '" + val.message + "' for you!", "Ba-leted.",
                             "removed", "cancelled", "neverminded.", "you're gonna regret that."];

@@ -384,7 +384,7 @@ h2 {
 
 .swipe-text {
   /*text-align: center;*/
-  text-indent: 85px;
+  text-align: center;
   display: inline-block;
   white-space: nowrap;
   color: #cfcfcf;
@@ -399,7 +399,7 @@ h2 {
   -webkit-text-fill-color: transparent;
   -webkit-animation: swipe 10s 2;
 
-  width: 200%;
+  width: 100%;
   -webkit-text-size-adjust: none;
 }
 

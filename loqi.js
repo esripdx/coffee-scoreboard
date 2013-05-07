@@ -1,6 +1,7 @@
 var fs = require('fs');
 var data = require('./data');
 var coffeeConfig = require('./config.json');
+require('date-utils');
 
 // sometimes you just gotta capitalize strings
 String.prototype.capitalize = function() {
@@ -58,7 +59,80 @@ sub.on('message', function(channel, message) {
         }
         zen.send_privmsg(config.channel, sentence);
       }
+    } else if (match=msg.data.message.match(/^!(un)?coffeeme ?(.*$)/, 'i')) {
+        // this is a command that has started with !coffeeme or !uncoffeeme
 
+        if (match.length > 1 && (match[1] === 'un' || (match[2] !== '' && match[2] !== ' '))) {
+            // This is either a !uncoffeeme or a !coffeeme command with a parameter, determine if we are creating or deleting
+
+            if (match[2].toLowerCase() === 'cancel' || match[2].toLowerCase() === 'nevermind' || match[1] === 'un') {
+                // Cancel the request on !uncoffeeme, !coffeeme cancel, and !coffeeme nevermind
+
+                redis.get(sender, function(err, val) {
+                    var response = [];
+                    if (val) {
+                        val = JSON.parse(val);
+                        redis.del(sender);
+                        responses = ["Your order has been cancelled.", "No coffee for you!", "no '" + val.message + "' for you!", "Ba-leted.",
+                            "removed", "cancelled", "neverminded.", "you're gonna regret that."];
+                    } else {
+                        responses = ["Ok, I didn't have any orders for you anyway.", "You didn't have requests out."];
+                    }
+                    zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
+                });
+            } else {
+                // We've received an add request command (!coffeeme a sammich) add it to redis with an expiration date
+                var val = {
+                    'message': match[2],
+                    'date': Date.now(),
+                    'sender': sender
+                };
+                redis.setex(sender, coffeeConfig.requestExpiration, JSON.stringify(val));
+                var responses = ["Got it!", "Yum!", "ooo, get me one too!", "Okay!", "comin' right up ... I hope.", "mmmm... " + val.message];
+                zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
+            }
+        } else {
+            // This is a !coffeeme command with no parameters, meaning a status update command.
+
+            redis.get(sender, function(err, val) {
+                if (err) {
+                    zen.send_privmsg(config.channel, "Ack! Something went horribly awry!");
+                    console.log(err);
+                    return;
+                }
+                var responses = [];
+                if (val) {
+                    // found one!
+                    val = JSON.parse(val);
+                    var requestedAt = new Date(val.date);
+                    var now = new Date();
+                    var minutes = requestedAt.getMinutesBetween(now);
+                    var seconds = requestedAt.getSecondsBetween(now.clone().addMinutes(-minutes));
+                    var waitString = getTimeString(minutes, seconds);
+
+                    var exp = requestedAt.clone().addSeconds(coffeeConfig.requestExpiration);
+                    var expMinutes = now.getMinutesBetween(exp);
+                    var expSeconds = now.getSecondsBetween(exp.clone().addMinutes(-expMinutes));
+                    var expString = getTimeString(expMinutes, expSeconds);
+
+                    responses = [
+                        sender + ": by my calculations you've been waiting for '" + val.message + "' for " + waitString + ". I'll be removing it in " + expString + ".",
+                        sender + ": you've been waiting for '" + val.message + "' for " + waitString + ". I'll be cancelling it for you in " + expString + ".",
+                        sender + ": you ordered '" + val.message + "' " + waitString + " ago. It's got " + expString + " left before I remove it.",
+                        sender + ": I've got you down for '" + val.message + "' " + waitString + " ago. If nobody buys it for you in the next " + expString + "; you're SOL."
+                    ];
+                } else {
+                    // no requests found for this user
+                    responses = [
+                        sender + ": I've got 99 problems but a request for you ain't one.",
+                        sender + ": no requests for you!",
+                        "I have no requests for you, " + sender,
+                        "I'm sorry, " + sender + ", but I don't see any requests for you, perhaps you should re-!coffeeme your request."
+                    ];
+                }
+                zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
+            });
+        }
     } else if((match=msg.data.message.match(/^([a-z]+) bought (a|1) coffees? for ([a-z]+)$/))
       || (match=msg.data.message.match(/^([a-z]+) bought ([a-z]+) (a|1) coffees?$/))) {
 
@@ -146,4 +220,22 @@ function coffeeWord(num, includeNum) {
       return "coffees";
     }
   }
+}
+
+function getTimeString(minutes, seconds) {
+    var retString = '';
+    if (minutes === 1) {
+        retString = "1 minute";
+    } else if (minutes > 1) {
+        retString = minutes + " minutes";
+    }
+    if (minutes > 0 && seconds > 0) {
+        retString += " and ";
+    }
+    if (seconds === 1) {
+        retString += "1 second";
+    } else if (seconds > 1) {
+        retString += seconds + " seconds";
+    }
+    return retString;
 }

@@ -369,13 +369,36 @@ h2 {
 }
 
 .swipe-text {
-  text-align: center;
+  /*text-align: center;*/
+  text-indent: 85px;
   display: inline-block;
-  width: 100%;
   white-space: nowrap;
   color: #cfcfcf;
   font-size: 12px;
   line-height: 50px;
+
+  background: -moz-linear-gradient(left, #cfcfcf, 0.4, #cfcfcf, 0.5, white, 0.6, #cfcfcf, #cfcfcf);
+  background: -webkit-gradient(linear,left top,right top,color-stop(0, #4d4d4d),color-stop(0.4, #4d4d4d),color-stop(0.5, white),color-stop(0.6, #4d4d4d),color-stop(1, #4d4d4d));
+  -moz-background-clip: text;
+  -webkit-background-clip: text;
+  -moz-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-animation: swipe 10s infinite;
+
+  width: 200%;
+  -webkit-text-size-adjust: none;
+}
+
+@-webkit-keyframes swipe {
+  0% {
+    background-position: -320px 0;
+  }
+  50% {
+    background-position: 320px 0;
+  }
+  100%{
+    background-position: -320px 0;
+  }
 }
 
 /* - - - - - - - - - - Requests - - - - - - - - - - */

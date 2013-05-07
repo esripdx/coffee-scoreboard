@@ -65,16 +65,29 @@ nav {
   margin:0;
 }
 
-nav h1 {
-  display inline;
-  margin:0;
+.brand {
+  color: #fff;
+  float: left;
   font-size: 16px;
   text-align: left;
-  margin: 8px;
+  margin: 0 10px;
 }
 
 .top-nav {
-  top:0;
+  top: 0;
+  padding-top: 12px;
+  overflow: hidden;
+}
+
+#logout {
+  color: #ccc;
+  display: block;
+  float: right;
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: right;
+  margin: 0 10px;
 }
 
 .bottom-nav {
@@ -123,6 +136,7 @@ nav h1 {
   height: 32px;
   background: url(../img/community.png) no-repeat center center;
   background-size: 32px;
+  margin-right: 2px;
   vertical-align: -11px;
 }
 
@@ -219,6 +233,30 @@ h2 {
   background:    -moz-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%, rgba(0,0,0,.2) 100%);
   background:     -ms-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%, rgba(0,0,0,.2) 100%);
   background:      -o-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%, rgba(0,0,0,.2) 100%);
+}
+
+#welcome,
+#auth {
+  display: none;
+}
+
+.who #welcome,
+.who #auth {
+  display: block;
+}
+
+.top-nav,
+.bottom-nav,
+#list,
+#requests {
+  display: block;
+}
+
+.who .top-nav,
+.who .bottom-nav,
+.who #list,
+.who #requests {
+  display: none;
 }
 
 .user {

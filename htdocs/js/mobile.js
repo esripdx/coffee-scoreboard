@@ -8,6 +8,9 @@
     'user'
   ]);
 
+  var cookie = $.fn.cookie('coffee-scoreboard');
+  console.log(cookie);
+
   var people = new People();
 
   $.get("/people", function(ppl) {
@@ -16,16 +19,48 @@
         people.add(ppl[i]);
       }
 
-      if ($('#list').length) {
+      if (cookie) {
+        $('body').removeClass('who');
         people.buildList();
-      }
-      if ($('#requests').length) {
         people.buildRequests();
-      }
-      if ($('#auth').length) {}
+      } else {
         people.buildAuth();
+      }
+
+      bindNav();
     });
   });
+
+  function bindNav() {
+    var $logout = $('#logout');
+    var $nav = $('.bottom-nav');
+    var $scoreboard = $nav.find('.scoreboard');
+    var $wants = $nav.find('.wants');
+
+    $scoreboard.on('click', function(e){
+      e.preventDefault();
+
+      $nav.find('.active').removeClass('active');
+      $('#requests').hide();
+      $('#list').show();
+      $(this).addClass('active');
+    });
+
+    $wants.on('click', function(e){
+      e.preventDefault();
+
+      $nav.find('.active').removeClass('active');
+      $('#list').hide();
+      $('#requests').show();
+      $(this).addClass('active');
+    });
+
+    $logout.on('click', function(e){
+      e.preventDefault();
+      reset();
+      window.location = '/m/';
+    });
+  }
 
   function loadTemplates(files) {
     Handlebars.getTemplate = function(name) {
@@ -111,12 +146,27 @@
   }
 
   People.prototype.buildAuth = function() {
-    $('#auth').empty();
+    var $auth = $('#auth');
+    $auth.empty();
+
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
       var html = HBT['user'](person);
-      $('#auth').append(html);
+      $auth.append(html);
     }
+
+    $auth.find('.user').on('click', function(e){
+      e.preventDefault();
+
+      var $el = $(this);
+      var login = $el.data('login');
+      console.log(login);
+
+      $.fn.cookie('coffee-scoreboard', login);
+      $('body').removeClass('who');
+      people.buildList();
+      people.buildRequests();
+    });
   }
 
   function Person(options) {
@@ -143,6 +193,10 @@
 
   function capitalize(name) {
     return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+
+  window.reset = function(options) {
+    $.fn.cookie('coffee-scoreboard', '', $.extend({}, options, { expires: -1 }));
   }
 
 

@@ -10,12 +10,29 @@
 </head>
 <body class="who">
 
-  <i id="logo"></i>
-  <h1>Who Are You?</h1>
+  <nav class="top-nav">
+    <a class="brand" href="/m/">Portland R&amp;D Center</a>
+    <a id="logout" href="/m/">Logout</a>
+  </nav>
+
+  <header id="welcome">
+    <i id="logo"></i>
+    <h1>Who Are You?</h1>
+  </header>
 
   <section id="auth"></section>
 
+  <section id="list" class="with-nav list"></section>
+
+  <section id="requests" class="with-nav list"></section>
+
+  <nav class="bottom-nav">
+    <a href="list.html" class="scoreboard community active">Scores</a>
+    <a href="requests.html" class="wants clipboard right">Wants</a>
+  </nav>
+
   <script src="/js/zepto.min.js"></script>
+  <script src="/js/zepto.cookie.min.js"></script>
   <script src="/js/hammer.min.js"></script>
   <script src="/js/gravatar.js"></script>
   <script src="/js/handlebars.js"></script>

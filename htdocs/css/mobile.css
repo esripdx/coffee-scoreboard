@@ -307,7 +307,7 @@ h2 {
   width: 20px;
   height: 20px;
   background: url(../img/more.png) center no-repeat transparent;
-  background-size:20px;
+  background-size: 20px;
 
   -webkit-transition: -webkit-transform 0.2s ease-in;
      -moz-transition: -moz-transform 0.2s ease-in;
@@ -317,8 +317,7 @@ h2 {
 
 }
 
-.more.active {
-
+.card.active .more {
   -webkit-transition: -webkit-transform 0.2s ease-in;
      -moz-transition: -moz-transform 0.2s ease-in;
       -ms-transition: -ms-transform 0.2s ease-in;
@@ -330,6 +329,14 @@ h2 {
       -ms-transform: rotate(180deg);
        -o-transform: rotate(180deg);
           transform: rotate(180deg);
+}
+
+.slider-wrap {
+  display: none;
+}
+
+.card.active .slider-wrap {
+  display: block;
 }
 
 

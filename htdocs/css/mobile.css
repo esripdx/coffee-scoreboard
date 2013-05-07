@@ -126,7 +126,54 @@ nav h1 {
   right: 0;
 }
 
-/* - - - - - - - - - - Choose a User - - - - - - - - - - */
+/* - - - - - - - - - - Common Styles - - - - - - - - - - */
+
+.card {
+  background: #fff;
+  border-radius: 4px;
+  float: left;
+  line-height: 1;
+  margin: 4px 3%;
+  min-height: 74px;
+  overflow: hidden;
+  padding: 1em;
+  position: relative;
+  width: 94%;
+
+  -webkit-box-shadow: 0 0 4px #DADADA;
+     -moz-box-shadow: 0 0 4px #DADADA;
+          box-shadow: 0 0 4px #DADADA;
+
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.user-icon {
+  width:60px;
+  height:60px;
+  margin: 0 auto;
+  background: url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100') cover no-repeat transparent;
+  background-size: 60px;
+  display:inline-block;
+  border: 4px solid #fff;
+  border-radius: 50%;
+
+  -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
+     -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
+}
+
+.with-nav {
+  overflow: hidden;
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+
+/* - - - - - - - - - - '""AUTHENTICATION""' - - - - - - - - - - */
+
 .logo {
   display: block;
   width: 50px;
@@ -152,12 +199,12 @@ h2 {
   color:#fff;
 }
 
-body.who {
+#auth {
   background: #2B9EA6;
-  background: -webkit-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
-  background:    -moz-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
-  background:     -ms-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
-  background:      -o-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%,rgba(0,0,0,.2) 100%);
+  background: -webkit-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%, rgba(0,0,0,.2) 100%);
+  background:    -moz-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%, rgba(0,0,0,.2) 100%);
+  background:     -ms-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%, rgba(0,0,0,.2) 100%);
+  background:      -o-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%, rgba(0,0,0,.2) 100%);
 }
 
 .user {
@@ -173,49 +220,14 @@ body.who {
           box-sizing: border-box;
 }
 
-.user-icon {
-  width:60px;
-  height:60px;
-  margin: 0 auto;
-  background: url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100') cover no-repeat transparent;
-  background-size: 60px;
-  display:inline-block;
-  border: 4px solid #fff;
-  border-radius: 50%;
-
-  -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
-     -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
-}
-
-
 /* - - - - - - - - - - List View - - - - - - - - - - */
 
-.list {
-  margin-top: 50px;
-}
-
-.user-list {
-  width: 94%;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-      -ms-box-sizing: border-box;
-       -o-box-sizing: border-box;
-          box-sizing: border-box;
-  margin: 4px 3%;
-  float:left;
+#list .card {
   padding: 0.5em;
-  background: #ffffff;
-  border-radius: 4px;
-  height:74px;
-  overflow: hidden;
-
-  -webkit-box-shadow: 0 0 4px #DADADA;
-     -moz-box-shadow: 0 0 4px #DADADA;
-          box-shadow: 0 0 4px #DADADA;
+  height: 74px;
 }
 
-.user-list.active{
+#list .card.active {
   height: 200px;
 }
 
@@ -229,19 +241,22 @@ body.who {
   border-color: white;
   box-shadow: none;
 }
+
 .debts, .credits {
   width: 30%;
-  margin-top: 18px;
+  margin-top: 13px;
   font-size: 32px;
   letter-spacing: 2px;
   position: absolute;
 }
+
 .debts {
   color: #ca4c29;
   text-align: left;
   margin-left: 40px;
   left: 50%;
 }
+
 .credits {
   color: #3ea349;
   text-align: right;
@@ -250,29 +265,6 @@ body.who {
 }
 
 /* - - - - - - - - - - Requests - - - - - - - - - - */
-
-.card {
-  background: #fff;
-  border-radius: 4px;
-  float: left;
-  line-height: 1;
-  margin: 3%;
-  min-height: 74px;
-  overflow: hidden;
-  padding: 1em;
-  position: relative;
-  width: 94%;
-
-  -webkit-box-shadow: 0 0 4px #DADADA;
-     -moz-box-shadow: 0 0 4px #DADADA;
-          box-shadow: 0 0 4px #DADADA;
-
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-      -ms-box-sizing: border-box;
-       -o-box-sizing: border-box;
-          box-sizing: border-box;
-}
 
 #requests .user-icon {
   background-size: 50px;

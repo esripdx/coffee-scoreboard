@@ -15,6 +15,7 @@
     "zenircbot-api": "~2",
     "xml-writer": "*",
     "atom-writer": "*",
-    "request": "~2.21.0"
+    "request": "~2.21.0",
+    "date-utils": "*"
   }
 }

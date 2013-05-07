@@ -91,6 +91,14 @@
       var html = HBT['list-item'](person);
       $('#list').append(html);
     }
+
+    $('#list').find('.card').each(function(){
+      var $card = $(this);
+      var $more = $card.find('.more');
+      $more.on('click', function(){
+        $card.toggleClass('active');
+      })
+    });
   }
 
   People.prototype.buildRequests = function() {

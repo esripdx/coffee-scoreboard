@@ -2,6 +2,7 @@ var fs = require('fs');
 var data = require('./data');
 var coffeeConfig = require('./config.json');
 require('date-utils');
+var wants = require('./wants');
 
 // sometimes you just gotta capitalize strings
 String.prototype.capitalize = function() {
@@ -16,6 +17,7 @@ var zen        = new api.ZenIRCBot(bot_config.redis.host,
 
 var sub   = zen.get_redis_client();
 var redis = zen.get_redis_client();
+wants.setRedis(redis);
 
 var config = api.load_config('./config.json');
 console.log("IRC Bot Configured");
@@ -68,32 +70,28 @@ sub.on('message', function(channel, message) {
             if (match[2].toLowerCase() === 'cancel' || match[2].toLowerCase() === 'nevermind' || match[1] === 'un') {
                 // Cancel the request on !uncoffeeme, !coffeeme cancel, and !coffeeme nevermind
 
-                redis.get(sender, function(err, val) {
+                wants.get(sender, function(err, val) {
                     var response = [];
-                    if (val) {
-                        redis.del(sender);
+                    if (val && val.message) {
+                        wants.del(sender);
                         responses = ["Your order has been cancelled.", "No coffee for you!", "no '" + val.message + "' for you!", "Ba-leted.",
                             "removed", "cancelled", "neverminded.", "you're gonna regret that."];
                     } else {
-                        responses = ["Ok, I didn't have any orders for you anyway.", "You didn't have requests out."];
+                        responses = ["Ok, I didn't have any orders for you anyway.", "You didn't have any requests out."];
                     }
                     zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
                 });
             } else {
                 // We've received an add request command (!coffeeme a sammich) add it to redis with an expiration date
-                var val = {
-                    'message': match[2],
-                    'date': Date.now(),
-                    'sender': sender
-                };
-                redis.setex(sender, coffeeConfig.requestExpiration, JSON.stringify(val));
-                var responses = ["Got it!", "Yum!", "ooo, get me one too!", "Okay!", "comin' right up ... I hope.", "mmmm... " + val.message];
+
+                var want = wants.create(sender, match[2]);
+                var responses = ["Got it!", "Yum!", "ooo, get me one too!", "Okay!", "comin' right up ... I hope.", "mmmm... " + want.message];
                 zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
             }
         } else {
             // This is a !coffeeme command with no parameters, meaning a status update command.
 
-            redis.get(sender, function(err, val) {
+            wants.get(sender, function(err, val) {
                 if (err) {
                     zen.send_privmsg(config.channel, "Ack! Something went horribly awry!");
                     console.log(err);
@@ -102,7 +100,6 @@ sub.on('message', function(channel, message) {
                 var responses = [];
                 if (val) {
                     // found one!
-                    val = JSON.parse(val);
                     var requestedAt = new Date(val.date);
                     var now = new Date();
                     var minutes = requestedAt.getMinutesBetween(now);
@@ -114,6 +111,7 @@ sub.on('message', function(channel, message) {
                     var expSeconds = now.getSecondsBetween(exp.clone().addMinutes(-expMinutes));
                     var expString = getTimeString(expMinutes, expSeconds);
 
+                    console.log(val);
                     responses = [
                         sender + ": by my calculations you've been waiting for '" + val.message + "' for " + waitString + ". I'll be removing it in " + expString + ".",
                         sender + ": you've been waiting for '" + val.message + "' for " + waitString + ". I'll be cancelling it for you in " + expString + ".",

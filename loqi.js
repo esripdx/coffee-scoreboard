@@ -61,35 +61,35 @@ sub.on('message', function(channel, message) {
         }
         zen.send_privmsg(config.channel, sentence);
       }
-    } else if (match=msg.data.message.match(/^!(un)?coffeeme ?(.*$)/, 'i')) {
-        // this is a command that has started with !coffeeme or !uncoffeeme
+    } else if (match=msg.data.message.match(/^!(un)?want ?(.*$)/, 'i')) {
+        // this is a command that has started with !want or !unwant
 
         if (match.length > 1 && (match[1] === 'un' || (match[2] !== '' && match[2] !== ' '))) {
-            // This is either a !uncoffeeme or a !coffeeme command with a parameter, determine if we are creating or deleting
+            // This is either a !unwant or a !want command with a parameter, determine if we are creating or deleting
 
             if (match[2].toLowerCase() === 'cancel' || match[2].toLowerCase() === 'nevermind' || match[1] === 'un') {
-                // Cancel the request on !uncoffeeme, !coffeeme cancel, and !coffeeme nevermind
+                // Cancel the request on !unwant, !want cancel, and !want nevermind
 
                 wants.get(sender, function(err, val) {
                     var response = [];
                     if (val && val.message) {
                         wants.del(sender);
-                        responses = ["Your order has been cancelled.", "No coffee for you!", "no '" + val.message + "' for you!", "Ba-leted.",
+                        responses = ["Your want has been cancelled.", "No coffee for you!", "no '" + val.message + "' for you!", "Ba-leted.",
                             "removed", "cancelled", "neverminded.", "you're gonna regret that."];
                     } else {
-                        responses = ["Ok, I didn't have any orders for you anyway.", "You didn't have any requests out."];
+                        responses = ["Ok, I didn't have any wants for you anyway.", "You didn't have any wants out."];
                     }
                     zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
                 });
             } else {
-                // We've received an add request command (!coffeeme a sammich) add it to redis with an expiration date
+                // We've received an add want command (!want a sammich) add it to redis with an expiration date
 
                 var want = wants.create(sender, match[2]);
                 var responses = ["Got it!", "Yum!", "ooo, get me one too!", "Okay!", "comin' right up ... I hope.", "mmmm... " + want.message];
                 zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
             }
         } else {
-            // This is a !coffeeme command with no parameters, meaning a status update command.
+            // This is a !want command with no parameters, meaning a status update command.
 
             wants.get(sender, function(err, val) {
                 if (err) {
@@ -115,16 +115,17 @@ sub.on('message', function(channel, message) {
                     responses = [
                         sender + ": by my calculations you've been waiting for '" + val.message + "' for " + waitString + ". I'll be removing it in " + expString + ".",
                         sender + ": you've been waiting for '" + val.message + "' for " + waitString + ". I'll be cancelling it for you in " + expString + ".",
-                        sender + ": you ordered '" + val.message + "' " + waitString + " ago. It's got " + expString + " left before I remove it.",
+                        sender + ": you wanted '" + val.message + "' " + waitString + " ago. It's got " + expString + " left before I remove it.",
                         sender + ": I've got you down for '" + val.message + "' " + waitString + " ago. If nobody buys it for you in the next " + expString + "; you're SOL."
                     ];
                 } else {
-                    // no requests found for this user
+                    // no want found for this user
                     responses = [
-                        sender + ": I've got 99 problems but a request for you ain't one.",
-                        sender + ": no requests for you!",
-                        "I have no requests for you, " + sender,
-                        "I'm sorry, " + sender + ", but I don't see any requests for you, perhaps you should re-!coffeeme your request."
+                        sender + ": I've got 99 problems but a want for you ain't one.",
+                        sender + ": no wants for you!",
+                        sender + ": what do you want?!",
+                        "I have no wants for you, " + sender,
+                        "I'm sorry, " + sender + ", but I don't see any wants for you, perhaps you should re-!want your request."
                     ];
                 }
                 zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);

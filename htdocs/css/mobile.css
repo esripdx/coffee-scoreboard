@@ -335,7 +335,7 @@ h2 {
   box-shadow: none;
 }
 
-.debts, .credits, .badge {
+.debts, .credits, .badge, .even {
   border-radius: 9px;
   font-size: 10px;
   color: #fff;
@@ -354,9 +354,15 @@ h2 {
           box-sizing: border-box;
 }
 
-.debts, .credits {
+.debts, .credits, .even {
   top: 12px;
   left: 48px;
+}
+
+.even {
+  color: #fff;
+  background-color: #ccc;
+  border: 1px solid #bbb;
 }
 
 .debts, .badge {

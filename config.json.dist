@@ -4,62 +4,77 @@
   "feedAuthor": "Esri Portland",
   "baseURL": "http://coffee.geoloqi.com/",
   "botConfigPath": "../../bot.json",
+  "requestExpiration": 1800,
   "people": [
     {
       "name": "Aaron",
-      "email": "aaron@parecki.com"
+      "email": "aaron@parecki.com",
+      "nicks": ["aaronpk"]
     },
     {
       "name": "Amber",
-      "email": "caseorganic@gmail.com"
+      "email": "caseorganic@gmail.com",
+      "nicks": ["caseorganic"]
     },
     {
       "name": "Court",
-      "email": "courtf@gmail.com"
+      "email": "courtf@gmail.com",
+      "nicks": ["courtf"]
     },
     {
       "name": "Jen",
-      "email": "poeksweb@gmail.com"
+      "email": "poeksweb@gmail.com",
+      "nicks": ["poeks"]
     },
     {
       "name": "Jerry",
-      "email": "code@legitimatesounding.com"
+      "email": "code@legitimatesounding.com",
+      "nicks": ["jerrysv"]
     },
     {
       "name": "Josh",
-      "email": "jyaganeh@gmail.com"
+      "email": "jyaganeh@gmail.com",
+      "nicks": ["josh", "joshy", "hsoj"]
     },
     {
       "name": "Kenichi",
-      "email": "kenichi.nakamura@gmail.com"
+      "email": "kenichi.nakamura@gmail.com",
+      "nicks": ["kenichi"]
     },
     {
       "name": "Nate",
-      "email": "nnmgoldman@gmail.com"
+      "email": "nnmgoldman@gmail.com",
+      "nicks": ["ngoldman"]
     },
     {
       "name": "Paul",
-      "email": "paul.c.pederson@gmail.com"
+      "email": "paul.c.pederson@gmail.com",
+      "nicks": ["paulcpederson"]
     },
     {
       "name": "Pat",
-      "email": "patrick.arlt@gmail.com"
+      "email": "patrick.arlt@gmail.com",
+      "nicks": ["patrickarlt"]
     },
     {
       "name": "Robin",
-      "email": "robin_jones@esri.com"
+      "email": "robin_jones@esri.com",
+      "nicks": ["robin"]
     },
     {
       "name": "Ryan",
-      "email": "ryan.arana@gmail.com"
+      "email": "ryan.arana@gmail.com",
+      "nicks": ["ryana", "thatryana"]
     },
     {
       "name": "Shawna",
-      "email": "swilliams@esri.com"
+      "email": "swilliams@esri.com",
+      "nicks": ["shawna"]
     },
     {
       "name": "Wayne",
-      "email": "wchambliss@esri.com"
+      "email": "wchambliss@esri.com",
+      "nicks": ["wayne"]
     }
   ]
 }

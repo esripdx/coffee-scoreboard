@@ -16,6 +16,22 @@ Parameters:
 * from
 * to
 
+### /status
+
+Parameters:
+* user
+
+### /wants
+
+Returns all wants
+
+### /broadcast (not yet implemented)
+
+Parameters:
+* user
+
+Broadcasts to IRC that user is at (or going to) Barista
+
 Returns the current score or error
 
 ## Required files

@@ -23,6 +23,7 @@ var store     = data.read();
 var writeData = data.write;
 var atomRoute = data.atom;
 var wants     = require('./wants');
+var coffeeWord = require('./lib/coffee-word');
 
 // paths
 var logFile = "./data/coffee.log";
@@ -91,6 +92,51 @@ function modifyRoute(request, response) {
     response.write(JSON.stringify(store));
   } else {
     response.write(JSON.stringify({"error": "need a 'from' and a 'to'"}));
+  }
+
+  response.end();
+}
+
+function statusRoute(request, response) {
+  var payload = url.parse(request.url, true);
+
+  response.setHeader('Content-Type', 'application/json');
+
+  if (payload.query && payload.query.user) {
+    var user = payload.query.user.toLowerCase();
+
+    if (!store[user]) {
+      response.write(JSON.stringify({"error": "user does not exist"}));
+      return response.end();
+    }
+
+    var numCoffeesOwed = 0;
+    var numPeopleOwed = 0;
+
+    for (var isOwed in store) {
+      for (var ower in store[isOwed]) {
+        if (ower == user) {
+          numCoffeesOwed += store[isOwed][ower];
+          if (store[isOwed][ower] > 0) {
+            numPeopleOwed += 1;
+          }
+        }
+      }
+    }
+
+    var msg;
+
+    if(numCoffeesOwed == 0) {
+      msg = "You are coffee-debt free!";
+    } else {
+      msg = "You owe " + numCoffeesOwed + " " + coffeeWord(numCoffeesOwed)
+        + " to " + numPeopleOwed + " " + (numPeopleOwed == 1 ? "person" : "people") + ".";
+    }
+
+    response.write(JSON.stringify({"status": msg}));
+
+  } else {
+    response.write(JSON.stringify({"error": "need a 'user' parameter"}));
   }
 
   response.end();
@@ -207,6 +253,7 @@ appServer.addRoute("/score$", scoreRoute);
 appServer.addRoute("/score\.atom", atomRoute);
 appServer.addRoute("/wants", wantsRoute);
 appServer.addRoute("/coffee", modifyRoute);
+appServer.addRoute("/status", statusRoute);
 appServer.addRoute("/people", peopleRoute);
 appServer.addRoute("/simplify", simplifyRoute);
 appServer.addRoute(".+", appServer.plugins.fourohfour);

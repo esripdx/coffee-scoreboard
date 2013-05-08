@@ -140,7 +140,8 @@
     $('#list').find('.card').each(function(){
       var $card = $(this);
       var $more = $card.find('.more');
-      $more.on('click', function(){
+      $more.on('click', function(e){
+        e.preventDefault();
         $card.toggleClass('active');
       })
     });

@@ -4,6 +4,8 @@ var fs         = require('fs'),
     XMLWriter  = require('xml-writer'),
     ATOMWriter = require('atom-writer');
 
+var coffeeWord = require('./lib/coffee-word');
+
 var dataStore = "./data/store.json";
 
 // sometimes you just gotta capitalize strings
@@ -74,20 +76,4 @@ exports.atom = function(request, response) {
   response.write('<?xml version="1.0" encoding="utf-8"?>'+"\n");
   response.write(atom.writer.toString());
   response.end();
-}
-
-function coffeeWord(num, includeNum) {
-  if(includeNum) {
-    if(num == 1) {
-      return "one coffee";
-    } else {
-      return num + " coffees";
-    }
-  } else {
-    if(num == 1) {
-      return "coffee";
-    } else {
-      return "coffees";
-    }
-  }
 }

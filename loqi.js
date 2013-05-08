@@ -17,7 +17,6 @@ var zen        = new api.ZenIRCBot(bot_config.redis.host,
 
 var sub   = zen.get_redis_client();
 var redis = zen.get_redis_client();
-wants.setRedis(redis);
 
 var config = api.load_config('./config.json');
 console.log("IRC Bot Configured");
@@ -129,7 +128,6 @@ sub.on('message', function(channel, message) {
                     var expSeconds = now.getSecondsBetween(exp.clone().addMinutes(-expMinutes));
                     var expString = getTimeString(expMinutes, expSeconds);
 
-                    console.log(val);
                     responses = [
                         sender + ": by my calculations you've been waiting for '" + val.message + "' for " + waitString + ". I'll be removing it in " + expString + ".",
                         sender + ": you've been waiting for '" + val.message + "' for " + waitString + ". I'll be cancelling it for you in " + expString + ".",

@@ -76,6 +76,9 @@ function modifyRoute(request, response) {
       existingDebt = false;
     }
 
+    // remove any current wants for the receiver
+    wants.del(to);
+
     // add transaction to log
     var log = new Date().toString() + ": " + from + " to " + to + ". now: " + store[from][to] + "\n";
     fs.appendFileSync(logFile, log);

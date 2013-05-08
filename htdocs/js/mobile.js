@@ -152,18 +152,26 @@
     var self = this;
     $.get('/wants', function(wants){
       for (var i = 0; i < wants.length; i++) {
-        var person = self.get(wants[i].sender);
-        console.log(wants[i].date);
-        console.log(person);
-        var context = {
-          name: person.name,
-          icon: person.icon,
-          item: wants[i].message,
-          time: moment.unix(wants[i].date/1000).fromNow()
+        var context;
+
+        if (user.name.toLowerCase() == wants[i].sender) {
+          context = {
+            name: user.name,
+            icon: user.icon,
+            item: wants[i].message,
+            time: moment.unix(wants[i].date/1000).fromNow()
+          }
+        } else {
+          var person = self.get(wants[i].sender);
+          context = {
+            name: person.name,
+            icon: person.icon,
+            item: wants[i].message,
+            time: moment.unix(wants[i].date/1000).fromNow()
+          }
         }
-        console.log(context);
+
         var html = HBT['request-item'](context);
-        console.log(html);
         $('#requests').append(html);
       }
     });

@@ -61,7 +61,7 @@ sub.on('message', function(channel, message) {
         }
         zen.send_privmsg(config.channel, sentence);
       }
-    } else if (match=msg.data.message.match(/^!(un)?want ?(.*$)/, 'i')) {
+    } else if (match=msg.data.message.match(/^!(un)?wants? ?(.*$)/, 'i')) {
         // this is a command that has started with !want or !unwant
 
         if (match.length > 1 && (match[1] === 'un' || (match[2] !== '' && match[2] !== ' '))) {

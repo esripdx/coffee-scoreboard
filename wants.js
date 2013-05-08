@@ -1,4 +1,10 @@
 var config = require('./config.json');
+var redisLib = require('redis');
+this.redis = redisLib.createClient(
+    config.redis.port,
+    config.redis.host,
+    { selected_db: config.redis.db }
+);
 exports.get = function(nick, callback) {
     var name = this.getNameFromNick(nick);
     if (name) {
@@ -58,10 +64,6 @@ exports.create = function(nick, message) {
     return val;
 };
 
-exports.setRedis = function(redis) {
-    this.redis = redis;
-};
-
 exports.getNameFromNick = function(nick) {
     for (var i in config.people) {
         var person = config.people[i];
@@ -69,7 +71,6 @@ exports.getNameFromNick = function(nick) {
             return person.name.toLowerCase();
         }
     }
-    console.log('uhoh');
 };
 
 exports.getNickFromName = function(name) {

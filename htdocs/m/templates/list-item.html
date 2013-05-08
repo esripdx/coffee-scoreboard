@@ -1,4 +1,4 @@
-<article class="card">
+<article class="card" id="{{name}}">
   <i class="user-icon smaller" style="background-image:url('{{icon}}')"></i>
   <span class="debts">1</span>
   <a href="#" class="more"></a>
@@ -6,10 +6,11 @@
 
   <div class="slider-wrap">
     <hr />
-    <div class="slider">
-      <i class="slider-icon left" style="background-image:url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100')"></i>
-      <i class="slider-icon right" style="background-image:url('{{icon}}')"></i>
-      <p class="swipe-text">swipe to transfer</p>
+    <div class="slider" id="slider">
+
+      <i class="slider-icon left me" style="background-image:url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100')"></i>
+      <i class="slider-icon right them" style="background-image:url('{{icon}}')"></i>
+      <p class="swipe-text" id="slider-text">swipe to transfer</p>
     </div>
   </div>
 </article>

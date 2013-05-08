@@ -259,6 +259,7 @@ h2 {
 #list .card {
   padding: 1.7em 1em 0.5em 1em;
   height: 74px;
+  overflow: hidden;
   -webkit-transition: height 0.2s ease-in;
      -moz-transition: height 0.2s ease-in;
       -ms-transition: height 0.2s ease-in;
@@ -366,11 +367,24 @@ h2 {
 }
 
 .slider-wrap {
-  display: none;
+  display: block;
+  opacity: 0;
+  width: 99%;
+  -webkit-transition: opacity 500ms linear;
+     -moz-transition: opacity 500ms linear;
+      -ms-transition: opacity 500ms linear;
+       -o-transition: opacity 500ms linear;
+          transition: opacity 500ms linear;
 }
 
 .card.active .slider-wrap {
+  opacity: 1;
   display: block;
+  -webkit-transition: opacity 500ms linear;
+     -moz-transition: opacity 500ms linear;
+      -ms-transition: opacity 500ms linear;
+       -o-transition: opacity 500ms linear;
+          transition: opacity 500ms linear;
 }
 
 
@@ -439,8 +453,8 @@ h2 {
   -moz-text-fill-color: transparent;
   -webkit-text-fill-color: transparent;
   -webkit-animation: swipe 10s infinite;
-  padding: 0 3em;
-  margin-left: -3em;
+  padding: 0 50%;
+  margin-left: -50%;
 
   width: 100%;
   -webkit-text-size-adjust: none;
@@ -494,4 +508,30 @@ h2 {
   border: 0;
   height: 0;
   border-bottom: 1px solid #f2f2f2;
+}
+
+/* - - - - TEST - - - */
+
+.drag {
+  border: 1px solid red;
+  margin-left: 50px;
+  position: absolute;
+  left: 60px;
+  top: 10px;
+  border-radius: 50px;
+  background: #42d692;
+  display: block;
+  z-index:400000;
+
+  width: 30px;
+  height: 30px;
+
+}
+
+.drag1 {
+  top:100px;
+}
+
+.drag2 {
+  top: 160px;
 }

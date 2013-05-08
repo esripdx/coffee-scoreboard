@@ -1,31 +1,52 @@
 (function(window,$,undefined){
 
+  // the players
+
   window.HBT = {};
 
   loadTemplates([
     'list-item',
     'request-item',
+    'person',
     'user'
   ]);
 
-  var people = new People();
+  var cookie = $.fn.cookie('coffee-scoreboard');
+  var allPeople = new People();
+  var user;
+  var everyoneElse = new People();
 
-  $.get("/people", function(ppl) {
-    $.get("/score", function(scores) {
-      for (var i = 0; i < ppl.length; i++) {
-        people.add(ppl[i]);
-      }
+  // the acts
 
-      if ($('#list').length) {
-        people.buildList();
-      }
-      if ($('#requests').length) {
-        people.buildRequests();
-      }
-      if ($('#auth').length) {}
-        people.buildAuth();
+  function bindNav() {
+    var $logout = $('#logout');
+    var $nav = $('.bottom-nav');
+    var $scoreboard = $nav.find('.scoreboard');
+    var $wants = $nav.find('.wants');
+
+    $scoreboard.on('click', function(e){
+      e.preventDefault();
+
+      $nav.find('.active').removeClass('active');
+      $('#requests').hide();
+      $('#list').show();
+      $(this).addClass('active');
     });
-  });
+
+    $wants.on('click', function(e){
+      e.preventDefault();
+
+      $nav.find('.active').removeClass('active');
+      $('#list').hide();
+      $('#requests').show();
+      $(this).addClass('active');
+    });
+
+    $logout.on('click', function(e){
+      e.preventDefault();
+      logout();
+    });
+  }
 
   function loadTemplates(files) {
     Handlebars.getTemplate = function(name) {
@@ -84,7 +105,7 @@
     }
   }
 
-  People.prototype.buildList = function() {
+  People.prototype.buildScoreboard = function() {
     $('#list').empty();
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
@@ -101,7 +122,7 @@
     });
   }
 
-  People.prototype.buildRequests = function() {
+  People.prototype.buildWants = function() {
     $('#requests').empty();
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
@@ -110,13 +131,29 @@
     }
   }
 
-  People.prototype.buildAuth = function() {
-    $('#auth').empty();
+  People.prototype.buildAuth = function(people) {
+    var $auth = $('#auth');
+    $auth.empty();
+
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
-      var html = HBT['user'](person);
-      $('#auth').append(html);
+      var html = HBT['person'](person);
+      $auth.append(html);
     }
+
+    $auth.find('.person').on('click', function(e){
+      e.preventDefault();
+
+      var $el = $(this);
+      var name = $el.data('login');
+
+      $.fn.cookie('coffee-scoreboard', name);
+      cookie = $.fn.cookie('coffee-scoreboard');
+      $('body').removeClass('who');
+      login(people);
+      everyoneElse.buildScoreboard();
+      everyoneElse.buildWants();
+    });
   }
 
   function Person(options) {
@@ -124,6 +161,40 @@
     this.email = options.email;
     this.icon = gravatar(options.email, 100);
   }
+
+  // user stuff
+
+  function User(options) {
+    this.name = options.name;
+    this.email = options.email;
+    this.icon = gravatar(options.email, 100);
+  }
+
+  User.prototype.auth = function() {
+    var html = HBT['user'](this);
+    $('.top-nav').prepend(html);
+  }
+
+  function login(people) {
+    for (var i = 0; i < people.length; i++) {
+      if (cookie == people[i].name) {
+        user = new User(people[i]);
+      }
+    }
+    for (var i = 0; i < people.length; i++) {
+      if (cookie != people[i].name) {
+        everyoneElse.add(people[i]);
+      }
+    }
+    user.auth();
+  }
+
+  function logout(options) {
+    $.fn.cookie('coffee-scoreboard', '', $.extend({}, options, { expires: -1 }));
+    window.location = '/m/';
+  }
+
+  // relationships
 
   function Relationships() {}
 
@@ -141,9 +212,33 @@
     }
   }
 
+  // helpers
+
   function capitalize(name) {
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
+
+  // the play
+
+  $.get("/people", function(people) {
+    $.get("/score", function(scores) {
+
+      for (var i = 0; i < people.length; i++) {
+        allPeople.add(people[i]);
+      }
+
+      if (cookie) {
+        login(people);
+        $('body').removeClass('who');
+        everyoneElse.buildScoreboard();
+        everyoneElse.buildWants();
+      } else {
+        allPeople.buildAuth(people);
+      }
+
+      bindNav();
+    });
+  });
 
 
 })(window,$);

@@ -65,23 +65,42 @@ nav {
   margin:0;
 }
 
-nav h1 {
-  display inline;
-  margin:0;
+nav h1,
+.brand {
+  color: #fff;
+  float: left;
+  font: 400 normal 24px/24px "Open Sans Light", "Lucida Grande", "Seoge UI", "Arial", sans-serif;
   font-size: 16px;
   text-align: left;
-  margin: 8px 0 8px 3%;
+  margin: 8px 0 0 3%;
 }
 
 .top-nav {
-  top:0;
+  top: 0;
+  overflow: visible;
+}
+
+.top-nav .user-icon {
+  background-size: 32px;
+  height: 32px;
+  width: 32px;
+  border-width: 2px;
+  display: block;
+  float: left;
+  margin: 4px 0 0 3%;
+}
+
+.top-nav .user-name {
+  display: block;
+  float: left;
+  margin: 9px 0 0 6px;
 }
 
 .checkin {
   position:absolute;
   top:8px;
   font-size: 14px;
-  right:3%;
+  right: 3%;
   display: block;
   z-index: 1001;
   padding:6px 8px;
@@ -142,6 +161,7 @@ nav h1 {
   height: 32px;
   background: url(../img/community.png) no-repeat center center;
   background-size: 32px;
+  margin-right: 2px;
   vertical-align: -11px;
 }
 
@@ -241,7 +261,34 @@ h2 {
   background:      -o-linear-gradient(center, circle cover, rgba(255,255,255,0) 0%, rgba(0,0,0,.2) 100%);
 }
 
-.user {
+#welcome,
+#auth {
+  display: none;
+}
+
+.who #welcome,
+.who #auth {
+  display: block;
+}
+
+.top-nav,
+.bottom-nav,
+#list {
+  display: block;
+}
+
+#requests {
+  display: none;
+}
+
+.who .top-nav,
+.who .bottom-nav,
+.who #list,
+.who #requests {
+  display: none;
+}
+
+.person {
   margin: 1em 4%;
   width: 25%;
   float:left;

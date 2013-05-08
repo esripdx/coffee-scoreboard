@@ -31,7 +31,10 @@ function manageMultitouch(ev, slider){
       them       = $('.them', slider),
       verb       = $('.verb', slider),
       my_name    = me[0].getAttribute("data-user"),
-      their_name = them[0].getAttribute("data-user");
+      their_name = them[0].getAttribute("data-user"),
+      card       = token.parent().parent().parent(),
+      badge      = $('.badges', card),
+      message    = $('.message', card);
 
   var active_me = false;
   var active_them = false;
@@ -86,34 +89,55 @@ function manageMultitouch(ev, slider){
 
         //if hovering, execute appropriate coffee transfer
         if (window.active_me === true){
-          updateScore(their_name, my_name);
+          updateScore(my_name, their_name, their_name, my_name, badge, message);
           me.removeClass("active");
         } else if (window.active_them === true){
-          updateScore(my_name, their_name);
+          updateScore(my_name, their_name, my_name, their_name, badge, message);
           them.removeClass("active");
-        } else {
-          console.log("nobody was given a coffee");
         }
           break;
   }
 
 }
 
-function updateScore(from, to){
+function updateScore(me, them, from, to, b, m){
   $.ajax({
-    url: "/coffee?from=" + from.toLowerCase() + "&to=" + to.toLowerCase()
-  }).done(function(response){
-      console.log(from + " gave " + to + " a coffee");
-      // send done message
-    });
+    type: 'GET',
+    url: "/coffee?from=" + from.toLowerCase() + "&to=" + to.toLowerCase(),
+    // data to be added to query string:
+    dataType: 'json',
+    timeout: 300,
+    success: function(data){
 
-    if (response.error) {
-     // error code
-     console.log('error');
-    }
+      var their_name = them;
+      me = me.toLowerCase().toString();
+      them = them.toLowerCase().toString();
 
-    else {
-      // success code
-      console.log('success');
+      var my_credit = data[me][them];
+      var my_debt = data[them][me];
+      var coffee_word = " coffees";
+
+      if (my_credit > my_debt) {
+        if (my_credit == 1) { coffee_word = " coffee";}
+        b.removeClass("debts credits even updated").addClass("credits updated");
+        b[0].innerHTML = my_credit;
+        m[0].innerHTML = '<span class="name">' + their_name + ' </span>' + ' now owes you ' + my_credit + coffee_word + ".";
+      } else if (my_debt > my_credit) {
+        if (my_debt == 1) { coffee_word = " coffee";}
+        b.removeClass("debts credits even updated").addClass("debts updated");
+        b[0].innerHTML = my_debt;
+        m[0].innerHTML = 'You now owe <span class="name">' + their_name + '</span> ' + my_debt + ' ' + coffee_word + '.';
+      } else {
+        b.removeClass("debts credits even updated").addClass("even updated");
+        b[0].innerHTML = '=';
+        m[0].innerHTML = 'You and <span class="name">' + their_name + '</span> are even.';
+      }
+
+      // update the credit or debit score
+      // update the text in the card
+    },
+    error: function(xhr, type){
+      alert('Ajax error!');
     }
+  });
 }

@@ -1,14 +1,14 @@
 <article class="card">
   <i class="user-icon smaller" style="background-image:url('{{icon}}')"></i>
   {{#if credits}}
-    <span class="credits">{{credits}}</span>
+    <span class="badges credits">{{credits}}</span>
     <div class="content"><p class="message"><span class="name">{{name}}</span> owes you {{coffeeWord credits}}</p></div>
   {{else}}
     {{#if debts}}
-      <span class="debts">{{debts}}</span>
+      <span class="badges debts">{{debts}}</span>
       <div class="content"><p class="message">You owe <span class="name">{{name}}</span> {{coffeeWord debts}}</p></div>
     {{else}}
-      <span class="even">=</span>
+      <span class="badges even">=</span>
       <div class="content"><p class="message">You and <span class="name">{{name}}</span> are even</p></div>
     {{/if}}
   {{/if}}

@@ -23,6 +23,7 @@ var store     = data.read();
 var writeData = data.write;
 var atomRoute = data.atom;
 var wants     = require('./wants');
+var coffeeWord = require('./lib/coffee-word');
 
 // paths
 var logFile = "./data/coffee.log";
@@ -230,22 +231,6 @@ function wantsRoute(request, response) {
         response.write(JSON.stringify(wantList));
         response.end();
     });
-}
-
-function coffeeWord(num, includeNum) {
-  if(includeNum) {
-    if(num == 1) {
-      return "one coffee";
-    } else {
-      return num + " coffees";
-    }
-  } else {
-    if(num == 1) {
-      return "coffee";
-    } else {
-      return "coffees";
-    }
-  }
 }
 
 // server settings

@@ -149,11 +149,24 @@
 
   People.prototype.buildWants = function() {
     $('#requests').empty();
-    for (var i = 0; i < this.length; i++) {
-      var person = this.get(i);
-      var html = HBT['request-item'](person);
-      $('#requests').append(html);
-    }
+    var self = this;
+    $.get('/wants', function(wants){
+      for (var i = 0; i < wants.length; i++) {
+        var person = self.get(wants[i].sender);
+        console.log(wants[i].date);
+        console.log(person);
+        var context = {
+          name: person.name,
+          icon: person.icon,
+          item: wants[i].message,
+          time: moment.unix(wants[i].date/1000).fromNow()
+        }
+        console.log(context);
+        var html = HBT['request-item'](context);
+        console.log(html);
+        $('#requests').append(html);
+      }
+    });
   }
 
   People.prototype.buildAuth = function() {

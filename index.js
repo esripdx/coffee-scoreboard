@@ -22,6 +22,7 @@ var data      = require('./data');
 var store     = data.read();
 var writeData = data.write;
 var atomRoute = data.atom;
+var wants     = require('./wants');
 
 // paths
 var logFile = "./data/coffee.log";
@@ -175,6 +176,14 @@ function simplifyRoute(request, response) {
   response.end();
 }
 
+function wantsRoute(request, response) {
+    response.setHeader('Content-Type', 'application/json');
+    wants.list(function(wantList) {
+        response.write(JSON.stringify(wantList));
+        response.end();
+    });
+}
+
 // server settings
 
 var redirects = [
@@ -193,6 +202,7 @@ appServer.addRoute(".+", appServer.plugins.redirect, { section: "pre", routes: r
 appServer.addRoute(".+", appServer.plugins.filehandler, { basedir: "./htdocs" });
 appServer.addRoute("/score$", scoreRoute);
 appServer.addRoute("/score\.atom", atomRoute);
+appServer.addRoute("/wants", wantsRoute);
 appServer.addRoute("/coffee", modifyRoute);
 appServer.addRoute("/people", peopleRoute);
 appServer.addRoute("/simplify", simplifyRoute);

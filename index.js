@@ -96,6 +96,45 @@ function modifyRoute(request, response) {
   response.end();
 }
 
+function statusRoute(request, response) {
+  var payload = url.parse(request.url, true);
+
+  response.setHeader('Content-Type', 'application/json');
+
+  if (payload.query && payload.query.user) {
+    var user = payload.query.user.toLowerCase();
+
+    var numCoffeesOwed = 0;
+    var numPeopleOwed = 0;
+
+    for (var isOwed in store) {
+      for (var ower in store[isOwed]) {
+        if (ower == user) {
+          numCoffeesOwed += store[isOwed][ower];
+          if (store[isOwed][ower] > 0) {
+            numPeopleOwed += 1;
+          }
+        }
+      }
+    }
+
+    var msg;
+    if(numCoffeesOwed == 0) {
+      msg = "You are coffee-debt free!";
+    } else {
+      msg = "You owe " + numCoffeesOwed + " " + coffeeWord(numCoffeesOwed)
+        + " to " + numPeopleOwed + " " + (numPeopleOwed == 1 ? "person" : "people") + ".";
+    }
+
+    response.write(JSON.stringify({"status": msg}));
+
+  } else {
+    response.write(JSON.stringify({"error": "need a 'user' parameter"}));
+  }
+
+  response.end();
+}
+
 function peopleRoute(request, response) {
   response.setHeader('Content-Type', 'application/json');
   // var people = [];
@@ -187,6 +226,22 @@ function wantsRoute(request, response) {
     });
 }
 
+function coffeeWord(num, includeNum) {
+  if(includeNum) {
+    if(num == 1) {
+      return "one coffee";
+    } else {
+      return num + " coffees";
+    }
+  } else {
+    if(num == 1) {
+      return "coffee";
+    } else {
+      return "coffees";
+    }
+  }
+}
+
 // server settings
 
 var redirects = [
@@ -207,6 +262,7 @@ appServer.addRoute("/score$", scoreRoute);
 appServer.addRoute("/score\.atom", atomRoute);
 appServer.addRoute("/wants", wantsRoute);
 appServer.addRoute("/coffee", modifyRoute);
+appServer.addRoute("/status", statusRoute);
 appServer.addRoute("/people", peopleRoute);
 appServer.addRoute("/simplify", simplifyRoute);
 appServer.addRoute(".+", appServer.plugins.fourohfour);

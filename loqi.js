@@ -61,6 +61,19 @@ sub.on('message', function(channel, message) {
         }
         zen.send_privmsg(config.channel, sentence);
       }
+    } else if (match=msg.data.message.match(/^!wants?list$/)) {
+        wants.list(function(wantList) {
+            wantList.forEach(function(el) {
+                var nick = wants.getNickFromName(el.sender);
+                var responses = [
+                    nick + " wants '" + el.message + "'.",
+                    nick + " would like '" + el.message + "'.",
+                    nick + " is in need of '" + el.message + "'.",
+                    "Somebody get " + nick + " '" + el.message + "', stat!"
+                ];
+                zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
+            });
+        });
     } else if (match=msg.data.message.match(/^!(un)?wants? ?(.*$)/, 'i')) {
         // this is a command that has started with !want or !unwant
 
@@ -85,7 +98,12 @@ sub.on('message', function(channel, message) {
                 // We've received an add want command (!want a sammich) add it to redis with an expiration date
 
                 var want = wants.create(sender, match[2]);
-                var responses = ["Got it!", "Yum!", "ooo, get me one too!", "Okay!", "comin' right up ... I hope.", "mmmm... " + want.message];
+                var responses = [];
+                if (want.found) {
+                    responses = ["Got it!", "Yum!", "ooo, get me one too!", "Okay!", "comin' right up ... I hope.", "mmmm... " + want.message];
+                } else {
+                    responses = ["I don't have an account for " + sender, sender + ": no can do. You need to get your nick added to the configs.", "I don't know anybody with the nick '" + sender + "'."];
+                }
                 zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
             }
         } else {
@@ -124,6 +142,7 @@ sub.on('message', function(channel, message) {
                         sender + ": I've got 99 problems but a want for you ain't one.",
                         sender + ": no wants for you!",
                         sender + ": what do you want?!",
+                        sender + ": you appear to want of nothing.",
                         "I have no wants for you, " + sender,
                         "I'm sorry, " + sender + ", but I don't see any wants for you, perhaps you should re-!want your request."
                     ];

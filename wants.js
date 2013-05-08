@@ -1,6 +1,11 @@
 var config = require('./config.json');
 exports.get = function(nick, callback) {
-    this.getName(getNameFromNick(nick), callback);
+    var name = this.getNameFromNick(nick);
+    if (name) {
+        this.getName(this.getNameFromNick(nick), callback);
+    } else {
+        callback(null, null);
+    }
 };
 
 exports.getName = function(name, callback) {
@@ -21,17 +26,18 @@ exports.list = function(callback) {
         return el.name.toLowerCase();
     });
     this.redis.mget(people, function(err, wantList) {
-        wantList = wantList.filter(function(el) {
+        callback(wantList.filter(function(el) {
             return el != null;
-        });
-        callback(wantList.sort(function(a, b) {
-            return a.date - b.date;
+        }).map(function(el) {
+            return JSON.parse(el)
+        }).sort(function(a, b) {
+            return b.date - a.date;
         }));
     });
 };
 
 exports.delNick = function(nick) {
-    this.del(getNameFromNick(nick));
+    this.del(this.getNameFromNick(nick));
 };
 
 exports.del = function(name) {
@@ -39,13 +45,16 @@ exports.del = function(name) {
 };
 
 exports.create = function(nick, message) {
-    var name = getNameFromNick(nick);
+    var name = this.getNameFromNick(nick);
     var val = {
         'message': message,
         'date': Date.now(),
         'sender': name
     };
-    this.redis.setex(name, config.requestExpiration, JSON.stringify(val));
+    if (name) {
+        val.found = true;
+        this.redis.setex(name, config.requestExpiration, JSON.stringify(val));
+    }
     return val;
 };
 
@@ -53,12 +62,22 @@ exports.setRedis = function(redis) {
     this.redis = redis;
 };
 
-function getNameFromNick(nick) {
+exports.getNameFromNick = function(nick) {
     for (var i in config.people) {
         var person = config.people[i];
         if (person.nicks.indexOf(nick.toLowerCase()) >= 0) {
             return person.name.toLowerCase();
         }
     }
-}
+    console.log('uhoh');
+};
+
+exports.getNickFromName = function(name) {
+    for (var i in config.people) {
+        var person = config.people[i];
+        if (person.name.toLowerCase() === name.toLowerCase()) {
+            return person.nicks[0].toLowerCase();
+        }
+    }
+};
 

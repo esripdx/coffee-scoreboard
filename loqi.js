@@ -3,6 +3,7 @@ var data = require('./data');
 var coffeeConfig = require('./config.json');
 require('date-utils');
 var wants = require('./wants');
+var coffeeWord = require('./lib/coffee-word');
 
 // sometimes you just gotta capitalize strings
 String.prototype.capitalize = function() {
@@ -219,22 +220,6 @@ exports.update = function(from, to, existingDebt) {
   }
 
   zen.send_privmsg(config.channel, msg);
-}
-
-function coffeeWord(num, includeNum) {
-  if(includeNum) {
-    if(num == 1) {
-      return "one coffee";
-    } else {
-      return num + " coffees";
-    }
-  } else {
-    if(num == 1) {
-      return "coffee";
-    } else {
-      return "coffees";
-    }
-  }
 }
 
 function getTimeString(minutes, seconds) {

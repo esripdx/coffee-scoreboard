@@ -26,10 +26,12 @@ $(function(){
 
 function manageMultitouch(ev, slider){
 
-  var token  = $('.coffee-token', slider),
-      me     = $('.me', slider),
-      them   = $('.them', slider),
-      verb   = $('.verb', slider);
+  var token      = $('.coffee-token', slider),
+      me         = $('.me', slider),
+      them       = $('.them', slider),
+      verb       = $('.verb', slider),
+      my_name    = me[0].getAttribute("data-user"),
+      their_name = them[0].getAttribute("data-user");
 
   var active_me = false;
   var active_them = false;
@@ -84,10 +86,10 @@ function manageMultitouch(ev, slider){
 
         //if hovering, execute appropriate coffee transfer
         if (window.active_me === true){
-          console.log("they gave you a coffee");
+          updateScore(their_name, my_name);
           me.removeClass("active");
         } else if (window.active_them === true){
-          console.log("you gave them a coffee");
+          updateScore(my_name, their_name);
           them.removeClass("active");
         } else {
           console.log("nobody was given a coffee");
@@ -95,4 +97,23 @@ function manageMultitouch(ev, slider){
           break;
   }
 
+}
+
+function updateScore(from, to){
+  $.ajax({
+    url: "/coffee?from=" + from.toLowerCase() + "&to=" + to.toLowerCase()
+  }).done(function(response){
+      console.log(from + " gave " + to + " a coffee");
+      // send done message
+    });
+
+    if (response.error) {
+     // error code
+     console.log('error');
+    }
+
+    else {
+      // success code
+      console.log('success');
+    }
 }

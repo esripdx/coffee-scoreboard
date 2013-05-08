@@ -30,8 +30,12 @@ exports.list = function(callback) {
     });
 };
 
-exports.del = function(nick) {
-    this.redis.del(getNameFromNick(nick));
+exports.delNick = function(nick) {
+    this.del(getNameFromNick(nick));
+};
+
+exports.del = function(name) {
+    this.redis.del(name.toLowerCase());
 };
 
 exports.create = function(nick, message) {

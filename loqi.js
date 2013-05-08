@@ -73,7 +73,7 @@ sub.on('message', function(channel, message) {
                 wants.get(sender, function(err, val) {
                     var response = [];
                     if (val && val.message) {
-                        wants.del(sender);
+                        wants.delNick(sender);
                         responses = ["Your want has been cancelled.", "No coffee for you!", "no '" + val.message + "' for you!", "Ba-leted.",
                             "removed", "cancelled", "neverminded.", "you're gonna regret that."];
                     } else {

@@ -5,6 +5,7 @@ this.redis = redisLib.createClient(
     config.redis.host,
     { selected_db: config.redis.db }
 );
+
 exports.get = function(nick, callback) {
     var name = this.getNameFromNick(nick);
     if (name) {

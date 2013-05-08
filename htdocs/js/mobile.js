@@ -140,7 +140,8 @@
     $('#list').find('.card').each(function(){
       var $card = $(this);
       var $more = $card.find('.more');
-      $more.on('click', function(){
+      $more.on('click', function(e){
+        e.preventDefault();
         $card.toggleClass('active');
       })
     });
@@ -148,11 +149,32 @@
 
   People.prototype.buildWants = function() {
     $('#requests').empty();
-    for (var i = 0; i < this.length; i++) {
-      var person = this.get(i);
-      var html = HBT['request-item'](person);
-      $('#requests').append(html);
-    }
+    var self = this;
+    $.get('/wants', function(wants){
+      for (var i = 0; i < wants.length; i++) {
+        var context;
+
+        if (user.name.toLowerCase() == wants[i].sender) {
+          context = {
+            name: user.name,
+            icon: user.icon,
+            item: wants[i].message,
+            time: moment.unix(wants[i].date/1000).fromNow()
+          }
+        } else {
+          var person = self.get(wants[i].sender);
+          context = {
+            name: person.name,
+            icon: person.icon,
+            item: wants[i].message,
+            time: moment.unix(wants[i].date/1000).fromNow()
+          }
+        }
+
+        var html = HBT['request-item'](context);
+        $('#requests').append(html);
+      }
+    });
   }
 
   People.prototype.buildAuth = function() {

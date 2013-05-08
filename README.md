@@ -16,6 +16,22 @@ Parameters:
 * from
 * to
 
+### /status
+
+Parameters:
+* user
+
+### /wants
+
+Returns all wants
+
+### /broadcast
+
+Parameters:
+* user
+
+Broadcasts to IRC that user is wanting to fulfill some !wants
+
 Returns the current score or error
 
 ## Required files

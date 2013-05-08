@@ -25,12 +25,12 @@ Parameters:
 
 Returns all wants
 
-### /broadcast (not yet implemented)
+### /broadcast
 
 Parameters:
 * user
 
-Broadcasts to IRC that user is at (or going to) Barista
+Broadcasts to IRC that user is wanting to fulfill some !wants
 
 Returns the current score or error
 

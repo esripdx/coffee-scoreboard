@@ -65,29 +65,54 @@ nav {
   margin:0;
 }
 
+nav h1,
 .brand {
   color: #fff;
   float: left;
+  font: 400 normal 24px/24px "Open Sans Light", "Lucida Grande", "Seoge UI", "Arial", sans-serif;
   font-size: 16px;
   text-align: left;
-  margin: 0 10px;
+  margin: 8px 0 0 3%;
 }
 
 .top-nav {
   top: 0;
-  padding-top: 12px;
-  overflow: hidden;
+  overflow: visible;
 }
 
-#logout {
-  color: #ccc;
+.top-nav .user-icon {
+  background-size: 32px;
+  height: 32px;
+  width: 32px;
+  border-width: 2px;
   display: block;
-  float: right;
-  margin: 0;
-  font-size: 12px;
-  line-height: 16px;
-  text-align: right;
-  margin: 0 10px;
+  float: left;
+  margin: 4px 0 0 3%;
+}
+
+.top-nav .user-name {
+  display: block;
+  float: left;
+  margin: 9px 0 0 6px;
+}
+
+.checkin {
+  position:absolute;
+  top:8px;
+  font-size: 14px;
+  right: 3%;
+  display: block;
+  z-index: 1001;
+  padding:6px 8px;
+  border-radius: 6px;
+  border:1px solid #010101;
+
+  font-family: 'Open Sans Light', "Lucida Grande", "Seoge UI", "Arial", sans-serif;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 0 #000;
+  color: white;
+  box-shadow: inset 0px 2px 9px -6px rgba(255,255,255,0.8),
+              0 1px 2px rgba(255,255,255,0.05);
 }
 
 .bottom-nav {
@@ -149,6 +174,7 @@ nav {
   background-size: 32px;
   vertical-align: -11px;
 }
+
 
 .right {
   right: 0;
@@ -247,9 +273,12 @@ h2 {
 
 .top-nav,
 .bottom-nav,
-#list,
-#requests {
+#list {
   display: block;
+}
+
+#requests {
+  display: none;
 }
 
 .who .top-nav,
@@ -259,7 +288,7 @@ h2 {
   display: none;
 }
 
-.user {
+.person {
   margin: 1em 4%;
   width: 25%;
   float:left;
@@ -305,7 +334,7 @@ h2 {
   box-shadow: none;
 }
 
-.debts, .credits {
+.debts, .credits, .badge {
   border-radius: 9px;
   font-size: 10px;
   color: #fff;
@@ -313,8 +342,6 @@ h2 {
   min-width:18px;
   padding:0 4px;
   position: absolute;
-  top: 12px;
-  left: 48px;
   box-shadow: 0 0 6px rgba(0,0,0,0.1);
   text-align: center;
   line-height: 16px;
@@ -326,7 +353,12 @@ h2 {
           box-sizing: border-box;
 }
 
-.debts {
+.debts, .credits {
+  top: 12px;
+  left: 48px;
+}
+
+.debts, .badge {
   background-color: #ca4c29;
   border: 1px solid #BC451D;
 }
@@ -334,6 +366,17 @@ h2 {
 .credits {
   background-color: #3ea349;
   border: 1px solid #369B40;
+}
+
+.badge {
+  display: inline-block;
+  position:relative;
+  z-index:1001;
+  height: 14px;
+  min-width:14px;
+  padding: 0 2px;
+  line-height:12px;
+  vertical-align: 7px;
 }
 
 .more {
@@ -388,7 +431,7 @@ h2 {
   border-radius: 25px;
   margin-top: 0.5em;
   overflow: hidden;
-  background-color: #f;
+  background-color: #f9f9f9;
 
   position: relative;
 
@@ -429,7 +472,7 @@ h2 {
 
 .swipe-text {
   /*text-align: center;*/
-  text-indent: 85px;
+  text-align: center;
   display: inline-block;
   white-space: nowrap;
   color: #cfcfcf;
@@ -442,9 +485,11 @@ h2 {
   -webkit-background-clip: text;
   -moz-text-fill-color: transparent;
   -webkit-text-fill-color: transparent;
-  -webkit-animation: swipe 10s 2;
+  -webkit-animation: swipe 10s infinite;
+  padding: 0 3em;
+  margin-left: -3em;
 
-  width: 200%;
+  width: 100%;
   -webkit-text-size-adjust: none;
 }
 

@@ -1,35 +1,22 @@
 (function(window,$,undefined){
 
+  // the players
+
   window.HBT = {};
 
   loadTemplates([
     'list-item',
     'request-item',
+    'person',
     'user'
   ]);
 
   var cookie = $.fn.cookie('coffee-scoreboard');
-  console.log(cookie);
+  var allPeople = new People();
+  var user;
+  var everyoneElse = new People();
 
-  var people = new People();
-
-  $.get("/people", function(ppl) {
-    $.get("/score", function(scores) {
-      for (var i = 0; i < ppl.length; i++) {
-        people.add(ppl[i]);
-      }
-
-      if (cookie) {
-        $('body').removeClass('who');
-        people.buildList();
-        people.buildRequests();
-      } else {
-        people.buildAuth();
-      }
-
-      bindNav();
-    });
-  });
+  // the acts
 
   function bindNav() {
     var $logout = $('#logout');
@@ -57,8 +44,7 @@
 
     $logout.on('click', function(e){
       e.preventDefault();
-      reset();
-      window.location = '/m/';
+      logout();
     });
   }
 
@@ -119,7 +105,7 @@
     }
   }
 
-  People.prototype.buildList = function() {
+  People.prototype.buildScoreboard = function() {
     $('#list').empty();
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
@@ -136,7 +122,7 @@
     });
   }
 
-  People.prototype.buildRequests = function() {
+  People.prototype.buildWants = function() {
     $('#requests').empty();
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
@@ -145,27 +131,28 @@
     }
   }
 
-  People.prototype.buildAuth = function() {
+  People.prototype.buildAuth = function(people) {
     var $auth = $('#auth');
     $auth.empty();
 
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
-      var html = HBT['user'](person);
+      var html = HBT['person'](person);
       $auth.append(html);
     }
 
-    $auth.find('.user').on('click', function(e){
+    $auth.find('.person').on('click', function(e){
       e.preventDefault();
 
       var $el = $(this);
-      var login = $el.data('login');
-      console.log(login);
+      var name = $el.data('login');
 
-      $.fn.cookie('coffee-scoreboard', login);
+      $.fn.cookie('coffee-scoreboard', name);
+      cookie = $.fn.cookie('coffee-scoreboard');
       $('body').removeClass('who');
-      people.buildList();
-      people.buildRequests();
+      login(people);
+      everyoneElse.buildScoreboard();
+      everyoneElse.buildWants();
     });
   }
 
@@ -174,6 +161,40 @@
     this.email = options.email;
     this.icon = gravatar(options.email, 100);
   }
+
+  // user stuff
+
+  function User(options) {
+    this.name = options.name;
+    this.email = options.email;
+    this.icon = gravatar(options.email, 100);
+  }
+
+  User.prototype.auth = function() {
+    var html = HBT['user'](this);
+    $('.top-nav').prepend(html);
+  }
+
+  function login(people) {
+    for (var i = 0; i < people.length; i++) {
+      if (cookie == people[i].name) {
+        user = new User(people[i]);
+      }
+    }
+    for (var i = 0; i < people.length; i++) {
+      if (cookie != people[i].name) {
+        everyoneElse.add(people[i]);
+      }
+    }
+    user.auth();
+  }
+
+  function logout(options) {
+    $.fn.cookie('coffee-scoreboard', '', $.extend({}, options, { expires: -1 }));
+    window.location = '/m/';
+  }
+
+  // relationships
 
   function Relationships() {}
 
@@ -191,13 +212,33 @@
     }
   }
 
+  // helpers
+
   function capitalize(name) {
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
 
-  window.reset = function(options) {
-    $.fn.cookie('coffee-scoreboard', '', $.extend({}, options, { expires: -1 }));
-  }
+  // the play
+
+  $.get("/people", function(people) {
+    $.get("/score", function(scores) {
+
+      for (var i = 0; i < people.length; i++) {
+        allPeople.add(people[i]);
+      }
+
+      if (cookie) {
+        login(people);
+        $('body').removeClass('who');
+        everyoneElse.buildScoreboard();
+        everyoneElse.buildWants();
+      } else {
+        allPeople.buildAuth(people);
+      }
+
+      bindNav();
+    });
+  });
 
 
 })(window,$);

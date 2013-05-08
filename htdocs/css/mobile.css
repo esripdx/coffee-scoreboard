@@ -458,22 +458,44 @@ h2 {
 }
 
 .slider-icon {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   margin-left: 0;
-  padding:2px;
   position: absolute;
-  top:1px;
+  top:2px;
   background-size: 46px;
   border-color: white;
+  border: 2px solid white;
   background: url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100') cover no-repeat transparent;
-  background-size: 50px;
+  background-size: 44px;
   display:inline-block;
   border-radius: 50%;
+
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
 
   -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
      -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
           box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
+
+  -webkit-transition: border 100ms linear;
+     -moz-transition: border 100ms linear;
+      -ms-transition: border 100ms linear;
+       -o-transition: border 100ms linear;
+          transition: border 100ms linear;
+}
+
+.slider-icon.active {
+  border:2px solid #3ea349;
+
+  -webkit-transition: border 100ms linear;
+     -moz-transition: border 100ms linear;
+      -ms-transition: border 100ms linear;
+       -o-transition: border 100ms linear;
+          transition: border 100ms linear;
 }
 
 .slider-icon.left {
@@ -505,6 +527,10 @@ h2 {
 
   width: 100%;
   -webkit-text-size-adjust: none;
+}
+
+.swipe-text .verb.red{
+  color:red;
 }
 
 @-webkit-keyframes swipe { 0% { background-position: -320px 0; } 50% { background-position: 320px 0; } 100%{ background-position: -320px 0; } }
@@ -574,10 +600,33 @@ h2 {
 
 }
 
-.drag1 {
-  top:100px;
+.coffee-token {
+  background: url(../img/plus1.png)transparent;
+  background-size: 50px;
+  height: 50px;
+  width: 50px;
+  opacity:0;
+
+  display: block;
+  position: absolute;
+
+  top: -2px;
+
+  z-index: 500;
+
+  -webkit-transition: opacity 100ms linear;
+     -moz-transition: opacity 100ms linear;
+      -ms-transition: opacity 100ms linear;
+       -o-transition: opacity 100ms linear;
+          transition: opacity 100ms linear;
 }
 
-.drag2 {
-  top: 160px;
+.coffee-token.active {
+  opacity: 1;
+
+  -webkit-transition: opacity 100ms linear;
+     -moz-transition: opacity 100ms linear;
+      -ms-transition: opacity 100ms linear;
+       -o-transition: opacity 100ms linear;
+          transition: opacity 100ms linear;
 }

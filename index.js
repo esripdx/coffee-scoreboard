@@ -104,6 +104,11 @@ function statusRoute(request, response) {
   if (payload.query && payload.query.user) {
     var user = payload.query.user.toLowerCase();
 
+    if (!store[user]) {
+      response.write(JSON.stringify({"error": "user does not exist"}));
+      return response.end();
+    }
+
     var numCoffeesOwed = 0;
     var numPeopleOwed = 0;
 
@@ -119,6 +124,7 @@ function statusRoute(request, response) {
     }
 
     var msg;
+
     if(numCoffeesOwed == 0) {
       msg = "You are coffee-debt free!";
     } else {

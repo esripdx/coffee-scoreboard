@@ -2,6 +2,8 @@
 
   // the players
 
+  var people, scores;
+
   window.HBT = {};
 
   loadTemplates([
@@ -107,10 +109,32 @@
 
   People.prototype.buildScoreboard = function() {
     $('#list').empty();
+
+    var creditors = [];
+    var debtors = [];
+    var neutrals = [];
+
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
-      var html = HBT['list-item'](person);
-      $('#list').append(html);
+      person.html = HBT['list-item'](person);
+      if (person.balance > 0) { creditors.push(person) }
+      else if (person.balance < 0) { debtors.push(person) }
+      else { neutrals.push(person) }
+    }
+
+    creditors = creditors.sort(function(a,b){ return b.balance - a.balance })
+    debtors = debtors.sort(function(a,b){ return a.balance - b.balance })
+
+    for (var i = 0; i < debtors.length; i++) {
+      $('#list').append(debtors[i].html);
+    }
+
+    for (var i = 0; i < creditors.length; i++) {
+      $('#list').append(creditors[i].html);
+    }
+
+    for (var i = 0; i < neutrals.length; i++) {
+      $('#list').append(neutrals[i].html);
     }
 
     $('#list').find('.card').each(function(){
@@ -131,7 +155,7 @@
     }
   }
 
-  People.prototype.buildAuth = function(people) {
+  People.prototype.buildAuth = function() {
     var $auth = $('#auth');
     $auth.empty();
 
@@ -150,10 +174,28 @@
       $.fn.cookie('coffee-scoreboard', name);
       cookie = $.fn.cookie('coffee-scoreboard');
       $('body').removeClass('who');
-      login(people);
+      login();
       everyoneElse.buildScoreboard();
       everyoneElse.buildWants();
     });
+  }
+
+  People.prototype.getRelations = function(user) {
+    var relations = {};
+
+    for (var i=0; i < this.length; i++) {
+      var p = this.get(i);
+      var amount = scores[user.name.toLowerCase()][p.name.toLowerCase()] - scores[p.name.toLowerCase()][user.name.toLowerCase()];
+      p.balance = amount;
+      if (amount > 0) {
+        p.credits = amount;
+      } else if (amount < 0) {
+        p.debts = -amount;
+      }
+      relations[p.name] = amount;
+    }
+
+    return relations;
   }
 
   function Person(options) {
@@ -161,8 +203,6 @@
     this.email = options.email;
     this.icon = gravatar(options.email, 100);
   }
-
-  // user stuff
 
   function User(options) {
     this.name = options.name;
@@ -175,7 +215,9 @@
     $('.top-nav').prepend(html);
   }
 
-  function login(people) {
+  User.prototype.relations = {};
+
+  function login() {
     for (var i = 0; i < people.length; i++) {
       if (cookie == people[i].name) {
         user = new User(people[i]);
@@ -186,6 +228,7 @@
         everyoneElse.add(people[i]);
       }
     }
+    var relations = everyoneElse.getRelations(user);
     user.auth();
   }
 
@@ -194,46 +237,54 @@
     window.location = '/m/';
   }
 
-  // relationships
-
-  function Relationships() {}
-
-  Relationships.prototype.add = function(relation) {
-    this[relation.id] = relation;
-  }
-
-  Relationships.prototype.get = function(id) {
-    return this[id];
-  }
-
-  Relationships.prototype.forEach = function(func) {
-    for(var key in this){
-      func(this[key]);
-    }
-  }
-
-  // helpers
+  // the helpers
 
   function capitalize(name) {
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
 
+  Handlebars.registerHelper('coffeeWord', function(num) {
+    if(num == 1) {
+      return "one coffee";
+    } else {
+      return num + " coffees";
+    }
+  });
+
+  function coffeeWord(num, includeNum) {
+    if(includeNum) {
+      if(num == 1) {
+        return "one coffee";
+      } else {
+        return num + " coffees";
+      }
+    } else {
+      if(num == 1) {
+        return "coffee";
+      } else {
+        return "coffees";
+      }
+    }
+  }
+
   // the play
 
-  $.get("/people", function(people) {
-    $.get("/score", function(scores) {
+  $.get("/people", function(p) {
+    people = p;
+    $.get("/score", function(s) {
+      scores = s;
 
       for (var i = 0; i < people.length; i++) {
         allPeople.add(people[i]);
       }
 
       if (cookie) {
-        login(people);
+        login();
         $('body').removeClass('who');
         everyoneElse.buildScoreboard();
         everyoneElse.buildWants();
       } else {
-        allPeople.buildAuth(people);
+        allPeople.buildAuth();
       }
 
       bindNav();

@@ -97,6 +97,19 @@ function modifyRoute(request, response) {
   response.end();
 }
 
+function broadcastRoute(request, response) {
+  var payload = url.parse(request.url, true);
+
+  response.setHeader('Content-Type', 'application/json');
+
+  if (payload.query && payload.query.user) {
+    var user = payload.query.user.toLowerCase();
+    loqi.broadcast(user);
+  }
+
+  response.end();
+}
+
 function statusRoute(request, response) {
   var payload = url.parse(request.url, true);
 
@@ -252,6 +265,7 @@ appServer.addRoute(".+", appServer.plugins.filehandler, { basedir: "./htdocs" })
 appServer.addRoute("/score$", scoreRoute);
 appServer.addRoute("/score\.atom", atomRoute);
 appServer.addRoute("/wants", wantsRoute);
+appServer.addRoute("/broadcast", broadcastRoute);
 appServer.addRoute("/coffee", modifyRoute);
 appServer.addRoute("/status", statusRoute);
 appServer.addRoute("/people", peopleRoute);

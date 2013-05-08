@@ -222,6 +222,17 @@ exports.update = function(from, to, existingDebt) {
   zen.send_privmsg(config.channel, msg);
 }
 
+exports.broadcast = function(name) {
+    console.log("broadcast for " + name);
+    var statements = [
+        name + " is headed to Barista! Anybody !want anything?",
+        name + " wants to grant your !wants",
+        "Send in your !wants, " + name + " is filling orders!",
+        name + " is at Barista, what do you !want?"
+    ];
+    zen.send_privmsg(config.channel, statements[Math.floor(Math.random() * statements.length)]);
+};
+
 function getTimeString(minutes, seconds) {
     var retString = '';
     if (minutes === 1) {

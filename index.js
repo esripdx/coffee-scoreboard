@@ -105,6 +105,8 @@ function broadcastRoute(request, response) {
   if (payload.query && payload.query.user) {
     var user = payload.query.user.toLowerCase();
     loqi.broadcast(user);
+  } else {
+    response.write(JSON.stringify({"error": "missing user parameter"}));
   }
 
   response.end();

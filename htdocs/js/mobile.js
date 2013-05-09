@@ -366,6 +366,7 @@
     switch(ev.type) {
 
         case 'dragdown':
+          page.removeClass("transition");
           if (touchY < windowY) {
             page.css('margin-top', deltaY + 50);
             if (deltaY > 61) {
@@ -389,9 +390,8 @@
             }
           }
           page.on("webKitTransitionEnd transitionend oTransitionEnd", function() {
-              page.removeClass("transition");
+            page.removeClass("transition");
           });
-
             break;
     }
 

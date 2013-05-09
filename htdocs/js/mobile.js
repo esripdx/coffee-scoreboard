@@ -3,7 +3,7 @@
   // makes click trigger tap on non-touch device
   if (!('ontouchend' in window)) {
     $(document).on('click', 'body', function(e) {
-      $(e.target).trigger('touchend');
+      $(e.target).trigger('tap');
     });
   }
 
@@ -33,7 +33,7 @@
     var $scoreboard = $nav.find('.scoreboard');
     var $wants = $nav.find('.wants');
 
-    $scoreboard.on('touchend', function(e){
+    $scoreboard.on('tap', function(e){
       e.preventDefault();
 
       $nav.find('.active').removeClass('active');
@@ -42,7 +42,7 @@
       $(this).addClass('active');
     });
 
-    $wants.on('touchend', function(e){
+    $wants.on('tap', function(e){
       e.preventDefault();
 
       $nav.find('.active').removeClass('active');
@@ -51,7 +51,7 @@
       $(this).addClass('active');
     });
 
-    $logout.on('touchend', function(e){
+    $logout.on('tap', function(e){
       e.preventDefault();
       logout();
     });
@@ -151,7 +151,7 @@
     $('#list').find('.card').each(function(){
       var $card = $(this);
       var $more = $card.find('.more');
-      $more.on('touchend', function(e){
+      $more.on('tap', function(e){
         e.preventDefault();
         $card.toggleClass('active');
       })
@@ -200,7 +200,7 @@
       $auth.append(html);
     }
 
-    $auth.find('.person').on('touchend', function(e){
+    $auth.find('.person').on('tap', function(e){
       e.preventDefault();
 
       var $el = $(this);

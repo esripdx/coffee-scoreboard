@@ -310,6 +310,14 @@ h2 {
 
 /* - - - - - - - - - - List View - - - - - - - - - - */
 
+#list.transition {
+  -webkit-transition: margin-top 0.25s ease-out;
+     -moz-transition: margin-top 0.25s ease-out;
+      -ms-transition: margin-top 0.25s ease-out;
+       -o-transition: margin-top 0.25s ease-out;
+          transition: margin-top 0.25s ease-out;
+}
+
 #list .card {
   padding: 1.7em 1em 0.5em 1em;
   height: 74px;
@@ -606,11 +614,6 @@ h2 {
        -o-transform: translate3d(0,0,0) scale3d(1,1,1);
           transform: translate3d(0,0,0) scale3d(1,1,1);
 
-  -webkit-transition: margin-top 100ms linear;
-     -moz-transition: margin-top 100ms linear;
-      -ms-transition: margin-top 100ms linear;
-       -o-transition: margin-top 100ms linear;
-          transition: margin-top 100ms linear;
 }
 
 .list .user-icon {

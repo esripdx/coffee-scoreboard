@@ -103,7 +103,7 @@
   People.prototype.add = function(data) {
     this.names.push(data.name);
     this[data.name] = new Person(data);
-  }
+  };
 
   People.prototype.get = function(getBy) {
     if(typeof getBy === "string"){
@@ -112,9 +112,10 @@
     if(typeof getBy === "number"){
       return this[capitalize(this.names[getBy])];
     }
-  }
+  };
 
   People.prototype.buildScoreboard = function() {
+
     $('#list').empty();
 
     var creditors = [];
@@ -128,13 +129,13 @@
         icon: user.icon
       };
       person.html = HBT['list-item'](person);
-      if (person.balance > 0) { creditors.push(person) }
-      else if (person.balance < 0) { debtors.push(person) }
-      else { neutrals.push(person) }
+      if (person.balance > 0) { creditors.push(person); }
+      else if (person.balance < 0) { debtors.push(person); }
+      else { neutrals.push(person); }
     }
 
-    creditors = creditors.sort(function(a,b){ return b.balance - a.balance })
-    debtors = debtors.sort(function(a,b){ return a.balance - b.balance })
+    creditors = creditors.sort(function(a,b){ return b.balance - a.balance; });
+    debtors = debtors.sort(function(a,b){ return a.balance - b.balance; });
 
     for (var i = 0; i < debtors.length; i++) {
       $('#list').append(debtors[i].html);
@@ -154,14 +155,19 @@
       $more.on('tap', function(e){
         e.preventDefault();
         $card.toggleClass('active');
-      })
+      });
     });
 
+    var list = $('#list');
+
     bindSwipe();
-  }
+    bindRefresh(this, list);
+
+  };
 
   People.prototype.buildWants = function() {
-    $('#requests').empty();
+    var requests = $('#requests');
+    requests.empty();
     var self = this;
     $.get('/wants', function(wants){
       for (var i = 0; i < wants.length; i++) {
@@ -185,7 +191,9 @@
         }
 
         var html = HBT['request-item'](context);
-        $('#requests').append(html);
+        requests.append(html);
+
+        bindRefresh(this, requests);
       }
     });
   }
@@ -302,7 +310,49 @@
     }
   }
 
-  // paul's touch
+  // pull to refresh
+
+  function bindRefresh(people, page) {
+
+    var hammertime = Hammer(page);
+
+    hammertime.on('dragdown release', function(ev) {
+      manageRefreshEvents(ev, page, people);
+    });
+  }
+
+  function manageRefreshEvents(ev, page, people){
+
+    var touchY  = ev.gesture.center.pageY;
+    var deltaY  = ev.gesture.deltaY;
+    var pullDiv = $('#pullrefresh');
+
+    switch(ev.type) {
+
+        case 'dragdown':
+          if (touchY < 150) {
+            page.css('margin-top', deltaY + 50);
+            if (deltaY > 50) {
+              pullDiv.addClass("breakpoint");
+            }
+            else {
+              pullDiv.removeClass("breakpoint");
+            }
+          }
+
+            break;
+
+        case 'release':
+          page.css('margin-top', 50);
+          if (deltaY > 50) {
+            people.buildScoreboard();
+          }
+            break;
+    }
+
+  }
+
+  // swipe to transfer tokens
 
   function bindSwipe() {
     var hammertime = Hammer($('.slider'), {
@@ -399,7 +449,6 @@
     $.ajax({
       type: 'GET',
       url: "/coffee?from=" + from.toLowerCase() + "&to=" + to.toLowerCase(),
-      // data to be added to query string:
       dataType: 'json',
       timeout: 300,
       success: function(data){
@@ -412,6 +461,7 @@
         var my_debt = data[them][me];
         var coffee_word = " coffees";
 
+        // update badge and message with new values
         if (my_credit > my_debt) {
           if (my_credit == 1) { coffee_word = " coffee";}
           b.removeClass("debts credits even updated").addClass("credits updated");
@@ -428,15 +478,12 @@
           m[0].innerHTML = 'You and <span class="name">' + their_name + '</span> are even.';
         }
 
-        // update the credit or debit score
-        // update the text in the card
       },
       error: function(xhr, type){
         alert('Ajax error!');
       }
     });
   }
-
 
   // the play
 

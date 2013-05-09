@@ -116,6 +116,10 @@
 
     for (var i = 0; i < this.length; i++) {
       var person = this.get(i);
+      person.currentUser = {
+        name: user.name,
+        icon: user.icon
+      };
       person.html = HBT['list-item'](person);
       if (person.balance > 0) { creditors.push(person) }
       else if (person.balance < 0) { debtors.push(person) }

@@ -17,7 +17,8 @@
     'list-item',
     'request-item',
     'person',
-    'user'
+    'user',
+    'wants-empty'
   ]);
 
   var cookie = $.fn.cookie('coffee-scoreboard');
@@ -28,6 +29,7 @@
   // the acts
 
   function bindNav() {
+    var $broadcast = $('#broadcast');
     var $logout = $('#logout');
     var $nav = $('.bottom-nav');
     var $scoreboard = $nav.find('.scoreboard');
@@ -54,6 +56,11 @@
     $logout.on('tap', function(e){
       e.preventDefault();
       logout();
+    });
+
+    $broadcast.on('tap', function(e){
+      e.preventDefault();
+      broadcast();
     });
   }
 
@@ -164,29 +171,39 @@
     $('#requests').empty();
     var self = this;
     $.get('/wants', function(wants){
-      for (var i = 0; i < wants.length; i++) {
-        var context;
+      if (wants.length) {
+        for (var i = 0; i < wants.length; i++) {
+          var context;
 
-        if (user.name.toLowerCase() == wants[i].sender) {
-          context = {
-            name: user.name,
-            icon: user.icon,
-            item: wants[i].message,
-            time: moment.unix(wants[i].date/1000).fromNow()
+          if (user.name.toLowerCase() == wants[i].sender) {
+            context = {
+              name: user.name,
+              icon: user.icon,
+              item: wants[i].message,
+              time: moment.unix(wants[i].date/1000).fromNow()
+            }
+          } else {
+            var person = self.get(wants[i].sender);
+            context = {
+              name: person.name,
+              icon: person.icon,
+              item: wants[i].message,
+              time: moment.unix(wants[i].date/1000).fromNow()
+            }
           }
-        } else {
-          var person = self.get(wants[i].sender);
-          context = {
-            name: person.name,
-            icon: person.icon,
-            item: wants[i].message,
-            time: moment.unix(wants[i].date/1000).fromNow()
-          }
+
+          var html = HBT['request-item'](context);
+          $('#requests').append(html);
         }
-
-        var html = HBT['request-item'](context);
+        var html = 'Wants<span class="badge">' + wants.length + '</span>';
+        $('.wants').html(html);
+      } else {
+        // no wants
+        var html = HBT['wants-empty']();
         $('#requests').append(html);
+        $('.wants').html('Wants');
       }
+
     });
   }
 
@@ -237,12 +254,14 @@
     this.name = options.name;
     this.email = options.email;
     this.icon = gravatar(options.email, 100);
+    this.nick = options.nicks[0];
   }
 
   function User(options) {
     this.name = options.name;
     this.email = options.email;
     this.icon = gravatar(options.email, 100);
+    this.nick = options.nicks[0];
   }
 
   User.prototype.auth = function() {
@@ -270,6 +289,23 @@
   function logout(options) {
     $.fn.cookie('coffee-scoreboard', '', $.extend({}, options, { expires: -1 }));
     window.location = '/m/';
+  }
+
+  function broadcast() {
+    if (confirm("Want to let everyone know you're going to Barista?")) {
+      $.ajax({
+        type: 'GET',
+        url: "/broadcast?user=" + user.nick,
+        dataType: 'json',
+        timeout: 300,
+        success: function(data){
+          alert('Broadcast successful!');
+        },
+        error: function(xhr, type){
+          alert('Ajax error!');
+        }
+      });
+    }
   }
 
   // the helpers

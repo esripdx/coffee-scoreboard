@@ -87,25 +87,19 @@ sub.on('message', function(channel, message) {
                     var response = [];
                     if (val && val.message) {
                         wants.delNick(sender);
-                        responses = ["Your want has been cancelled.", "No coffee for you!", "no '" + val.message + "' for you!", "Ba-leted.",
+                        responses = ["Your !want has been cancelled.", "No coffee for you!", "no '" + val.message + "' for you!", "Ba-leted.",
                             "removed", "cancelled", "neverminded.", "you're gonna regret that."];
                     } else {
-                        responses = ["Ok, I didn't have any wants for you anyway.", "You didn't have any wants out."];
+                        responses = ["Ok, I didn't have any !wants for you anyway.", "You didn't have any !wants out."];
                     }
                     zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
                 });
             } else {
                 // We've received an add want command (!want a sammich) add it to redis with an expiration date
 
-                var want = wants.create(sender, match[2]);
-                var responses = [];
-                if (want.found) {
-                    responses = ["Got it!", "Yum!", "ooo, get me one too!", "Okay!", "comin' right up ... I hope.", "mmmm... " + want.message];
-                } else {
-                    responses = ["I don't have an account for " + sender, sender + ": no can do. You need to get your nick added to the configs.", "I don't know anybody with the nick '" + sender + "'."];
-                }
-                zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
+               addWant(sender, match[2]);
             }
+
         } else {
             // This is a !want command with no parameters, meaning a status update command.
 
@@ -132,23 +126,27 @@ sub.on('message', function(channel, message) {
                     responses = [
                         sender + ": by my calculations you've been waiting for '" + val.message + "' for " + waitString + ". I'll be removing it in " + expString + ".",
                         sender + ": you've been waiting for '" + val.message + "' for " + waitString + ". I'll be cancelling it for you in " + expString + ".",
-                        sender + ": you wanted '" + val.message + "' " + waitString + " ago. It's got " + expString + " left before I remove it.",
+                        sender + ": you !wanted '" + val.message + "' " + waitString + " ago. It's got " + expString + " left before I remove it.",
                         sender + ": I've got you down for '" + val.message + "' " + waitString + " ago. If nobody buys it for you in the next " + expString + "; you're SOL."
                     ];
                 } else {
                     // no want found for this user
                     responses = [
-                        sender + ": I've got 99 problems but a want for you ain't one.",
-                        sender + ": no wants for you!",
-                        sender + ": what do you want?!",
-                        sender + ": you appear to want of nothing.",
-                        "I have no wants for you, " + sender,
-                        "I'm sorry, " + sender + ", but I don't see any wants for you, perhaps you should re-!want your request."
+                        sender + ": I've got 99 problems but a !want for you ain't one.",
+                        sender + ": no !wants for you!",
+                        sender + ": what do you !want?!",
+                        sender + ": you appear to !want of nothing.",
+                        "I have no !wants for you, " + sender,
+                        "I'm sorry, " + sender + ", but I don't see any !wants for you, perhaps you should re-!want your request."
                     ];
                 }
                 zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
             });
         }
+    } else if (match=msg.data.message.match(/^!sudo (get|make) me (.*$)/, 'i')) {
+        var responseVerb = match[1].toLowerCase() === 'get' ? 'getting' : 'making';
+        var expMinutes = config.requestExpiration / 60;
+        addWant(sender, match[2], [responseVerb + " '" + match[2] + "' for " + sender + ". This may take up to " + expMinutes + " minutes..."]);
     } else if((match=msg.data.message.match(/^([a-z]+) bought (a|1) coffees? for ([a-z]+)$/))
       || (match=msg.data.message.match(/^([a-z]+) bought ([a-z]+) (a|1) coffees?$/))) {
 
@@ -193,6 +191,26 @@ sub.on('message', function(channel, message) {
     }
   }
 });
+
+function addWant(sender, message, responses) {
+    var want = wants.create(sender, message);
+    var responses = responses || [
+        "Got it!",
+        "Yum!",
+        "ooo, get me one too!",
+        "Okay!",
+        "comin' right up ... I hope.",
+        "mmmm... " + want.message
+    ];
+
+    if (!want.found) {
+        responses = [
+            "I don't have an account for " + sender, sender + ": no can do. You need to get your nick added to the configs.",
+            "I don't know anybody with the nick '" + sender + "'."
+        ];
+    }
+    zen.send_privmsg(config.channel, responses[Math.floor(Math.random() * responses.length)]);
+}
 
 exports.update = function(from, to, existingDebt) {
   var store = data.read();

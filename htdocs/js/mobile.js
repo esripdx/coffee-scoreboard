@@ -211,7 +211,6 @@
       } else {
         // no wants
         requests.append(HBT['wants-empty']());
-        console.log('empty');
         $('.wants').html('Wants');
       }
 
@@ -246,8 +245,6 @@
 
   People.prototype.updateRelations = function(user) {
     var relations = {};
-
-    console.log(scores);
 
     for (var i=0; i < this.length; i++) {
       var p = this.get(i);

@@ -52,12 +52,12 @@ function manageMultitouch(ev, slider){
             x         = ev.gesture.center.pageX;
 
         // determine if token is inside the slider
-        if (x > me_pos.left + 20 && x < them_pos.left + them_pos.width - 30){
+        if (x > me_pos.left + 18 && x < them_pos.left + them_pos.width - 20){
           token.css('left', x - 50);
         }
 
         // determine if token is over me
-        if (token_pos.left > me_pos.left && token_pos.left < me_pos.left + me_pos.width && active_me === false) {
+        if (token_pos.left < me_pos.left + me_pos.width && active_me === false) {
           me.addClass("active");
           window.active_me = true;
         } else {
@@ -66,7 +66,7 @@ function manageMultitouch(ev, slider){
         }
 
         // determine if token is over them
-        if (token_pos.left + token_pos.width > them_pos.left && token_pos.left + token_pos.width < them_pos.left + them_pos.width && active_them === false) {
+        if (token_pos.left + token_pos.width > them_pos.left && active_them === false) {
           them.addClass("active");
           window.active_them = true;
         } else {
@@ -121,12 +121,12 @@ function updateScore(me, them, from, to, b, m){
         if (my_credit == 1) { coffee_word = " coffee";}
         b.removeClass("debts credits even updated").addClass("credits updated");
         b[0].innerHTML = my_credit;
-        m[0].innerHTML = '<span class="name">' + their_name + ' </span>' + ' now owes you ' + my_credit + coffee_word + ".";
+        m[0].innerHTML = '<span class="name">' + their_name + ' </span>' + ' owes you ' + my_credit + coffee_word + ".";
       } else if (my_debt > my_credit) {
         if (my_debt == 1) { coffee_word = " coffee";}
         b.removeClass("debts credits even updated").addClass("debts updated");
         b[0].innerHTML = my_debt;
-        m[0].innerHTML = 'You now owe <span class="name">' + their_name + '</span> ' + my_debt + ' ' + coffee_word + '.';
+        m[0].innerHTML = 'You owe <span class="name">' + their_name + '</span> ' + my_debt + ' ' + coffee_word + '.';
       } else {
         b.removeClass("debts credits even updated").addClass("even updated");
         b[0].innerHTML = '=';

@@ -164,10 +164,11 @@
       $('#list').find('.card').each(function(){
         var $card = $(this);
         var $more = $card.find('.more');
-        $more.on('tap', function(e){
+        $more.on('singleTap', function(e){
           e.preventDefault();
           $card.toggleClass('active');
         });
+
       });
 
       var list = $('#list');
@@ -356,11 +357,14 @@
 
   function bindRefresh(people, page, target) {
 
-    var hammertime = Hammer(page);
+    var hammertime = Hammer(page, {
+      drag_min_distance: 10,
+      show_touches: true
+    });
 
-    hammertime.off('touch dragdown release');
+    hammertime.off('dragdown dragend');
 
-    hammertime.on('touch dragdown release', function(ev) {
+    hammertime.on('dragdown dragend', function(ev) {
       manageRefreshEvents(ev, page, people, target);
     });
   }
@@ -371,19 +375,14 @@
     var deltaY   = ev.gesture.deltaY;
     var pullDiv  = $('#pullrefresh');
     var topTouch = false;
+    var windowY  = $(window).height();
 
     switch(ev.type) {
-        case 'touch':
-          if (touchY < 300){
-            window.topTouch = true;
-          }
-            break;
 
         case 'dragdown':
-          if (window.topTouch === true) {
-            if (deltaY < 60){
-              page.css('margin-top', deltaY + 50);
-            }
+          page.removeClass("transition");
+          if (touchY < windowY) {
+            page.css('margin-top', deltaY + 50);
             if (deltaY > 61) {
               pullDiv.addClass("breakpoint");
             }
@@ -394,9 +393,9 @@
 
             break;
 
-        case 'release':
+        case 'dragend':
+          page.addClass("transition");
           page.css('margin-top', 50);
-          window.topTouch = false;
           if (deltaY > 50) {
             if (target == 'scores') {
               everyoneElse.buildScoreboard();
@@ -404,6 +403,9 @@
               everyoneElse.buildWants();
             }
           }
+          page.on("webKitTransitionEnd transitionend oTransitionEnd", function() {
+            page.removeClass("transition");
+          });
             break;
     }
 
@@ -476,9 +478,9 @@
             window.active_them = false;
           }
 
-          //change swipe to release when hovering
+          //change swipe to dragend when hovering
           if (window.active_me === true || window.active_them === true) {
-            verb[0].innerHTML = 'release';
+            verb[0].innerHTML = 'dragend';
           } else {
             verb[0].innerHTML = 'swipe';
           }

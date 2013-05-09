@@ -204,7 +204,6 @@
       } else {
         // no wants
         requests.append(HBT['wants-empty']());
-        console.log('empty');
         $('.wants').html('Wants');
       }
 
@@ -349,9 +348,9 @@
 
     var hammertime = Hammer(page);
 
-    hammertime.off('touch dragdown release');
+    hammertime.off('dragdown release');
 
-    hammertime.on('touch dragdown release', function(ev) {
+    hammertime.on('dragdown release', function(ev) {
       manageRefreshEvents(ev, page, people, target);
     });
   }
@@ -362,19 +361,13 @@
     var deltaY   = ev.gesture.deltaY;
     var pullDiv  = $('#pullrefresh');
     var topTouch = false;
+    var windowY  = $(window).height();
 
     switch(ev.type) {
-        case 'touch':
-          if (touchY < 300){
-            window.topTouch = true;
-          }
-            break;
 
         case 'dragdown':
-          if (window.topTouch === true) {
-            if (deltaY < 60){
-              page.css('margin-top', deltaY + 50);
-            }
+          if (touchY < windowY) {
+            page.css('margin-top', deltaY + 50);
             if (deltaY > 61) {
               pullDiv.addClass("breakpoint");
             }
@@ -386,8 +379,8 @@
             break;
 
         case 'release':
+          page.addClass("transition");
           page.css('margin-top', 50);
-          window.topTouch = false;
           if (deltaY > 50) {
             if (target == 'scores') {
               everyoneElse.buildScoreboard();
@@ -395,6 +388,10 @@
               everyoneElse.buildWants();
             }
           }
+          page.on("webKitTransitionEnd transitionend oTransitionEnd", function() {
+              page.removeClass("transition");
+          });
+
             break;
     }
 

@@ -11,7 +11,7 @@
 
   var people, scores;
 
-  window.HBT = {};
+  var HBT = {};
 
   loadTemplates([
     'list-item',
@@ -68,7 +68,7 @@
     Handlebars.getTemplate = function(name) {
       if (HBT === undefined || HBT[name] === undefined) {
         if (HBT === undefined) {
-          window.HBT = {};
+          HBT = {};
         }
         $.ajax({
           url : '/m/templates/' + name + '.html',
@@ -124,50 +124,57 @@
   People.prototype.buildScoreboard = function() {
     $('#list').empty();
 
-    var creditors = [];
-    var debtors = [];
-    var neutrals = [];
+    var self = this;
 
-    for (var i = 0; i < this.length; i++) {
-      var person = this.get(i);
-      person.currentUser = {
-        name: user.name,
-        icon: user.icon
-      };
-      person.html = HBT['list-item'](person);
-      if (person.balance > 0) { creditors.push(person); }
-      else if (person.balance < 0) { debtors.push(person); }
-      else { neutrals.push(person); }
-    }
+    $.get("/score", function(response) {
+      scores = response;
+      everyoneElse.updateRelations(user);
 
-    creditors = creditors.sort(function(a,b){ return b.balance - a.balance; });
-    debtors = debtors.sort(function(a,b){ return a.balance - b.balance; });
+      var creditors = [];
+      var debtors = [];
+      var neutrals = [];
 
-    for (var i = 0; i < debtors.length; i++) {
-      $('#list').append(debtors[i].html);
-    }
+      for (var i = 0; i < self.length; i++) {
+        var person = self.get(i);
+        person.currentUser = {
+          name: user.name,
+          icon: user.icon
+        };
+        person.html = HBT['list-item'](person);
+        if (person.balance > 0) { creditors.push(person); }
+        else if (person.balance < 0) { debtors.push(person); }
+        else { neutrals.push(person); }
+      }
 
-    for (var i = 0; i < creditors.length; i++) {
-      $('#list').append(creditors[i].html);
-    }
+      creditors = creditors.sort(function(a,b){ return b.balance - a.balance; });
+      debtors = debtors.sort(function(a,b){ return a.balance - b.balance; });
 
-    for (var i = 0; i < neutrals.length; i++) {
-      $('#list').append(neutrals[i].html);
-    }
+      for (var i = 0; i < debtors.length; i++) {
+        $('#list').append(debtors[i].html);
+      }
 
-    $('#list').find('.card').each(function(){
-      var $card = $(this);
-      var $more = $card.find('.more');
-      $more.on('tap', function(e){
-        e.preventDefault();
-        $card.toggleClass('active');
+      for (var i = 0; i < creditors.length; i++) {
+        $('#list').append(creditors[i].html);
+      }
+
+      for (var i = 0; i < neutrals.length; i++) {
+        $('#list').append(neutrals[i].html);
+      }
+
+      $('#list').find('.card').each(function(){
+        var $card = $(this);
+        var $more = $card.find('.more');
+        $more.on('tap', function(e){
+          e.preventDefault();
+          $card.toggleClass('active');
+        });
       });
+
+      var list = $('#list');
+
+      bindSwipe();
+      bindRefresh(self, list, 'scores');
     });
-
-    var list = $('#list');
-
-    bindSwipe();
-    bindRefresh(this, list, 'scores');
 
   };
 
@@ -237,8 +244,10 @@
     });
   }
 
-  People.prototype.getRelations = function(user) {
+  People.prototype.updateRelations = function(user) {
     var relations = {};
+
+    console.log(scores);
 
     for (var i=0; i < this.length; i++) {
       var p = this.get(i);
@@ -287,8 +296,11 @@
         everyoneElse.add(people[i]);
       }
     }
-    var relations = everyoneElse.getRelations(user);
-    user.auth();
+    $.get("/score", function(response) {
+      scores = response;
+      everyoneElse.updateRelations(user);
+      user.auth();
+    });
   }
 
   function logout(options) {
@@ -535,26 +547,23 @@
 
   // the play
 
-  $.get("/people", function(p) {
-    people = p;
-    $.get("/score", function(s) {
-      scores = s;
+  $.get("/people", function(response) {
+    people = response;
 
-      for (var i = 0; i < people.length; i++) {
-        allPeople.add(people[i]);
-      }
+    for (var i = 0; i < people.length; i++) {
+      allPeople.add(people[i]);
+    }
 
-      if (cookie) {
-        login();
-        $('body').removeClass('who');
-        everyoneElse.buildScoreboard();
-        everyoneElse.buildWants();
-      } else {
-        allPeople.buildAuth();
-      }
+    if (cookie) {
+      login();
+      $('body').removeClass('who');
+      everyoneElse.buildScoreboard();
+      everyoneElse.buildWants();
+    } else {
+      allPeople.buildAuth();
+    }
 
-      bindNav();
-    });
+    bindNav();
   });
 
 

@@ -158,8 +158,10 @@
     $('#list').find('.card').each(function(){
       var $card = $(this);
       var $more = $card.find('.more');
-      $more.on('tap', function(e){
+      $more.on('singleTap', function(e){
         e.preventDefault();
+                console.log("tap fired");
+
         $card.toggleClass('active');
       });
     });
@@ -346,11 +348,14 @@
 
   function bindRefresh(people, page, target) {
 
-    var hammertime = Hammer(page);
+    var hammertime = Hammer(page, {
+      drag_min_distance: 10,
+      show_touches: true
+    });
 
-    hammertime.off('dragdown release');
+    hammertime.off('dragdown dragend');
 
-    hammertime.on('dragdown release', function(ev) {
+    hammertime.on('dragdown dragend', function(ev) {
       manageRefreshEvents(ev, page, people, target);
     });
   }
@@ -379,7 +384,7 @@
 
             break;
 
-        case 'release':
+        case 'dragend':
           page.addClass("transition");
           page.css('margin-top', 50);
           if (deltaY > 50) {
@@ -464,9 +469,9 @@
             window.active_them = false;
           }
 
-          //change swipe to release when hovering
+          //change swipe to dragend when hovering
           if (window.active_me === true || window.active_them === true) {
-            verb[0].innerHTML = 'release';
+            verb[0].innerHTML = 'dragend';
           } else {
             verb[0].innerHTML = 'swipe';
           }

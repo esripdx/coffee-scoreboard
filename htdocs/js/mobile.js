@@ -364,8 +364,23 @@
 
     hammertime.off('dragdown dragend');
 
+    var scrolling = false;
+
+    hammertime.on('dragstart', function(){
+      if (window.scrollY > 5) {
+        scrolling = true;
+      } else {
+        scrolling = false;
+      }
+    });
+
     hammertime.on('dragdown dragend', function(ev) {
-      manageRefreshEvents(ev, page, people, target);
+      if ($(ev.target).closest('.slider').length) {
+        return;
+      }
+      if (!scrolling) {
+        manageRefreshEvents(ev, page, people, target);
+      }
     });
   }
 
@@ -381,12 +396,12 @@
     switch(ev.type) {
 
         case 'dragdown':
+          ev.gesture.preventDefault();
           page.removeClass("transition");
           if (touchY < windowY) {
-            console.log(deltaY);
             page.css('-webkit-transform', 'translate3d(0,' + deltaY + 'px,0) scale3d(1,1,1)').css('-moz-transform', 'translate3d(0,' + deltaY + 'px,0)').css('-ms-transform', 'translate3d(0,' + deltaY + 'px,0)').css('-o-transform', 'translate3d(0,' + deltaY + 'px,0)').css('transform', 'translate3d(0,' + deltaY + 'px,0)');
             pullDiv.css('-webkit-transform', 'translate3d(0,' + messageY + 'px,0) scale3d(1,1,1)').css('-moz-transform', 'translate3d(0,' + messageY + 'px,0)').css('-ms-transform', 'translate3d(0,' + messageY + 'px,0)').css('-o-transform', 'translate3d(0,' + messageY + 'px,0)').css('transform', 'translate3d(0,' + messageY + 'px,0)');
-            if (ev.gesture.deltaY > 61) {
+            if (ev.gesture.deltaY > 80) {
               pullDiv.addClass("breakpoint");
             }
             else {
@@ -397,6 +412,7 @@
             break;
 
         case 'dragend':
+          ev.gesture.preventDefault();
           page.addClass("transition");
           page.css('-webkit-transform', 'translate3d(0,50px,0) scale3d(1,1,1)').css('-moz-transform', 'translate3d(0,50px,0)').css('-ms-transform', 'translate3d(0,50px,0)').css('-o-transform', 'translate3d(0,50px,0)').css('transform', 'translate3d(0,50px,0)');
           pullDiv.css('-webkit-transform', 'translate3d(0,-500px,0) scale3d(1,1,1)').css('-moz-transform', 'translate3d(0,-500px,0)').css('-ms-transform', 'translate3d(0,-500px,0)').css('-o-transform', 'translate3d(0,-500px,0)').css('transform', 'translate3d(0,-500px,0)');
@@ -427,7 +443,7 @@
       drag_min_distance: 0
     });
 
-    hammertime.on('dragstart drag dragend', function(ev) {
+    hammertime.on('dragstart drag release', function(ev) {
       var slider = this;
       manageMultitouch(ev, slider);
     });
@@ -483,16 +499,16 @@
             window.active_them = false;
           }
 
-          //change swipe to dragend when hovering
+          //change swipe to release when hovering
           if (window.active_me === true || window.active_them === true) {
-            verb[0].innerHTML = 'dragend';
+            verb[0].innerHTML = 'release';
           } else {
             verb[0].innerHTML = 'swipe';
           }
 
             break;
 
-        case 'dragend':
+        case 'release':
 
           token.removeClass('active');
 

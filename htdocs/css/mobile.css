@@ -309,7 +309,7 @@ h2 {
 
 /* - - - - - - - - - - List View - - - - - - - - - - */
 
-#list.transition {
+.list.transition {
   -webkit-transition:   -webkit-transform 0.25s ease-out;
      -moz-transition:      -moz-transform 0.25s ease-out;
       -ms-transition:       -ms-transform 0.25s ease-out;
@@ -706,6 +706,10 @@ h2 {
 }
 
 /* - - - - - - - Pull To Refresh - - - - - - - - */
+.who #pullrefresh {
+  display: none;
+}
+
 #pullrefresh {
     display: block;
     overflow: hidden;

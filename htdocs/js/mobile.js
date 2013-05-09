@@ -17,7 +17,8 @@
     'list-item',
     'request-item',
     'person',
-    'user'
+    'user',
+    'wants-empty'
   ]);
 
   var cookie = $.fn.cookie('coffee-scoreboard');
@@ -198,8 +199,9 @@
         $('.wants').html(html);
       } else {
         // no wants
-        $('#requests').append('no wants');
-        $('.wants').html('wants');
+        var html = HBT['wants-empty']();
+        $('#requests').append(html);
+        $('.wants').html('Wants');
       }
 
     });

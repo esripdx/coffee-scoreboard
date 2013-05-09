@@ -97,13 +97,19 @@ nav h1,
   margin: 9px 0 0 6px;
 }
 
-.checkin {
+.btngroup {
   position:absolute;
   top:8px;
-  font-size: 14px;
   right: 3%;
   display: block;
   z-index: 1001;
+}
+
+.btngroup .btn {
+  margin-left: 3px;
+  float: left;
+  display: block;
+  font-size: 14px;
   padding:6px 8px;
   border-radius: 6px;
   border:1px solid #010101;

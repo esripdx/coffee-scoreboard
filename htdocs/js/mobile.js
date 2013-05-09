@@ -17,7 +17,8 @@
     'list-item',
     'request-item',
     'person',
-    'user'
+    'user',
+    'wants-empty'
   ]);
 
   var cookie = $.fn.cookie('coffee-scoreboard');
@@ -28,6 +29,7 @@
   // the acts
 
   function bindNav() {
+    var $broadcast = $('#broadcast');
     var $logout = $('#logout');
     var $nav = $('.bottom-nav');
     var $scoreboard = $nav.find('.scoreboard');
@@ -54,6 +56,11 @@
     $logout.on('tap', function(e){
       e.preventDefault();
       logout();
+    });
+
+    $broadcast.on('tap', function(e){
+      e.preventDefault();
+      broadcast();
     });
   }
 
@@ -115,7 +122,6 @@
   };
 
   People.prototype.buildScoreboard = function() {
-
     $('#list').empty();
 
     var creditors = [];
@@ -161,7 +167,7 @@
     var list = $('#list');
 
     bindSwipe();
-    bindRefresh(this, list);
+    bindRefresh(this, list, 'scores');
 
   };
 
@@ -170,31 +176,39 @@
     requests.empty();
     var self = this;
     $.get('/wants', function(wants){
-      for (var i = 0; i < wants.length; i++) {
-        var context;
+      if (wants.length) {
+        for (var i = 0; i < wants.length; i++) {
+          var context;
 
-        if (user.name.toLowerCase() == wants[i].sender) {
-          context = {
-            name: user.name,
-            icon: user.icon,
-            item: wants[i].message,
-            time: moment.unix(wants[i].date/1000).fromNow()
+          if (user.name.toLowerCase() == wants[i].sender) {
+            context = {
+              name: user.name,
+              icon: user.icon,
+              item: wants[i].message,
+              time: moment.unix(wants[i].date/1000).fromNow()
+            }
+          } else {
+            var person = self.get(wants[i].sender);
+            context = {
+              name: person.name,
+              icon: person.icon,
+              item: wants[i].message,
+              time: moment.unix(wants[i].date/1000).fromNow()
+            }
           }
-        } else {
-          var person = self.get(wants[i].sender);
-          context = {
-            name: person.name,
-            icon: person.icon,
-            item: wants[i].message,
-            time: moment.unix(wants[i].date/1000).fromNow()
-          }
+
+          var html = HBT['request-item'](context);
+          requests.append(html);
         }
-
-        var html = HBT['request-item'](context);
-        requests.append(html);
-
-        bindRefresh(this, requests);
+        $('.wants').html('Wants<span class="badge">' + wants.length + '</span>');
+      } else {
+        // no wants
+        requests.append(HBT['wants-empty']());
+        console.log('empty');
+        $('.wants').html('Wants');
       }
+
+      bindRefresh(self, requests, 'wants');
     });
   }
 
@@ -245,12 +259,14 @@
     this.name = options.name;
     this.email = options.email;
     this.icon = gravatar(options.email, 100);
+    this.nick = options.nicks[0];
   }
 
   function User(options) {
     this.name = options.name;
     this.email = options.email;
     this.icon = gravatar(options.email, 100);
+    this.nick = options.nicks[0];
   }
 
   User.prototype.auth = function() {
@@ -278,6 +294,23 @@
   function logout(options) {
     $.fn.cookie('coffee-scoreboard', '', $.extend({}, options, { expires: -1 }));
     window.location = '/m/';
+  }
+
+  function broadcast() {
+    if (confirm("Want to let everyone know you're going to Barista?")) {
+      $.ajax({
+        type: 'GET',
+        url: "/broadcast?user=" + user.nick,
+        dataType: 'json',
+        timeout: 300,
+        success: function(data){
+          alert('Broadcast successful!');
+        },
+        error: function(xhr, type){
+          alert('Ajax error!');
+        }
+      });
+    }
   }
 
   // the helpers
@@ -312,27 +345,37 @@
 
   // pull to refresh
 
-  function bindRefresh(people, page) {
+  function bindRefresh(people, page, target) {
 
     var hammertime = Hammer(page);
 
-    hammertime.on('dragdown release', function(ev) {
-      manageRefreshEvents(ev, page, people);
+    hammertime.off('touch dragdown release');
+
+    hammertime.on('touch dragdown release', function(ev) {
+      manageRefreshEvents(ev, page, people, target);
     });
   }
 
-  function manageRefreshEvents(ev, page, people){
+  function manageRefreshEvents(ev, page, people, target){
 
-    var touchY  = ev.gesture.center.pageY;
-    var deltaY  = ev.gesture.deltaY;
-    var pullDiv = $('#pullrefresh');
+    var touchY   = ev.gesture.center.pageY;
+    var deltaY   = ev.gesture.deltaY;
+    var pullDiv  = $('#pullrefresh');
+    var topTouch = false;
 
     switch(ev.type) {
+        case 'touch':
+          if (touchY < 300){
+            window.topTouch = true;
+          }
+            break;
 
         case 'dragdown':
-          if (touchY < 150) {
-            page.css('margin-top', deltaY + 50);
-            if (deltaY > 50) {
+          if (window.topTouch === true) {
+            if (deltaY < 60){
+              page.css('margin-top', deltaY + 50);
+            }
+            if (deltaY > 61) {
               pullDiv.addClass("breakpoint");
             }
             else {
@@ -344,8 +387,13 @@
 
         case 'release':
           page.css('margin-top', 50);
+          window.topTouch = false;
           if (deltaY > 50) {
-            people.buildScoreboard();
+            if (target == 'scores') {
+              everyoneElse.buildScoreboard();
+            } else {
+              everyoneElse.buildWants();
+            }
           }
             break;
     }

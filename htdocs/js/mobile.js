@@ -372,7 +372,8 @@
   function manageRefreshEvents(ev, page, people, target){
 
     var touchY   = ev.gesture.center.pageY;
-    var deltaY   = ev.gesture.deltaY;
+    var deltaY   = ev.gesture.deltaY + 50;
+    var messageY = deltaY - 500;
     var pullDiv  = $('#pullrefresh');
     var topTouch = false;
     var windowY  = $(window).height();
@@ -382,8 +383,10 @@
         case 'dragdown':
           page.removeClass("transition");
           if (touchY < windowY) {
-            page.css('margin-top', deltaY + 50);
-            if (deltaY > 61) {
+            console.log(deltaY);
+            page.css('-webkit-transform', 'translate3d(0,' + deltaY + 'px,0) scale3d(1,1,1)').css('-moz-transform', 'translate3d(0,' + deltaY + 'px,0)').css('-ms-transform', 'translate3d(0,' + deltaY + 'px,0)').css('-o-transform', 'translate3d(0,' + deltaY + 'px,0)').css('transform', 'translate3d(0,' + deltaY + 'px,0)');
+            pullDiv.css('-webkit-transform', 'translate3d(0,' + messageY + 'px,0) scale3d(1,1,1)').css('-moz-transform', 'translate3d(0,' + messageY + 'px,0)').css('-ms-transform', 'translate3d(0,' + messageY + 'px,0)').css('-o-transform', 'translate3d(0,' + messageY + 'px,0)').css('transform', 'translate3d(0,' + messageY + 'px,0)');
+            if (ev.gesture.deltaY > 61) {
               pullDiv.addClass("breakpoint");
             }
             else {
@@ -395,7 +398,9 @@
 
         case 'dragend':
           page.addClass("transition");
-          page.css('margin-top', 50);
+          page.css('-webkit-transform', 'translate3d(0,50px,0) scale3d(1,1,1)').css('-moz-transform', 'translate3d(0,50px,0)').css('-ms-transform', 'translate3d(0,50px,0)').css('-o-transform', 'translate3d(0,50px,0)').css('transform', 'translate3d(0,50px,0)');
+          pullDiv.css('-webkit-transform', 'translate3d(0,-500px,0) scale3d(1,1,1)').css('-moz-transform', 'translate3d(0,-500px,0)').css('-ms-transform', 'translate3d(0,-500px,0)').css('-o-transform', 'translate3d(0,-500px,0)').css('transform', 'translate3d(0,-500px,0)');
+
           if (deltaY > 50) {
             if (target == 'scores') {
               everyoneElse.buildScoreboard();

@@ -1,0 +1,26 @@
+<article class="card">
+  <i class="user-icon smaller" style="background-image:url('{{icon}}')"></i>
+  {{#if credits}}
+    <span class="badges credits">{{credits}}</span>
+    <div class="content"><p class="message"><span class="name">{{name}}</span> owes you {{coffeeWord credits}}</p></div>
+  {{else}}
+    {{#if debts}}
+      <span class="badges debts">{{debts}}</span>
+      <div class="content"><p class="message">You owe <span class="name">{{name}}</span> {{coffeeWord debts}}</p></div>
+    {{else}}
+      <span class="badges even">=</span>
+      <div class="content"><p class="message">You and <span class="name">{{name}}</span> are even</p></div>
+    {{/if}}
+  {{/if}}
+  <a class="more"></a>
+
+  <div class="slider-wrap">
+    <hr />
+    <div class="slider">
+      <div class="coffee-token"></div>
+      <i class="slider-icon left me" data-user="{{currentUser.name}}" style="background-image:url('{{currentUser.icon}}')"></i>
+      <i class="slider-icon right them" data-user="{{name}}" style="background-image:url('{{icon}}')"></i>
+      <p class="swipe-text"><span class="verb">swipe</span> to transfer</p>
+    </div>
+  </div>
+</article>

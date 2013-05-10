@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Coffee Scoreboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/css/mobile-fonts.css">
+  <link rel="stylesheet" href="/css/mobile.css">
+</head>
+<body class="who">
+
+  <nav class="top-nav">
+    <div class="btngroup">
+      <a id="broadcast" class="btn">Broadcast</a>
+      <a id="logout" class="btn">Log Out</a>
+    </div>
+  </nav>
+
+  <header id="welcome">
+    <i id="logo"></i>
+    <h1>Who Are You?</h1>
+  </header>
+
+  <div id="pullrefresh">
+      <div class="message">
+          <div id="pullrefresh-icon" class="icon arrow arrow-down"></div>
+          <span></span>
+      </div>
+  </div>
+
+  <section id="auth"></section>
+
+  <section id="list" class="with-nav list"></section>
+
+  <section id="requests" class="with-nav list"></section>
+
+  <nav class="bottom-nav">
+    <a class="scoreboard community active">Scores</a>
+    <a class="wants clipboard right">Wants</a>
+  </nav>
+
+  <script src="/js/zepto.min.js"></script>
+  <script src="/js/zepto.touch.js"></script>
+  <script src="/js/zepto.cookie.min.js"></script>
+  <script src="/js/handlebars.min.js"></script>
+  <script src="/js/hammer.min.js"></script>
+  <script src="/js/moment.min.js"></script>
+  <script src="/js/gravatar.js"></script>
+  <script src="/js/mobile.js"></script>
+
+</body>
+</html>

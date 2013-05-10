@@ -399,7 +399,7 @@ function renderBoard(people, scores) {
         var $el = $template.clone();
         var name = data.name;
         var dragIcon = document.createElement('img');
-        dragIcon.src = '/img/plus1.png';
+        dragIcon.src = '/img/plus.png';
 
         $el
           .attr('data-name', name)

@@ -218,6 +218,7 @@ nav h1,
   margin: 0 auto;
   background: url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100') cover no-repeat transparent;
   background-size: 60px;
+  background-position: center center;
   display:inline-block;
   border: 4px solid #fff;
   border-radius: 50%;
@@ -229,7 +230,7 @@ nav h1,
 
 .with-nav {
   overflow: hidden;
-  margin-bottom: 50px;
+  padding-bottom: 50px;
 }
 
 /* - - - - - - - - - - '""AUTHENTICATION""' - - - - - - - - - - */
@@ -446,15 +447,17 @@ h2 {
 }
 
 .more {
-  display: block;
-  z-index:2;
-  position: absolute;
-  top:28px;
-  right: 11px;
-  width: 20px;
-  height: 20px;
   background: url(../img/more.png) center no-repeat transparent;
   background-size: 20px;
+  display: block;
+  height: 20px;
+  width: 20px;
+  padding: 20px 11px 20px 20px;
+
+  position: absolute;
+  top: 8px;
+  right: 0;
+  z-index: 2;
 
   -webkit-transition: -webkit-transform 0.2s ease-in;
      -moz-transition: -moz-transform 0.2s ease-in;
@@ -522,24 +525,17 @@ h2 {
 }
 
 .slider-icon {
-  width: 44px;
-  height: 44px;
+  background: url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100') cover no-repeat transparent;
+  background-size: 42px;
+  width: 42px;
+  height: 42px;
   margin-left: 0;
   position: absolute;
   top:2px;
-  background-size: 46px;
   border-color: white;
   border: 2px solid white;
-  background: url('http://www.gravatar.com/avatar/2bb8f84e5afc6318fd03de5bf28d1edc.jpg?s=100') cover no-repeat transparent;
-  background-size: 44px;
   display:inline-block;
   border-radius: 50%;
-
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-      -ms-box-sizing: border-box;
-       -o-box-sizing: border-box;
-          box-sizing: border-box;
 
   -webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);
      -moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.1);

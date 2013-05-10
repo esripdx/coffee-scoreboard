@@ -581,12 +581,15 @@ h2 {
   -webkit-background-clip: text;
   -moz-text-fill-color: transparent;
   -webkit-text-fill-color: transparent;
-  -webkit-animation: swipe 10s infinite;
   padding: 0 50%;
   margin-left: -50%;
 
   width: 100%;
   -webkit-text-size-adjust: none;
+}
+
+.card.active .swipe-text {
+  -webkit-animation: swipe 10s infinite;
 }
 
 .swipe-text .verb.red{

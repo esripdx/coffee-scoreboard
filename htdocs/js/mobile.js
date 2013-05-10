@@ -122,13 +122,15 @@
   };
 
   People.prototype.buildScoreboard = function() {
-    $('#list').empty();
+    var $list = $('#list');
+
+    $list.empty();
 
     var self = this;
 
     $.get("/score", function(response) {
       scores = response;
-      everyoneElse.updateRelations(user);
+      self.updateRelations(user);
 
       var creditors = [];
       var debtors = [];
@@ -150,18 +152,18 @@
       debtors = debtors.sort(function(a,b){ return a.balance - b.balance; });
 
       for (var i = 0; i < debtors.length; i++) {
-        $('#list').append(debtors[i].html);
+        $list.append(debtors[i].html);
       }
 
       for (var i = 0; i < creditors.length; i++) {
-        $('#list').append(creditors[i].html);
+        $list.append(creditors[i].html);
       }
 
       for (var i = 0; i < neutrals.length; i++) {
-        $('#list').append(neutrals[i].html);
+        $list.append(neutrals[i].html);
       }
 
-      $('#list').find('.card').each(function(){
+      $list.find('.card').each(function(){
         var $card = $(this);
         var $more = $card.find('.more');
         $more.on('singleTap', function(e){
@@ -171,10 +173,8 @@
 
       });
 
-      var list = $('#list');
-
       bindSwipe();
-      bindRefresh(self, list, 'scores');
+      bindRefresh(self, $list, 'scores');
     });
 
   };
@@ -250,6 +250,8 @@
     for (var i=0; i < this.length; i++) {
       var p = this.get(i);
       var amount = scores[user.name.toLowerCase()][p.name.toLowerCase()] - scores[p.name.toLowerCase()][user.name.toLowerCase()];
+      p.credits = null;
+      p.debts = null;
       p.balance = amount;
       if (amount > 0) {
         p.credits = amount;
@@ -312,7 +314,7 @@
         type: 'GET',
         url: "/broadcast?user=" + user.nick,
         dataType: 'json',
-        timeout: 300,
+        timeout: 5000,
         success: function(data){
           alert('Broadcast successful!');
         },
@@ -558,7 +560,7 @@
       type: 'GET',
       url: "/coffee?from=" + from.toLowerCase() + "&to=" + to.toLowerCase(),
       dataType: 'json',
-      timeout: 300,
+      timeout: 5000,
       success: function(data){
 
         var their_name = them;

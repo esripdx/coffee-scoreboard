@@ -235,7 +235,7 @@
       var $el = $(this);
       var name = $el.data('login');
 
-      $.fn.cookie('coffee-scoreboard', name);
+      $.fn.cookie('coffee-scoreboard', name, { expires: 365*3 });
       cookie = $.fn.cookie('coffee-scoreboard');
       $('body').removeClass('who');
       login();

@@ -68,7 +68,7 @@ exports.create = function(nick, message) {
 exports.getNameFromNick = function(nick) {
     for (var i in config.people) {
         var person = config.people[i];
-        if (person.nicks.indexOf(nick.toLowerCase()) >= 0) {
+        if (person.nicks.indexOf(nick.toLowerCase().replace(/[\|_].*$/, "")) >= 0) {
             return person.name.toLowerCase();
         }
     }

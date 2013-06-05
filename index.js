@@ -45,7 +45,7 @@ function modifyRoute(request, response) {
 
   if (payload.query && payload.query.from && payload.query.to) {
     var from = payload.query.from.toLowerCase(),
-        to   = payload.query.to.toLowerCase();
+    to   = payload.query.to.toLowerCase();
 
     if (from === to) {
       response.write(JSON.stringify({"error": "you can't give yourself coffee"}));
@@ -145,7 +145,7 @@ function statusRoute(request, response) {
       msg = "You are coffee-debt free!";
     } else {
       msg = "You owe " + numCoffeesOwed + " " + coffeeWord(numCoffeesOwed)
-        + " to " + numPeopleOwed + " " + (numPeopleOwed == 1 ? "person" : "people") + ".";
+      + " to " + numPeopleOwed + " " + (numPeopleOwed == 1 ? "person" : "people") + ".";
     }
 
     response.write(JSON.stringify({"status": msg}));
@@ -241,24 +241,37 @@ function simplifyRoute(request, response) {
 }
 
 function wantsRoute(request, response) {
-    response.setHeader('Content-Type', 'application/json');
-    wants.list(function(wantList) {
-        response.write(JSON.stringify(wantList));
-        response.end();
-    });
+  response.setHeader('Content-Type', 'application/json');
+  wants.list(function(wantList) {
+    response.write(JSON.stringify(wantList));
+    response.end();
+  });
+}
+
+function addWantRoute(request, response) {
+  var payload = url.parse(request.url, true);
+  response.setHeader('Content-Type', 'application/json');
+  if (payload.query && payload.query.name && payload.query.want) {
+    var nick = wants.getNickFromName(payload.query.name);
+    response.write(JSON.stringify(wants.create(nick, payload.query.want)));
+    response.end();
+  } else {
+    response.write(JSON.stringify({ "error": "not enough parameters." }));
+    response.end();
+  }
 }
 
 // server settings
 
 var redirects = [
   {
-    path: "^/$",
-    url:  "/index.html"
-  },
-  {
-    path: "^/m(/)?$",
-    url:  "/m/index.html"
-  }
+  path: "^/$",
+  url:  "/index.html"
+},
+{
+  path: "^/m(/)?$",
+  url:  "/m/index.html"
+}
 ];
 
 appServer.addRoute(".+", appServer.plugins.redirect, { section: "pre", routes: redirects });
@@ -266,6 +279,7 @@ appServer.addRoute(".+", appServer.plugins.redirect, { section: "pre", routes: r
 appServer.addRoute(".+", appServer.plugins.filehandler, { basedir: "./htdocs" });
 appServer.addRoute("/score$", scoreRoute);
 appServer.addRoute("/score\.atom", atomRoute);
+appServer.addRoute("/wants/add", addWantRoute);
 appServer.addRoute("/wants", wantsRoute);
 appServer.addRoute("/broadcast", broadcastRoute);
 appServer.addRoute("/coffee", modifyRoute);

@@ -99,7 +99,11 @@ function renderBoard(people, scores) {
 
         // Aaron has bought Amber n coffees
         // coffees aaron has bought amber - coffees amber and bought aaron
-        this.amount = scores[person1.name.toLowerCase()][person2.name.toLowerCase()] - scores[person2.name.toLowerCase()][person1.name.toLowerCase()];
+        if (typeof scores[person1.name.toLowerCase()] === 'undefined' || typeof scores[person1.name.toLowerCase()][person2.name.toLowerCase()] === 'undefined') {
+          this.amount = 0;
+        } else {
+          this.amount = scores[person1.name.toLowerCase()][person2.name.toLowerCase()] - scores[person2.name.toLowerCase()][person1.name.toLowerCase()];
+        }
 
         // THE CONTROL POINTS
         var person1x = this.get(0).x;
@@ -297,7 +301,7 @@ function renderBoard(people, scores) {
 
         stage.on("message:portraitEnter", function(data){
           relationships.forEach(function(relation){
-            if(!relation.id.match(data.name)){
+            if(relation.id && !relation.id.match(data.name)){
               relation.paths[0].animate(".25s", {
                 opacity:0.2,
                 strokeWidth:1

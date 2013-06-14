@@ -248,8 +248,18 @@
     var relations = {};
 
     for (var i=0; i < this.length; i++) {
+      var amount;
+
       var p = this.get(i);
-      var amount = scores[user.name.toLowerCase()][p.name.toLowerCase()] - scores[p.name.toLowerCase()][user.name.toLowerCase()];
+      var name = user.name.toLowerCase();
+      var other = p.name.toLowerCase();
+
+      if (typeof scores[name] === 'undefined' || typeof scores[name][other] === 'undefined') {
+        amount = 0;
+      } else {
+        amount = scores[name][other] - (scores[other][name] ? scores[other][name] : 0);
+      }
+
       p.credits = null;
       p.debts = null;
       p.balance = amount;

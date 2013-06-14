@@ -73,9 +73,7 @@ function renderBoard(people, scores) {
         this.email = options.email;
       }
 
-      function Relationships(){
-
-      }
+      function Relationships(){}
 
       Relationships.prototype.add = function(relation) {
         this[relation.id] = relation;
@@ -99,10 +97,13 @@ function renderBoard(people, scores) {
 
         // Aaron has bought Amber n coffees
         // coffees aaron has bought amber - coffees amber and bought aaron
-        if (typeof scores[person1.name.toLowerCase()] === 'undefined' || typeof scores[person1.name.toLowerCase()][person2.name.toLowerCase()] === 'undefined') {
+        var name = person1.name.toLowerCase();
+        var other = person2.name.toLowerCase();
+
+        if (typeof scores[name] === 'undefined' || typeof scores[name][other] === 'undefined') {
           this.amount = 0;
         } else {
-          this.amount = scores[person1.name.toLowerCase()][person2.name.toLowerCase()] - scores[person2.name.toLowerCase()][person1.name.toLowerCase()];
+          this.amount = scores[name][other] - (scores[other][name] ? scores[other][name] : 0);
         }
 
         // THE CONTROL POINTS
